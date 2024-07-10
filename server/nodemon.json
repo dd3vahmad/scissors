@@ -1,0 +1,6 @@
+{
+  "watch": ["./**"],
+  "ext": "ts",
+  "ignore": ["*.log", "C:\\DumpStack.log.tmp"],
+  "exec": "ts-node-esm server.ts"
+}
