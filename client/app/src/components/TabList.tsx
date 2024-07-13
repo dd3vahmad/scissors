@@ -6,55 +6,20 @@ import {
   List,
   ListItem,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { IconType } from "react-icons";
-import { BiHome, BiLink } from "react-icons/bi";
-import { ImQrcode } from "react-icons/im";
-import { IoAnalyticsOutline, IoSettingsOutline } from "react-icons/io5";
-import { RiPagesLine } from "react-icons/ri";
+import { IoSettingsOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import tabs from "../data/tabs";
 
 interface IProps {
-  onClose?: () => void;
-}
-
-interface ITab {
-  name: string;
-  icon: IconType;
-  path: string;
+  onClose: () => void;
 }
 
 const TabList = ({ onClose = () => {} }: IProps) => {
   const [activeTab, setActiveTab] = useState<number>(0);
-
-  const tabs: ITab[] = [
-    {
-      name: "Home",
-      icon: BiHome,
-      path: "/",
-    },
-    {
-      name: "Links",
-      icon: BiLink,
-      path: "/links",
-    },
-    {
-      name: "QR Codes",
-      icon: ImQrcode,
-      path: "/qrcodes",
-    },
-    {
-      name: "Pages",
-      icon: RiPagesLine,
-      path: "/pages",
-    },
-    {
-      name: "Analytics",
-      icon: IoAnalyticsOutline,
-      path: "/analytics",
-    },
-  ];
+  const bgColor = useColorModeValue("gray.50", "gray.900");
 
   return (
     <>
@@ -67,9 +32,9 @@ const TabList = ({ onClose = () => {} }: IProps) => {
             <ListItem paddingY="5px" key={i}>
               <Link to={tab.path}>
                 <HStack
-                  _hover={{ bg: "gray.50" }}
-                  bg={activeTab === i ? "gray.100" : "none"}
-                  borderRadius={"sm"}
+                  _hover={{ bg: bgColor }}
+                  bg={activeTab === i ? bgColor : "none"}
+                  borderRadius={8}
                   px={"10px"}
                   py={"8px"}
                   onClick={() => {
@@ -89,9 +54,9 @@ const TabList = ({ onClose = () => {} }: IProps) => {
         <ListItem paddingY="10px">
           <Link to="/settings">
             <HStack
-              _hover={{ bg: "gray.50" }}
-              bg={activeTab === tabs.length ? "gray.100" : "none"}
-              borderRadius={"sm"}
+              _hover={{ bg: bgColor }}
+              bg={activeTab === tabs.length ? bgColor : "none"}
+              borderRadius={8}
               px={"10px"}
               py={"8px"}
               onClick={() => {
