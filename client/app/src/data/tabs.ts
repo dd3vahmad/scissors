@@ -1,14 +1,8 @@
-import { IconType } from "react-icons";
 import { BiHome, BiLink } from "react-icons/bi";
 import { ImQrcode } from "react-icons/im";
 import { IoAnalyticsOutline } from "react-icons/io5";
 import { RiPagesLine } from "react-icons/ri";
-
-interface ITab {
-  name: string;
-  icon: IconType;
-  path: string;
-}
+import ITab from "../entites/Tab";
 
 const tabs: ITab[] = [
   {

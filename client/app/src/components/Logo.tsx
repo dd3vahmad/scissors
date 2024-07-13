@@ -1,10 +1,5 @@
 import { Box } from "@chakra-ui/react";
-
-interface ILogo {
-  onClick: () => void;
-  width: string;
-  height: string;
-}
+import ILogo from "../entites/Logo";
 
 const Logo = ({ onClick, height, width }: ILogo) => (
   <Box

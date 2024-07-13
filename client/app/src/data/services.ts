@@ -1,9 +1,4 @@
-export interface IService {
-  name: string;
-  title: string;
-  path: string;
-  banner: string;
-}
+import IService from "../entites/Service";
 
 const services: IService[] = [
   {

@@ -1,7 +1,7 @@
 import { Button, Flex, Image, Text } from "@chakra-ui/react";
 import getCroppedImageUrl from "../Utils/image-url";
-import { IService } from "../data/services";
 import { useNavigate } from "react-router-dom";
+import IService from "../entites/Service";
 
 interface IProps {
   service: IService;
