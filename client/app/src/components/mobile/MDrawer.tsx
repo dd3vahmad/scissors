@@ -21,7 +21,7 @@ const MDrawer = ({ isOpen, onClose, placement = "left" }: IProps) => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerBody>
-            <TabList />
+            <TabList onClose={onClose} />
           </DrawerBody>
         </DrawerContent>
       </Drawer>

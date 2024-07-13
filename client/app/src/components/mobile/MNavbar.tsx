@@ -1,9 +1,11 @@
-import { HStack, useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import { HStack, Icon, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import { Link, useLocation } from "react-router-dom";
 import MDrawer from "./MDrawer";
 import SearchInput from "../SearchInput";
 import ColorModeSwitch from "../ColorModeSwitch";
 import Logo from "../Logo";
+import { FcMenu } from "react-icons/fc";
+import { IoClose } from "react-icons/io5";
 
 const MNavBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -23,6 +25,7 @@ const MNavBar = () => {
       </Link>
       <SearchInput />
       <ColorModeSwitch />
+      <Icon onClick={onOpen} boxSize={8} as={isOpen ? IoClose : FcMenu} />
       <MDrawer isOpen={isOpen} onClose={onClose} />
     </HStack>
   );
