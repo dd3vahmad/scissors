@@ -1,10 +1,10 @@
 import { Button, Flex, Text, useColorModeValue } from "@chakra-ui/react";
-import LinkList from "../components/LinkList";
 import NoData from "../components/NoData";
-import links from "../data/links";
 import { useNavigate } from "react-router-dom";
+import QrCodeList from "../components/QrCodeList";
+import qrcodes from "../data/qrcodes";
 
-const Links = () => {
+const QrCodes = () => {
   const location = useNavigate();
   const bgColor = useColorModeValue("gray.100", "gray.800");
   const bgColor1 = useColorModeValue("white", "gray.800");
@@ -12,11 +12,11 @@ const Links = () => {
 
   return (
     <>
-      {links.length ? (
-        <LinkList links={links} />
+      {qrcodes.length ? (
+        <QrCodeList qrcodes={qrcodes} />
       ) : (
         <Flex direction={"column"}>
-          <NoData message="No Link Found" />
+          <NoData message="No QR Code Found" />
           <Flex direction={"column"} bg={bgColor1} height={"45vh"} py={3}>
             <Text
               color={color}
@@ -25,7 +25,7 @@ const Links = () => {
               textAlign={"center"}
               px={5}
             >
-              More Clicks Are Just A Link Away
+              Connect your audience with a simple scan
             </Text>
             <Text
               color={color}
@@ -35,8 +35,8 @@ const Links = () => {
               px={5}
               mt={2}
             >
-              Shorten long links and get attention by customizing what they say.
-              No more sics.ly/3yqawYa, more sics.ly/brands-sicsly.
+              Create a QR Code from any short link. Then edit, customize, and
+              track your QR Codes here.
             </Text>
             <Button
               borderWidth={2}
@@ -47,7 +47,7 @@ const Links = () => {
               mx={10}
               onClick={() => location("/create-new")}
             >
-              Create A New Sicsly Link
+              Create A Code
             </Button>
           </Flex>
         </Flex>
@@ -56,4 +56,4 @@ const Links = () => {
   );
 };
 
-export default Links;
+export default QrCodes;

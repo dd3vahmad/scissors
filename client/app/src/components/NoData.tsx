@@ -6,7 +6,7 @@ interface IProps {
 }
 
 const NoData = ({ message }: IProps) => {
-  const bgColor = useColorModeValue("gray.100", "gray.800");
+  const bgColor = useColorModeValue("white", "gray.800");
   const color = useColorModeValue("gray.400", "gray.700");
 
   return (
