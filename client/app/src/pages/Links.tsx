@@ -1,15 +1,11 @@
-import {
-  Button,
-  Flex,
-  Text,
-  useColorModeValue,
-  VStack,
-} from "@chakra-ui/react";
+import { Button, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import LinkList from "../components/LinkList";
 import NoData from "../components/NoData";
 import links from "../data/links";
+import { useNavigate } from "react-router-dom";
 
 const Links = () => {
+  const location = useNavigate();
   const bgColor = useColorModeValue("gray.100", "gray.800");
   const color = useColorModeValue("gray.400", "gray.700");
 
@@ -48,6 +44,7 @@ const Links = () => {
               fontSize={"lg"}
               mt={5}
               mx={10}
+              onClick={() => location("/create-new")}
             >
               Create A New Sicsly Link
             </Button>
