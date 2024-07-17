@@ -26,6 +26,11 @@ const tabs: ITab[] = [
     path: "/pages",
   },
   {
+    name: "Custom Urls",
+    icon: BiLink,
+    path: "/custom-urls",
+  },
+  {
     name: "Analytics",
     icon: IoAnalyticsOutline,
     path: "/analytics",
