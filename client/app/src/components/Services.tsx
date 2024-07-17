@@ -8,9 +8,9 @@ const Services = () => {
   return (
     <Container px={7} pb={5}>
       <List bg={bgColor} p={5} spacing={3} borderRadius={8}>
-        {services.map((service) => {
+        {services.map((service, i) => {
           return (
-            <ListItem>
+            <ListItem key={i}>
               <Service service={service} />
             </ListItem>
           );

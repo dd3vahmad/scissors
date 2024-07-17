@@ -6,6 +6,7 @@ import {
   DrawerOverlay,
 } from "@chakra-ui/react";
 import TabList from "../TabList";
+import { useState } from "react";
 
 interface IProps {
   isOpen: boolean;
@@ -14,6 +15,8 @@ interface IProps {
 }
 
 const MDrawer = ({ isOpen, onClose, placement = "left" }: IProps) => {
+  const [activeTab, setActiveTab] = useState<number>(0);
+
   return (
     <>
       <Drawer size="xs" isOpen={isOpen} placement={placement} onClose={onClose}>
@@ -21,7 +24,11 @@ const MDrawer = ({ isOpen, onClose, placement = "left" }: IProps) => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerBody>
-            <TabList onClose={onClose} />
+            <TabList
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              onClose={onClose}
+            />
           </DrawerBody>
         </DrawerContent>
       </Drawer>

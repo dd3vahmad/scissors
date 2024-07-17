@@ -8,17 +8,18 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import tabs from "../data/tabs";
+import { Dispatch, SetStateAction } from "react";
 
 interface IProps {
   onClose: () => void;
+  activeTab: number;
+  setActiveTab: Dispatch<SetStateAction<number>>;
 }
 
-const TabList = ({ onClose = () => {} }: IProps) => {
-  const [activeTab, setActiveTab] = useState<number>(0);
+const TabList = ({ onClose = () => {}, activeTab, setActiveTab }: IProps) => {
   const bgColor = useColorModeValue("gray.50", "gray.900");
 
   return (
@@ -38,8 +39,8 @@ const TabList = ({ onClose = () => {} }: IProps) => {
                   px={"10px"}
                   py={"8px"}
                   onClick={() => {
-                    onClose();
                     setActiveTab(i);
+                    onClose();
                   }}
                   cursor={"pointer"}
                 >
