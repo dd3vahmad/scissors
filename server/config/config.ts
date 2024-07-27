@@ -8,8 +8,11 @@ const config = {
     HOSTNAME: process.env.HOSTNAME,
     BACKLOG: Number(process.env.BACKLOG),
   },
+  app: {
+    BASE_URL: process.env.BASE_URL,
+  },
   db: {
-    DATABASE_URI: "",
+    DATABASE_URI: process.env.DATABASE_URI || "",
   },
 };
 

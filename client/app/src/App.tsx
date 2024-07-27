@@ -9,12 +9,18 @@ import Pages from "./pages/Pages";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import CustomUrls from "./pages/CustomUrls";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
     <>
       <Router>
         <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/" element={<AppLayout />} errorElement={<ErrorPage />}>
             <Route index element={<Dashboard />} />
             <Route path="links" element={<Links />} />

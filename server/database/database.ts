@@ -1,10 +1,11 @@
-const mongoose = require("mongoose");
+import config from "../config/config";
+import mongoose from "mongoose";
 
 mongoose
   .connect(config.db.DATABASE_URI)
   .then(() => {
     console.log("Connected to database");
   })
-  .catch((err) => {
+  .catch((err: any) => {
     console.log(err);
   });

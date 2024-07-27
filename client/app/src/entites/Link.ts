@@ -1,5 +1,8 @@
 export default interface ILink {
   title: string;
-  original: string;
+  longUrl: string;
   shortUrl: string;
+  customUrl?: null;
+  qrCode?: string;
+  clicks: number;
 }
