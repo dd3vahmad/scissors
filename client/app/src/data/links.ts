@@ -6,7 +6,7 @@ const links: ILink[] = [
     longUrl: "https://www.an-extremely-long-url.com",
     shortUrl: "https://www.shortone.com",
     customUrl: null,
-    qrCode: "https://www.qrcode-link.jpg",
+    qrCode: "",
     clicks: 0,
   },
   {
@@ -14,7 +14,7 @@ const links: ILink[] = [
     longUrl: "https://www.an-extremely-long-url.com",
     shortUrl: "https://www.shortone.com",
     customUrl: null,
-    qrCode: "https://www.qrcode-link.jpg",
+    qrCode: "",
     clicks: 0,
   },
   {
@@ -22,7 +22,8 @@ const links: ILink[] = [
     longUrl: "https://www.an-extremely-long-url.com",
     shortUrl: "https://www.shortone.com",
     customUrl: null,
-    qrCode: "https://www.qrcode-link.jpg",
+    // qrCode: "https://www.imgonline.com.ua/examples/qr-code-url.png",
+    qrCode: "",
     clicks: 0,
   },
   {
@@ -30,7 +31,7 @@ const links: ILink[] = [
     longUrl: "https://www.an-extremely-long-url.com",
     shortUrl: "https://www.shortone.com",
     customUrl: null,
-    qrCode: "https://www.qrcode-link.jpg",
+    qrCode: "",
     clicks: 0,
   },
 ];

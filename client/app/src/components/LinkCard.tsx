@@ -1,6 +1,26 @@
-import { Flex, Icon, Text, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Heading,
+  HStack,
+  Icon,
+  Image,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import ILink from "../entites/Link";
-import { BiCopy } from "react-icons/bi";
+import getCroppedImageUrl from "../Utils/image-url";
+import {
+  FaCopy,
+  FaInstagram,
+  FaShare,
+  FaTelegram,
+  FaTiktok,
+  FaTwitter,
+  FaWhatsapp,
+} from "react-icons/fa6";
 
 interface IProps {
   link: ILink;
@@ -8,25 +28,53 @@ interface IProps {
 
 const LinkCard = ({ link }: IProps) => {
   return (
-    <Flex
-      px={5}
-      py={2}
-      mx={3}
-      my={2}
-      rounded={8}
-      justifyContent={"space-between"}
-      border={2}
+    <Card
+      direction={{ base: "column", sm: "row" }}
+      overflow="hidden"
+      variant="outline"
+      mb={5}
+      shadow={"2xl"}
     >
-      <Flex direction={"column"}>
-        <Text>{link.title}</Text>
-        <Text fontSize={24}>{link.shortUrl}</Text>
-        <Text fontSize={14}>{link.longUrl}</Text>
-      </Flex>
-      <VStack>
-        <Text fontSize={"large"}>{link.clicks}</Text>
-        <Icon as={BiCopy} />
-      </VStack>
-    </Flex>
+      <Image
+        objectFit="cover"
+        maxW={{ base: "100%", sm: "200px" }}
+        src={getCroppedImageUrl(link.qrCode || "")}
+        alt="Link QR Code"
+      />
+
+      <Stack>
+        <CardBody>
+          <Heading size="md">{link.title}</Heading>
+          <Text py="1" fontSize={24} fontWeight={500}>
+            {link.shortUrl}
+          </Text>
+          <Text fontSize={15}>{link.longUrl}</Text>
+        </CardBody>
+
+        <CardFooter>
+          <HStack>
+            <Button variant="solid" colorScheme="blue">
+              <Icon as={FaCopy} />
+            </Button>
+            <Button variant="solid" colorScheme="green">
+              <Icon as={FaWhatsapp} />
+            </Button>
+            <Button variant="solid" colorScheme="blue">
+              <Icon as={FaTwitter} />
+            </Button>
+            <Button variant="solid" colorScheme="blue">
+              <Icon as={FaTiktok} />
+            </Button>
+            <Button variant="solid" colorScheme="blue">
+              <Icon as={FaInstagram} />
+            </Button>
+            <Button variant="solid" colorScheme="red">
+              <Icon as={FaShare} />
+            </Button>
+          </HStack>
+        </CardFooter>
+      </Stack>
+    </Card>
   );
 };
 
