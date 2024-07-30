@@ -1,8 +1,14 @@
 import { Flex, Icon, Input, Select, Text } from "@chakra-ui/react";
+import { Dispatch, SetStateAction } from "react";
 import { BiLock } from "react-icons/bi";
 import { BsQuestionCircleFill } from "react-icons/bs";
+import { ICreateLink } from "../entites/Link";
 
-const ShortLinkShare = () => {
+interface IProps {
+  setLinkData: Dispatch<SetStateAction<ICreateLink>>;
+}
+
+const ShortLinkShare = ({ setLinkData }: IProps) => {
   const backHalfCount = 5;
 
   return (
@@ -22,7 +28,17 @@ const ShortLinkShare = () => {
           <Text fontSize={"md"} fontWeight={600}>
             Custom back-half (Optional)
           </Text>
-          <Input size={"md"} />
+          <Input
+            onChange={(e) =>
+              setLinkData((prev) => {
+                return {
+                  ...prev,
+                  customUrl: e.target.value,
+                };
+              })
+            }
+            size={"md"}
+          />
           <Flex alignItems={"center"} justifyContent={"space-evenly"}>
             <Text fontSize="sm" fontWeight={500}>
               You can create {backHalfCount} more custom back-halves this month.

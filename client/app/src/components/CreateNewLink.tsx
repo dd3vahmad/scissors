@@ -1,7 +1,12 @@
 import { Flex, HStack, Icon, Input, Switch, Text } from "@chakra-ui/react";
+import { Dispatch, SetStateAction } from "react";
 import { BiLock } from "react-icons/bi";
+import { ICreateLink } from "../entites/Link";
+interface IProps {
+  setLinkData: Dispatch<SetStateAction<ICreateLink>>;
+}
 
-const CreateNewLink = () => {
+const CreateNewLink = ({ setLinkData }: IProps) => {
   return (
     <>
       <Text fontSize={"3xl"} fontWeight={700}>
@@ -14,6 +19,11 @@ const CreateNewLink = () => {
             Destination
           </Text>
           <Input
+            onChange={(e) =>
+              setLinkData((prev) => {
+                return { ...prev, longUrl: e.target.value };
+              })
+            }
             size={"md"}
             placeholder="https://www.example.com/my-long-url"
           />
@@ -22,7 +32,17 @@ const CreateNewLink = () => {
           <Text fontSize={"md"} fontWeight={600}>
             Title (Optional)
           </Text>
-          <Input size={"md"} />
+          <Input
+            onChange={(e) =>
+              setLinkData((prev) => {
+                return {
+                  ...prev,
+                  title: e.target.value,
+                };
+              })
+            }
+            size={"md"}
+          />
           <HStack>
             <Switch size="md" />
             <Text fontSize="sm" fontWeight={500}>

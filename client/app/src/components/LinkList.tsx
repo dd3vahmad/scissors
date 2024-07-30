@@ -20,8 +20,8 @@ const LinkList = ({ links }: IProps) => {
           <AddIcon />
         </Button>
       </Flex>
-      {links.map((link: ILink) => {
-        return <LinkCard link={link} />;
+      {links.map((link: ILink, i) => {
+        return <LinkCard key={i} link={link} />;
       })}
     </Container>
   );

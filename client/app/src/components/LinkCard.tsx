@@ -16,7 +16,6 @@ import {
   FaCopy,
   FaInstagram,
   FaShare,
-  FaTelegram,
   FaTiktok,
   FaTwitter,
   FaWhatsapp,

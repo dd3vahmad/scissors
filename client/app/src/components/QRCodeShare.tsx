@@ -1,7 +1,13 @@
 import { Flex, Icon, Switch, Text } from "@chakra-ui/react";
+import { Dispatch, SetStateAction } from "react";
 import { BsQuestionCircleFill } from "react-icons/bs";
+import { ICreateLink } from "../entites/Link";
 
-const QRCodeShare = () => {
+interface IProps {
+  setLinkData: Dispatch<SetStateAction<ICreateLink>>;
+}
+
+const QRCodeShare = ({ setLinkData }: IProps) => {
   const qrCodeCount = 2;
 
   return (
@@ -12,7 +18,14 @@ const QRCodeShare = () => {
             QR Code (optional)
           </Text>
           <Flex alignItems={"center"} justifyContent={"space-between"} gap={2}>
-            <Switch size="md" />
+            <Switch
+              onChange={() => {
+                setLinkData((prev) => {
+                  return { ...prev, generateQrCode: !prev.generateQrCode };
+                });
+              }}
+              size="md"
+            />
             <Text fontSize={"sm"} fontWeight={600}>
               Generate a QR Code to share anywhere people can see it
             </Text>
