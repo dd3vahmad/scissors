@@ -24,6 +24,7 @@ const CreateNewLink = ({ setLinkData }: IProps) => {
                 return { ...prev, longUrl: e.target.value };
               })
             }
+            required
             size={"md"}
             placeholder="https://www.example.com/my-long-url"
           />

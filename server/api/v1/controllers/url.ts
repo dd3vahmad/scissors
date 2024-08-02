@@ -3,10 +3,15 @@ import { getOriginalUrl, shortenNewUrl } from "../services/url";
 import config from "../../../config/config";
 
 export const shortenUrl = async (req: Request, res: Response) => {
-  const { longUrl, customUrl, generateQrCode } = req.body;
+  const { title, longUrl, backHalf, generateQrCode } = req.body;
 
   try {
-    const shortUrl = await shortenNewUrl(customUrl, longUrl, generateQrCode);
+    const shortUrl = await shortenNewUrl(
+      title,
+      backHalf,
+      longUrl,
+      generateQrCode
+    );
 
     res.status(201).json(shortUrl);
   } catch (err) {

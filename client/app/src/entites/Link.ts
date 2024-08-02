@@ -1,6 +1,7 @@
 export interface ICreateLink {
+  title: string;
   longUrl: string;
-  customUrl: string;
+  backHalf: string;
   generateQrCode: boolean;
 }
 
@@ -8,7 +9,7 @@ export default interface ILink {
   title: string;
   longUrl: string;
   shortUrl: string;
-  customUrl?: string;
+  backHalf?: string;
   qrCode?: string;
   clicks: number;
 }

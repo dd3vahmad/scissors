@@ -11,11 +11,13 @@ import QRCodeShare from "../components/QRCodeShare";
 import LinkPageShare from "../components/LinkPageShare";
 import { ICreateLink } from "../entites/Link";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const CreateNew = () => {
   const [linkData, setLinkData] = useState<ICreateLink>({
+    title: "",
     longUrl: "",
-    customUrl: "",
+    backHalf: "",
     generateQrCode: false,
   });
   const bgColor1 = useColorModeValue("gray.400", "gray.300");
@@ -25,7 +27,9 @@ const CreateNew = () => {
 
   const createNewLink = async (linkData: ICreateLink | undefined) => {
     try {
-      console.log(linkData);
+      const response = await axios.post("/url/shorten", linkData);
+      if (!linkData?.longUrl) alert("Oops an error occurred");
+      console.log(response);
     } catch (error) {
       console.error(error);
     }

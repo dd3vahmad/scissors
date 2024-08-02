@@ -15,11 +15,12 @@ export const generateNewQrCode = async (shortUrl: string) => {
 };
 
 export const shortenNewUrl = async (
-  customUrl: string,
+  title: string,
+  backHalf: string,
   longUrl: string,
   generateQrCode: boolean
 ) => {
-  const urlCode = customUrl || uuidv4().slice(0, 8);
+  const urlCode = backHalf || uuidv4().slice(0, 8);
 
   try {
     let url = await Url.findOne({ longUrl });
@@ -41,7 +42,7 @@ export const shortenNewUrl = async (
       qrCode = newQrCode;
     }
 
-    url = new Url({ longUrl, shortUrl, customUrl, qrCode });
+    url = new Url({ title, longUrl, shortUrl, backHalf, qrCode });
     await url.save();
 
     return url;

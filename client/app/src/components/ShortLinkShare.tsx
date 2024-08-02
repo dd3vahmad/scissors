@@ -33,7 +33,7 @@ const ShortLinkShare = ({ setLinkData }: IProps) => {
               setLinkData((prev) => {
                 return {
                   ...prev,
-                  customUrl: e.target.value,
+                  backHalf: e.target.value,
                 };
               })
             }
