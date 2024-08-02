@@ -4,7 +4,17 @@ import Url from "../models/url";
 import config from "../../../config/config";
 import logger from "../../../utils/logger.util";
 
-export const shortenUrl = async (
+export const generateNewQrCode = async (shortUrl: string) => {
+  try {
+    const qrCode = await QRCode.toDataURL(shortUrl);
+    return qrCode;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export const shortenNewUrl = async (
   customUrl: string,
   longUrl: string,
   generateQrCode: boolean
@@ -21,7 +31,14 @@ export const shortenUrl = async (
 
     const shortUrl = `${config.app.BASE_URL}/${urlCode}`;
     if (generateQrCode) {
-      qrCode = await QRCode.toDataURL(shortUrl);
+      const newQrCode = await generateNewQrCode(shortUrl);
+      if (!newQrCode) {
+        console.error(`Failed to generate qr code for this link: ${shortUrl}`);
+        return logger.error(
+          `Failed to generate qr code for this link: ${shortUrl}`
+        );
+      }
+      qrCode = newQrCode;
     }
 
     url = new Url({ longUrl, shortUrl, customUrl, qrCode });
@@ -31,11 +48,10 @@ export const shortenUrl = async (
   } catch (err: any) {
     console.error(err);
     logger.error("An error occurred while shortening url");
-    throw new Error(err.message);
   }
 };
 
-export const redirectUrl = async (code: string) => {
+export const getOriginalUrl = async (code: string) => {
   try {
     const url = await Url.findOne({
       shortUrl: `${config.app.BASE_URL}/${code}`,
@@ -49,6 +65,5 @@ export const redirectUrl = async (code: string) => {
   } catch (err: any) {
     console.error(err);
     logger.error("An error occurred while redirecting url");
-    throw new Error(err.message);
   }
 };

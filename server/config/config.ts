@@ -9,7 +9,7 @@ const config = {
     BACKLOG: process.env.BACKLOG,
   },
   app: {
-    BASE_URL: process.env.BASE_URL,
+    BASE_URL: process.env.BASE_URL || "/",
   },
   db: {
     DATABASE_URI: process.env.DATABASE_URI || "",

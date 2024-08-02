@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import userAgent from "express-useragent";
+import apiRoutes from "./api/v1/routes";
 
 dotenv.config();
 
@@ -21,6 +22,6 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Routes
-// Import and use routes here
+app.use("api/v1", apiRoutes);
 
 export default app;

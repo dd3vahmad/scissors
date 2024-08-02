@@ -9,6 +9,11 @@ interface IUrl extends Document {
   clicks: number;
 }
 
+interface IClick extends Document {
+  at: string;
+  on: Date;
+}
+
 const UrlSchema: Schema = new Schema(
   {
     title: { type: String, required: true },
@@ -17,6 +22,7 @@ const UrlSchema: Schema = new Schema(
     customUrl: { type: String, unique: true },
     qrCode: { type: String },
     clicks: { type: Number, default: 0 },
+    clicksData: { type: Array },
   },
   { timestamps: true }
 );

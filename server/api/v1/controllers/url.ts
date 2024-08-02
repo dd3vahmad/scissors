@@ -1,25 +1,14 @@
 import { Request, Response } from "express";
-import { v4 as uuidv4 } from "uuid";
-import QRCode from "qrcode";
-import Url from "../models/url";
+import { getOriginalUrl, shortenNewUrl } from "../services/url";
+import config from "../../../config/config";
 
 export const shortenUrl = async (req: Request, res: Response) => {
-  const { longUrl, customUrl } = req.body;
-  const urlCode = customUrl || uuidv4().slice(0, 8);
+  const { longUrl, customUrl, generateQrCode } = req.body;
 
   try {
-    let url = await Url.findOne({ longUrl });
-    if (url) {
-      return res.status(200).json(url);
-    }
+    const shortUrl = await shortenNewUrl(customUrl, longUrl, generateQrCode);
 
-    const shortUrl = `${process.env.BASE_URL}/${urlCode}`;
-    const qrCode = await QRCode.toDataURL(shortUrl);
-
-    url = new Url({ longUrl, shortUrl, customUrl, qrCode });
-    await url.save();
-
-    res.status(201).json(url);
+    res.status(201).json(shortUrl);
   } catch (err) {
     console.error(err);
     res.status(500).json("Server error");
@@ -30,15 +19,11 @@ export const redirectUrl = async (req: Request, res: Response) => {
   const { code } = req.params;
 
   try {
-    const url = await Url.findOne({
-      shortUrl: `${process.env.BASE_URL}/${code}`,
-    });
-    if (url) {
-      url.clicks++;
-      await url.save();
-      return res.redirect(url.longUrl);
+    const url = await getOriginalUrl(code);
+    if (!url) {
+      return res.status(404).json({ message: "No URL found", failed: true });
     }
-    res.status(404).json("No URL found");
+    res.redirect(url || config.app.BASE_URL);
   } catch (err) {
     console.error(err);
     res.status(500).json("Server error");
