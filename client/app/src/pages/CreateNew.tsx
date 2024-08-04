@@ -56,7 +56,7 @@ const CreateNew = () => {
           bg={bgColor1}
           color={color1}
         >
-          {shorteningLink ? "Create" : <FaSpinner size={25} color={color2} />}
+          {shorteningLink ? <FaSpinner size={25} color={color1} /> : "Create"}
         </Button>
         <Button bg={bgColor2} color={color2}>
           Cancel
