@@ -6,7 +6,7 @@ import userAgent from "express-useragent";
 import apiRoutes from "./api/v1/routes";
 import cors, { CorsOptions } from "cors";
 import config from "./config/config";
-import { redirectUrl } from "./api/v1/controllers/url";
+import { redirectUrl } from "./api/v1/controllers/url.controller";
 import connectDb from "./database/database";
 
 dotenv.config();

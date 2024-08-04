@@ -12,6 +12,9 @@ const config = {
         process.env.NODE_ENV !== "production"
           ? process.env.SERVER_DEMO_BASE_URL
           : process.env.SERVER_LIVE_BASE_URL,
+      auth: {
+        JWT_SECRET: process.env.JWT_SECRET || "",
+      },
     },
   },
   db: {

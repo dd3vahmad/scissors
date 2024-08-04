@@ -1,18 +1,5 @@
-import mongoose, { Document, Schema } from "mongoose";
-
-interface IUrl extends Document {
-  title: string;
-  longUrl: string;
-  shortUrl: string;
-  backHalf?: string;
-  qrCode?: string;
-  clicks: number;
-}
-
-interface IClick extends Document {
-  at: string;
-  on: Date;
-}
+import mongoose, { Schema } from "mongoose";
+import IUrl from "../entities/url.entity";
 
 const UrlSchema: Schema = new Schema(
   {

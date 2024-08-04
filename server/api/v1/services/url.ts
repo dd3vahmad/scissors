@@ -1,12 +1,14 @@
 import { v4 as uuidv4 } from "uuid";
 import QRCode from "qrcode";
-import Url from "../models/url";
+import Url from "../models/url.model";
 import config from "../../../config/config";
 import logger from "../../../utils/logger.util";
 
 const server_base_url: string = config.server.app.BASE_URL || "";
 
-export const generateNewQrCode = async (shortUrl: string) => {
+export const generateNewQrCode: (
+  shortUrl: string
+) => Promise<string | boolean> = async (shortUrl: string) => {
   try {
     const qrCode = await QRCode.toDataURL(shortUrl);
     return qrCode;
@@ -65,6 +67,22 @@ export const getOriginalUrl = async (code: string) => {
       return url.longUrl;
     }
     logger.error(`Url with this back half ${cleanCode} is not found`);
+    return null;
+  } catch (err: any) {
+    logger.error("An error occurred while getting url");
+    return false;
+  }
+};
+
+export const getUserUrls = async (userId: string) => {
+  try {
+    const urls = await Url.find({
+      postedBy: userId,
+    });
+    if (urls) {
+      return urls;
+    }
+    logger.error(`Urls for this user ${userId} cannot not found`);
     return null;
   } catch (err: any) {
     logger.error("An error occurred while getting url");

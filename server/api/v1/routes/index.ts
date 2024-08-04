@@ -1,8 +1,8 @@
-import express from "express"
-import urlRoutes from "./url"
+import express from "express";
+import urlRoutes from "./url.route";
 
-const router = express.Router()
+const router = express.Router();
 
-router.use("/url", urlRoutes)
+router.use("/url", urlRoutes);
 
-export default router
+export default router;
