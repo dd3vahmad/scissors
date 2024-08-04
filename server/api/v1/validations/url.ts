@@ -7,8 +7,10 @@ export const validateUrl = (
   next: NextFunction
 ) => {
   const schema = Joi.object({
+    title: Joi.string().required(),
     longUrl: Joi.string().uri().required(),
-    customUrl: Joi.string().optional(),
+    backHalf: Joi.string().optional(),
+    generateQrCode: Joi.boolean().required(),
   });
 
   const { error } = schema.validate(req.body);
