@@ -9,6 +9,7 @@ import config from "./config/config";
 import { redirectUrl } from "./api/v1/controllers/url.controller";
 import connectDb from "./database/database";
 import IError from "./api/v1/entities/error.entity";
+import limiter from "./api/v1/middlewares/limiter.middleware";
 
 dotenv.config();
 
@@ -35,13 +36,14 @@ const corsOptions: CorsOptions = {
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(userAgent.express());
+
+// CORS configuration
 app.use(cors(corsOptions));
 
+// Handle preflight requests
+app.options("*", cors(corsOptions));
+
 // Rate Limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-});
 app.use(limiter);
 
 // Routes
