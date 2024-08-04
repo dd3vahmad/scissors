@@ -6,14 +6,15 @@ import userAgent from "express-useragent";
 import apiRoutes from "./api/v1/routes";
 import cors, { CorsOptions } from "cors";
 import config from "./config/config";
+import { redirectUrl } from "./api/v1/controllers/url";
+import connectDb from "./database/database";
 
 dotenv.config();
 
 const app = express();
+connectDb();
 
 const validOrigins = [
-  // "http://localhost:5174",
-  // "http://localhost:5173",
   config.client.landing.BASE_URL,
   config.client.app.BASE_URL,
 ];
@@ -44,5 +45,6 @@ app.use(limiter);
 
 // Routes
 app.use("/api/v1", apiRoutes);
+app.get("/:code", redirectUrl);
 
 export default app;
