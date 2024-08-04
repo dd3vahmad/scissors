@@ -3,6 +3,7 @@ import Dashboard from "./pages/Dashboard";
 import AppLayout from "./layout/AppLayout";
 import ErrorPage from "./pages/ErrorPage";
 import Links from "./pages/Links";
+import Link from "./pages/Link";
 import CreateNew from "./pages/CreateNew";
 import QrCodes from "./pages/QrCodes";
 import Pages from "./pages/Pages";
@@ -26,6 +27,7 @@ function App() {
           <Route path="/" element={<AppLayout />} errorElement={<ErrorPage />}>
             <Route index element={<Dashboard />} />
             <Route path="links" element={<Links />} />
+            <Route path="link/:id" element={<Link />} />
             <Route path="create-new" element={<CreateNew />} />
             <Route path="qrcodes" element={<QrCodes />} />
             <Route path="pages" element={<Pages />} />

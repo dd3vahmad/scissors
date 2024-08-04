@@ -6,6 +6,7 @@ export interface ICreateLink {
 }
 
 export default interface ILink {
+  id: string;
   title: string;
   longUrl: string;
   shortUrl: string;
