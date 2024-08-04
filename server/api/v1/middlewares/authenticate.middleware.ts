@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload, VerifyErrors } from "jsonwebtoken";
 import config from "../../../config/config";
 import { error } from "../../../utils/error.util";
-import IUser from "../entities/user.entity";
 
 // Extend the Express Request interface to include the user property
 declare module "express-serve-static-core" {

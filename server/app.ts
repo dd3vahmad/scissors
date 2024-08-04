@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
@@ -8,6 +8,7 @@ import cors, { CorsOptions } from "cors";
 import config from "./config/config";
 import { redirectUrl } from "./api/v1/controllers/url.controller";
 import connectDb from "./database/database";
+import IError from "./api/v1/entities/error.entity";
 
 dotenv.config();
 
@@ -46,5 +47,16 @@ app.use(limiter);
 // Routes
 app.use("/api/v1", apiRoutes);
 app.get("/:code", redirectUrl);
+
+// Internal server error middleware
+app.use((err: IError, req: Request, res: Response, next: NextFunction) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  return res.status(statusCode).json({
+    failed: true,
+    message,
+    statusCode,
+  });
+});
 
 export default app;
