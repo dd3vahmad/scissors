@@ -5,7 +5,7 @@ import links from "../data/links";
 import { useNavigate } from "react-router-dom";
 
 const Links = () => {
-  const location = useNavigate();
+  const goTo = useNavigate();
   const bgColor = useColorModeValue("gray.100", "gray.800");
   const bgColor1 = useColorModeValue("white", "gray.800");
   const color = useColorModeValue("gray.400", "whitesmoke");
@@ -45,7 +45,7 @@ const Links = () => {
               fontSize={"lg"}
               mt={5}
               mx={10}
-              onClick={() => location("/create-new")}
+              onClick={() => goTo("/create-new")}
             >
               Create A New Sicsly Link
             </Button>

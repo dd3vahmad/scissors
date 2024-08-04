@@ -10,10 +10,14 @@ import ShortLinkShare from "../components/ShortLinkShare";
 import QRCodeShare from "../components/QRCodeShare";
 import LinkPageShare from "../components/LinkPageShare";
 import { ICreateLink } from "../entites/Link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
+import { FaSpinner } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 const CreateNew = () => {
+  const goTo = useNavigate();
+  const [shorteningLink, setShorteningLink] = useState(false);
   const [linkData, setLinkData] = useState<ICreateLink>({
     title: "",
     longUrl: "",
@@ -27,17 +31,15 @@ const CreateNew = () => {
 
   const createNewLink = async (linkData: ICreateLink | undefined) => {
     try {
-      const response = await axios.post("/url/shorten", linkData);
+      setShorteningLink(true);
+      await axios.post("/url/shorten", linkData);
       if (!linkData?.longUrl) alert("Oops an error occurred");
-      console.log(response);
+      setShorteningLink(false);
+      return goTo("/links");
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    console.log(linkData);
-  }, [linkData]);
 
   return (
     <Container py={3} px={5}>
@@ -54,7 +56,7 @@ const CreateNew = () => {
           bg={bgColor1}
           color={color1}
         >
-          Create
+          {shorteningLink ? "Create" : <FaSpinner size={25} color={color2} />}
         </Button>
         <Button bg={bgColor2} color={color2}>
           Cancel
