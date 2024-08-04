@@ -7,19 +7,28 @@ const config = {
     PORT: process.env.PORT,
     HOSTNAME: process.env.HOSTNAME,
     BACKLOG: process.env.BACKLOG,
-    NODE_ENV: "development",
+    app: {
+      BASE_URL:
+        process.env.NODE_ENV !== "production"
+          ? process.env.SERVER_DEMO_BASE_URL
+          : process.env.SERVER_LIVE_BASE_URL,
+    },
   },
   db: {
     DATABASE_URI: process.env.DATABASE_URI || "",
   },
   client: {
     app: {
-      DEMO_BASE_URL: process.env.APP_DEMO_BASE_URL || "/",
-      LIVE_BASE_URL: process.env.APP_LIVE_BASE_URL || "/",
+      BASE_URL:
+        process.env.NODE_ENV !== "production"
+          ? process.env.APP_DEMO_BASE_URL
+          : process.env.APP_LIVE_BASE_URL,
     },
     landing: {
-      DEMO_BASE_URL: process.env.LANDING_DEMO_BASE_URL || "/",
-      LIVE_BASE_URL: process.env.LANDING_LIVE_BASE_URL || "/",
+      BASE_URL:
+        process.env.NODE_ENV !== "production"
+          ? process.env.LANDING_DEMO_BASE_URL
+          : process.env.LANDING_LIVE_BASE_URL,
     },
   },
 };

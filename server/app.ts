@@ -4,17 +4,28 @@ import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import userAgent from "express-useragent";
 import apiRoutes from "./api/v1/routes";
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 import config from "./config/config";
 
 dotenv.config();
 
 const app = express();
-const corsOptions = {
-  origin:
-    config.server.NODE_ENV !== "production"
-      ? [config.client.landing.DEMO_BASE_URL, config.client.app.DEMO_BASE_URL]
-      : [config.client.landing.LIVE_BASE_URL, config.client.app.LIVE_BASE_URL],
+
+const validOrigins = [
+  // "http://localhost:5174",
+  // "http://localhost:5173",
+  config.client.landing.BASE_URL,
+  config.client.app.BASE_URL,
+];
+
+const corsOptions: CorsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || validOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 };
 
@@ -32,6 +43,6 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Routes
-app.use("api/v1", apiRoutes);
+app.use("/api/v1", apiRoutes);
 
 export default app;

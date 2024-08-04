@@ -4,6 +4,8 @@ import Url from "../models/url";
 import config from "../../../config/config";
 import logger from "../../../utils/logger.util";
 
+const server_base_url: string = config.server.app.BASE_URL || "";
+
 export const generateNewQrCode = async (shortUrl: string) => {
   try {
     const qrCode = await QRCode.toDataURL(shortUrl);
@@ -30,7 +32,7 @@ export const shortenNewUrl = async (
       return url;
     }
 
-    const shortUrl = `${config.app.BASE_URL}/${urlCode}`;
+    const shortUrl = `${server_base_url}/${urlCode}`;
     if (generateQrCode) {
       const newQrCode = await generateNewQrCode(shortUrl);
       if (!newQrCode) {
@@ -55,7 +57,7 @@ export const shortenNewUrl = async (
 export const getOriginalUrl = async (code: string) => {
   try {
     const url = await Url.findOne({
-      shortUrl: `${config.app.BASE_URL}/${code}`,
+      shortUrl: `${server_base_url}/${code}`,
     });
     if (url) {
       url.clicks++;
