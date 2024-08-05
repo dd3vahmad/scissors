@@ -15,4 +15,4 @@ const TokenSchema: Schema = new Schema(
   }
 );
 
-export default mongoose.model<IToken>("User", TokenSchema);
+export default mongoose.model<IToken>("Token", TokenSchema);

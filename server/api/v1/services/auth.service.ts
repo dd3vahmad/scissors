@@ -76,12 +76,12 @@ export const signInUser = async (email: string, password: string) => {
   }
 };
 
-export const resendOTPToken = async (userId: string) => {
+export const resendOTPToken = async (email: string) => {
   try {
-    const validUser = await User.findById(userId);
+    const validUser = await User.findOne({ email });
     if (validUser) {
       await Token.findOneAndDelete({ userId: validUser._id });
-      await sendOTP(validUser.email, userId, validUser.lastname);
+      await sendOTP(validUser.email, validUser._id, validUser.lastname);
     }
   } catch (err: IError | any) {
     throw new Error(err.message);

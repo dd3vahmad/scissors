@@ -41,7 +41,7 @@ export const signup = async (
   }
 };
 
-export const login = async (
+export const signin = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -61,7 +61,7 @@ export const login = async (
         failed: false,
       });
   } catch (error) {
-    next({ message: "Internal server error. Please try again." });
+    next(error);
   }
 };
 
@@ -71,8 +71,8 @@ export const resendOTP = async (
   next: NextFunction
 ) => {
   try {
-    const user = req.user as JwtPayload;
-    await resendOTPToken(user._id);
+    const email = req.body.email;
+    await resendOTPToken(email);
     res
       .status(200)
       .json({ message: "OTP has been resent successfully", failed: false });
