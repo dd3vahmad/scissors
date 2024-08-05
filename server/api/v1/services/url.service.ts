@@ -3,6 +3,7 @@ import QRCode from "qrcode";
 import Url from "../models/url.model";
 import config from "../../../config/config";
 import logger from "../../../utils/logger.util";
+import IError from "../entities/error.entity";
 
 const server_base_url: string = config.server.app.BASE_URL || "";
 
@@ -12,9 +13,8 @@ export const generateNewQrCode: (
   try {
     const qrCode = await QRCode.toDataURL(shortUrl);
     return qrCode;
-  } catch (error) {
-    logger.error(error);
-    return false;
+  } catch (error: IError | any) {
+    throw new Error(error.message);
   }
 };
 
@@ -39,7 +39,7 @@ export const shortenNewUrl = async (
     if (generateQrCode) {
       const newQrCode = await generateNewQrCode(shortUrl);
       if (!newQrCode) {
-        return logger.error(
+        throw new Error(
           `Failed to generate qr code for this link: ${shortUrl}`
         );
       }
@@ -50,8 +50,8 @@ export const shortenNewUrl = async (
     await url.save();
 
     return url;
-  } catch (err: any) {
-    logger.error("An error occurred while shortening url");
+  } catch (err: IError | any) {
+    throw new Error(err.message);
   }
 };
 
@@ -66,11 +66,9 @@ export const getOriginalUrl = async (code: string) => {
       await url.save();
       return url.longUrl;
     }
-    logger.error(`Url with this back half ${cleanCode} is not found`);
-    return null;
-  } catch (err: any) {
-    logger.error("An error occurred while getting url");
-    return false;
+    throw new Error(`Url with this back half ${cleanCode} is not found`);
+  } catch (err: IError | any) {
+    throw new Error(err.message);
   }
 };
 
@@ -82,10 +80,8 @@ export const getUserUrls = async (userId: string) => {
     if (urls) {
       return urls;
     }
-    logger.error(`Urls for this user ${userId} cannot not found`);
-    return null;
-  } catch (err: any) {
-    logger.error("An error occurred while getting url");
-    return false;
+    throw new Error(`Urls for this user ${userId} cannot not found`);
+  } catch (err: IError | any) {
+    throw new Error(err.message);
   }
 };
