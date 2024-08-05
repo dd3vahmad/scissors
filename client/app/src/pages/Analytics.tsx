@@ -7,29 +7,29 @@ import formatDay from "../Utils/formatDay";
 const Analytics = () => {
   const clicksData = [
     {
-      at: new Date().getDay(),
+      on: new Date().getDay(),
       clicks: 10,
     },
     {
-      at: new Date().getDay() + 1,
+      on: new Date().getDay() + 1,
       clicks: 20,
     },
     {
-      at: new Date().getDay() + 2,
+      on: new Date().getDay() + 2,
       clicks: 18,
     },
     {
-      at: new Date().getDay() + 3,
+      on: new Date().getDay() + 3,
       clicks: 11,
     },
     {
-      at: new Date().getDay() + 4,
+      on: new Date().getDay() + 4,
       clicks: 13,
     },
   ];
 
   const chartData = {
-    labels: clicksData.map((data) => formatDay(data.at, true).toUpperCase()),
+    labels: clicksData.map((data) => formatDay(data.on, true).toUpperCase()),
     datasets: [
       {
         label: "Users Gained ",
