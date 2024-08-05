@@ -70,47 +70,47 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const loginUser = async (email: string, password: string): Promise<any> => {
     try {
       const formData = { email, password };
-      const response = await axios.post("/api/auth/login", formData);
+      const response = await axios.post("/auth/login", formData);
       return response.data;
     } catch (error: any) {
-      throw new Error(error.response.data.message);
+      throw new Error(error.response.data.message || error.message);
     }
   };
 
   const logoutUser = async (): Promise<any> => {
     try {
-      const response = await axios.get("/api/auth/logout");
+      const response = await axios.get("/auth/logout");
       return response.data;
     } catch (error: any) {
-      throw new Error(error.response.data.message);
+      throw new Error(error.response.data.message || error.message);
     }
   };
 
   const signupUser = async (formData: IUser): Promise<any> => {
     try {
-      const response = await axios.post("/api/auth/signup", formData);
+      const response = await axios.post("/auth/signup", formData);
       return response.data;
     } catch (error: any) {
-      return { failed: true, message: error.response.data.message };
+      throw new Error(error.response.data.message || error.message);
     }
   };
 
   const verifyUserEmail = async (email: string, otp: number): Promise<any> => {
     try {
       const formData = { email, otp };
-      const response = await axios.post("/api/auth/verifyWithOTP", formData);
+      const response = await axios.post("/auth/verifyWithOTP", formData);
       return response.data;
     } catch (error: any) {
-      throw new Error(error.response.data.message);
+      throw new Error(error.response.data.message || error.message);
     }
   };
 
   const resendOTP = async (email: string): Promise<any> => {
     try {
-      const response = await axios.post("/api/auth/resend-otp", { email });
+      const response = await axios.post("/auth/resend-otp", { email });
       return response.data;
     } catch (error: any) {
-      throw new Error(error.response.data.message);
+      throw new Error(error.response.data.message || error.message);
     }
   };
 
