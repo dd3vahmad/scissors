@@ -107,7 +107,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const resendOTP = async (email: string): Promise<any> => {
     try {
-      const response = await axios.post("/auth/resend-otp", { email });
+      const response = await axios.post("/auth/resendOTP", { email });
       return response.data;
     } catch (error: any) {
       throw new Error(error.response.data.message || error.message);

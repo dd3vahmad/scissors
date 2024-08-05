@@ -16,7 +16,7 @@ import { useAuth } from "../context/auth"; // Adjust the path accordingly
 import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
-  const { loginUser } = useAuth();
+  const { loginUser, fetchUserData } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -26,6 +26,7 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       await loginUser(email, password);
+      await fetchUserData();
       navigate("/");
     } catch (error: any) {
       setError(error.message);
