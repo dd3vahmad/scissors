@@ -21,6 +21,7 @@ import EVerificationRoute from "./rbac/EVerification";
 
 function App() {
   axios.defaults.baseURL = "http://localhost:5700/api/v1";
+  axios.defaults.withCredentials = true;
   return (
     <>
       <AuthProvider>

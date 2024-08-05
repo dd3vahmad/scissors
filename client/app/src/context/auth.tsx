@@ -48,7 +48,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const getCurrentUser = async (): Promise<IUser | null> => {
     try {
-      const response = await axios.get("/api/v1/user/user-details");
+      const response = await axios.get("/user/user-details");
       return response.data as IUser;
     } catch (error) {
       return null;
