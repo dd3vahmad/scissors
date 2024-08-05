@@ -1,79 +1,61 @@
 import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
+  Box,
+  Flex,
   Heading,
-  HStack,
   Icon,
   Image,
   Stack,
   Text,
+  useColorModeValue,
+  VStack,
 } from "@chakra-ui/react";
 import ILink from "../entites/Link";
 import getCroppedImageUrl from "../Utils/image-url";
-import {
-  FaCopy,
-  FaInstagram,
-  FaShare,
-  FaTiktok,
-  FaTwitter,
-  FaWhatsapp,
-} from "react-icons/fa6";
+import { FaCopy, FaDownload, FaShare } from "react-icons/fa6";
 
 interface IProps {
   link: ILink;
 }
 
 const LinkCard = ({ link }: IProps) => {
+  const iconColor = useColorModeValue("grey", "gray");
+
   return (
-    <Card
-      direction={{ base: "column", sm: "row" }}
-      overflow="hidden"
-      variant="outline"
-      mb={5}
-      shadow={"2xl"}
+    <Flex
+      gap={3}
+      p={2}
+      alignItems={"start"}
+      border={"1px solid gray"}
+      borderRadius={5}
     >
       <Image
         objectFit="cover"
-        maxW={{ base: "100%", sm: "200px" }}
+        maxW={{ base: "100px", sm: "50px" }}
         src={getCroppedImageUrl(link.qrCode || "")}
         alt="Link QR Code"
+        borderRadius={5}
       />
 
       <Stack>
-        <CardBody>
-          <Heading size="md">{link.title}</Heading>
-          <Text py="1" fontSize={24} fontWeight={500}>
+        <Box>
+          <Heading size="sm">{link.title}</Heading>
+          <Text py="1" fontSize={14} fontWeight={500}>
             {link.shortUrl}
           </Text>
-          <Text fontSize={15}>{link.longUrl}</Text>
-        </CardBody>
-
-        <CardFooter>
-          <HStack>
-            <Button variant="solid" colorScheme="blue">
-              <Icon as={FaCopy} />
-            </Button>
-            <Button variant="solid" colorScheme="green">
-              <Icon as={FaWhatsapp} />
-            </Button>
-            <Button variant="solid" colorScheme="blue">
-              <Icon as={FaTwitter} />
-            </Button>
-            <Button variant="solid" colorScheme="blue">
-              <Icon as={FaTiktok} />
-            </Button>
-            <Button variant="solid" colorScheme="blue">
-              <Icon as={FaInstagram} />
-            </Button>
-            <Button variant="solid" colorScheme="red">
-              <Icon as={FaShare} />
-            </Button>
-          </HStack>
-        </CardFooter>
+          <Text fontSize={10}>{link.longUrl}</Text>
+        </Box>
       </Stack>
-    </Card>
+      <VStack
+        display={"flex"}
+        justifyContent={"start"}
+        alignItems={"end"}
+        flex={1}
+      >
+        <Icon as={FaCopy} color={iconColor} />
+        <Icon as={FaShare} color={iconColor} />
+        <Icon as={FaDownload} color={iconColor} />
+      </VStack>
+    </Flex>
   );
 };
 

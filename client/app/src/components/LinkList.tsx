@@ -1,4 +1,4 @@
-import { Button, Container, Flex, Text } from "@chakra-ui/react";
+import { Container, Flex, Stack, Text } from "@chakra-ui/react";
 import ILink from "../entites/Link";
 import LinkCard from "./LinkCard";
 import { useNavigate } from "react-router-dom";
@@ -16,13 +16,23 @@ const LinkList = ({ links }: IProps) => {
         <Text fontSize={"larger"} py={2} fontWeight={600}>
           My Sicsly Links:
         </Text>
-        <Button borderWidth={2} onClick={() => location("/create-new")}>
-          <AddIcon />
-        </Button>
+        <Flex gap={2} onClick={() => location("/create-new")}>
+          <Text fontWeight={600}>Create</Text>
+          <AddIcon
+            px={4}
+            py={2}
+            borderRadius={"50%"}
+            minInlineSize={26}
+            minBlockSize={26}
+            borderWidth={2}
+          />
+        </Flex>
       </Flex>
-      {links.map((link: ILink, i) => {
-        return <LinkCard key={i} link={link} />;
-      })}
+      <Stack>
+        {links.map((link: ILink, i) => {
+          return <LinkCard key={i} link={link} />;
+        })}
+      </Stack>
     </Container>
   );
 };
