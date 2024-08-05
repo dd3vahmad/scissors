@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import rateLimit from "express-rate-limit";
+import authRoutes from "./api/v1/routes/auth.route";
 import userAgent from "express-useragent";
 import apiRoutes from "./api/v1/routes";
 import cors, { CorsOptions } from "cors";
@@ -10,6 +10,7 @@ import { redirectUrl } from "./api/v1/controllers/url.controller";
 import connectDb from "./database/database";
 import IError from "./api/v1/entities/error.entity";
 import limiter from "./api/v1/middlewares/limiter.middleware";
+import authenticateToken from "./api/v1/middlewares/authenticate.middleware";
 
 dotenv.config();
 
@@ -47,7 +48,8 @@ app.options("*", cors(corsOptions));
 app.use(limiter);
 
 // Routes
-app.use("/api/v1", apiRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1", authenticateToken, apiRoutes);
 app.get("/:code", redirectUrl);
 
 // Internal server error middleware

@@ -14,7 +14,7 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.access_token;
 
   if (!token) {
-    const res_error = error("Token is required");
+    const res_error = error(401, "Token is required");
     return res.status(401).json(res_error);
   }
 
