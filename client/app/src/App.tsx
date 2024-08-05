@@ -16,6 +16,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import axios from "axios";
 import ProtectedRoute from "./rbac/ProtectedRoute";
 import AuthProvider from "./context/auth";
+import VerifyEmail from "./pages/VerifyEmail";
+import EVerificationRoute from "./rbac/EVerification";
 
 function App() {
   axios.defaults.baseURL = "http://localhost:5700/api/v1";
@@ -26,6 +28,9 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/" element={<EVerificationRoute />}>
+              <Route path="/verify-email" element={<VerifyEmail />} />
+            </Route>
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
               path="/"

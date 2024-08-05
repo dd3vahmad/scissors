@@ -41,9 +41,10 @@ const SignUp: React.FC = () => {
         password,
       };
       await signupUser(formData);
+      localStorage.setItem("new-user-email", email);
       navigate("/verify-email"); // Redirect to email verification page
-    } catch (error) {
-      setError("Failed to sign up. Please try again.");
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 
