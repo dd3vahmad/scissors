@@ -76,7 +76,10 @@ const Login: React.FC = () => {
           </Stack>
         </form>
         <Text mt={4} textAlign="center">
-          Don't have an account? <a href="/signup">Sign up</a>
+          Don't have an account?{" "}
+          <span className="hover:underline" onClick={() => navigate("/signup")}>
+            Sign up
+          </span>
         </Text>
       </Box>
     </Container>
