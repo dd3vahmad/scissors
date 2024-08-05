@@ -32,7 +32,7 @@ const Analytics = () => {
     labels: clicksData.map((data) => formatDay(data.on, true).toUpperCase()),
     datasets: [
       {
-        label: "Users Gained ",
+        label: "Users Gained",
         data: clicksData.map((data) => data.clicks),
         backgroundColor: [
           "rgba(75,192,192,1)",
