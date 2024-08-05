@@ -41,3 +41,6 @@
 2024-08-05T21:06:01.363Z [32minfo[39m: Connected to database
 2024-08-05T21:14:08.967Z [32minfo[39m: Server running on port 5700
 2024-08-05T21:17:56.209Z [32minfo[39m: Connected to database
+2024-08-05T21:20:53.052Z [32minfo[39m: Server running on port 5700
+2024-08-05T21:20:55.600Z [32minfo[39m: Connected to database
+2024-08-05T21:21:11.921Z [31merror[39m: Email fail to send.

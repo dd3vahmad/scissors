@@ -7,7 +7,6 @@ import {
   verifyEmailWithOTP,
 } from "../services/auth.service";
 import { sendOTP } from "../../../utils/sendotp.util";
-import { JwtPayload } from "jsonwebtoken";
 
 interface IRequestParams {}
 
