@@ -2,7 +2,6 @@ import { v4 as uuidv4 } from "uuid";
 import QRCode from "qrcode";
 import Url from "../models/url.model";
 import config from "../../../config/config";
-import logger from "../../../utils/logger.util";
 import IError from "../entities/error.entity";
 
 const server_base_url: string = config.server.app.BASE_URL || "";
@@ -83,5 +82,16 @@ export const getUserUrls = async (userId: string) => {
     throw new Error(`Urls for this user ${userId} cannot not found`);
   } catch (err: IError | any) {
     throw new Error(err.message);
+  }
+};
+
+export const getUrlStats = async (code: string) => {
+  try {
+    const cleanCode = code.replace(" ", "");
+    const url = await Url.findOne({
+      shortUrl: `${server_base_url}/${cleanCode}`,
+    });
+  } catch (error: IError | any) {
+    throw new Error(error.message);
   }
 };
