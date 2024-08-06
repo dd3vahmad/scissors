@@ -2,12 +2,14 @@ import { Flex, Icon, Image, Text, useColorModeValue } from "@chakra-ui/react";
 import getCroppedImageUrl from "../Utils/image-url";
 import IQrCode from "../entites/QrCode";
 import { FaCopy, FaDownload, FaShare } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
   qrCode: IQrCode;
 }
 
 const QRCodeCard = ({ qrCode }: IProps) => {
+  const goTo = useNavigate();
   const iconColor = useColorModeValue("grey", "gray");
 
   return (
@@ -27,6 +29,7 @@ const QRCodeCard = ({ qrCode }: IProps) => {
           src={getCroppedImageUrl(qrCode.qrCode || "")}
           alt="Link QR Code"
           borderRadius={5}
+          onClick={() => goTo(`/links/${qrCode.id}`)}
         />
 
         <Flex

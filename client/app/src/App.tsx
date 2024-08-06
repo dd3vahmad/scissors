@@ -40,8 +40,8 @@ function App() {
             >
               <Route path="/" element={<ProtectedRoute />}>
                 <Route index element={<Dashboard />} />
+                <Route path="links/:id" element={<Link />} />
                 <Route path="links" element={<Links />} />
-                <Route path="link/:id" element={<Link />} />
                 <Route path="create-new" element={<CreateNew />} />
                 <Route path="qrcodes" element={<QrCodes />} />
                 <Route path="pages" element={<Pages />} />

@@ -12,6 +12,7 @@ import {
 import ILink from "../entites/Link";
 import getCroppedImageUrl from "../Utils/image-url";
 import { FaCopy, FaDownload, FaShare } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
   link: ILink;
@@ -19,6 +20,8 @@ interface IProps {
 
 const LinkCard = ({ link }: IProps) => {
   const iconColor = useColorModeValue("grey", "gray");
+  const goTo = useNavigate();
+  console.log(link);
 
   return (
     <Flex
@@ -34,15 +37,22 @@ const LinkCard = ({ link }: IProps) => {
         src={getCroppedImageUrl(link.qrCode || "")}
         alt="Link QR Code"
         borderRadius={5}
+        onClick={() => goTo(`/links/${link.id}`)}
       />
 
-      <Stack>
+      <Stack mt={2}>
         <Box>
           <Heading size="sm">{link.title}</Heading>
           <Text py="1" fontSize={14} fontWeight={500}>
-            {link.shortUrl}
+            <a target="_blank" href={link.shortUrl}>
+              {link.shortUrl}
+            </a>
           </Text>
-          <Text fontSize={10}>{link.longUrl}</Text>
+          <Text fontSize={10}>
+            <a target="_blank" href={link.longUrl}>
+              {link.longUrl}
+            </a>
+          </Text>
         </Box>
       </Stack>
       <VStack
