@@ -24,6 +24,7 @@
   "description": "A simple and scalable url shortener which can also be used to generate easy-to-use qrcode for long ambiguous links",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^4.17.21",

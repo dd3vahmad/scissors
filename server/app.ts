@@ -11,6 +11,7 @@ import connectDb from "./database/database";
 import IError from "./api/v1/entities/error.entity";
 import limiter from "./api/v1/middlewares/limiter.middleware";
 import authenticateToken from "./api/v1/middlewares/authenticate.middleware";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -46,6 +47,7 @@ app.options("*", cors(corsOptions));
 
 // Rate Limiting
 app.use(limiter);
+app.use(cookieParser());
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
