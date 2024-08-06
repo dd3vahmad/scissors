@@ -1,19 +1,40 @@
-import { Button, Flex, Text, useColorModeValue } from "@chakra-ui/react";
+import { Button, Flex, Icon, Text, useColorModeValue } from "@chakra-ui/react";
 import NoData from "../components/NoData";
 import { useNavigate } from "react-router-dom";
 import QrCodeList from "../components/QrCodeList";
-import qrcodes from "../data/qrcodes";
+import { useEffect, useState } from "react";
+import { FaSpinner } from "react-icons/fa6";
+import axios from "axios";
 
 const QrCodes = () => {
-  const location = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [qrCodeHistory, setQrCodeHistory] = useState([]);
   const bgColor = useColorModeValue("gray.100", "gray.800");
   const bgColor1 = useColorModeValue("white", "gray.800");
   const color = useColorModeValue("gray.400", "whitesmoke");
+  const goTo = useNavigate();
+
+  const getLinkHistory = async () => {
+    try {
+      const response: any = await axios.get("/url/qrcode-history");
+
+      setQrCodeHistory(response.data.data);
+      return setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getLinkHistory();
+  }, []);
 
   return (
     <>
-      {qrcodes.length ? (
-        <QrCodeList qrcodes={qrcodes} />
+      {loading ? (
+        <Icon as={FaSpinner} size={16} />
+      ) : qrCodeHistory.length ? (
+        <QrCodeList qrcodes={qrCodeHistory} />
       ) : (
         <Flex direction={"column"}>
           <NoData message="No QR Code Found" />
@@ -45,7 +66,7 @@ const QrCodes = () => {
               fontSize={"lg"}
               mt={5}
               mx={10}
-              onClick={() => location("/create-new")}
+              onClick={() => goTo("/create-new")}
             >
               Create A Code
             </Button>

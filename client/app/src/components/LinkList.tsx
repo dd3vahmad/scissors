@@ -1,8 +1,8 @@
-import { Container, Flex, Stack, Text } from "@chakra-ui/react";
+import { Container, Flex, Icon, Stack, Text } from "@chakra-ui/react";
 import ILink from "../entites/Link";
 import LinkCard from "./LinkCard";
 import { useNavigate } from "react-router-dom";
-import { AddIcon } from "@chakra-ui/icons";
+import { IoAddSharp } from "react-icons/io5";
 
 interface IProps {
   links: ILink[];
@@ -18,9 +18,8 @@ const LinkList = ({ links }: IProps) => {
         </Text>
         <Flex gap={2} onClick={() => location("/create-new")}>
           <Text fontWeight={600}>Create</Text>
-          <AddIcon
-            px={4}
-            py={2}
+          <Icon
+            as={IoAddSharp}
             borderRadius={"50%"}
             minInlineSize={26}
             minBlockSize={26}

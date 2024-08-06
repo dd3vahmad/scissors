@@ -1,11 +1,13 @@
-import { Button, Flex, Text, useColorModeValue } from "@chakra-ui/react";
+import { Button, Flex, Icon, Text, useColorModeValue } from "@chakra-ui/react";
 import LinkList from "../components/LinkList";
 import NoData from "../components/NoData";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { FaSpinner } from "react-icons/fa6";
 
 const Links = () => {
+  const [loading, setLoading] = useState(true);
   const [linkHistory, setLinkHistory] = useState([]);
   const goTo = useNavigate();
   const bgColor = useColorModeValue("gray.100", "gray.800");
@@ -16,7 +18,8 @@ const Links = () => {
     try {
       const response: any = await axios.get("/url/history");
 
-      return setLinkHistory(response.data.data);
+      setLinkHistory(response.data.data);
+      return setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -28,7 +31,9 @@ const Links = () => {
 
   return (
     <>
-      {linkHistory.length ? (
+      {loading ? (
+        <Icon as={FaSpinner} size={16} />
+      ) : linkHistory.length ? (
         <LinkList links={linkHistory} />
       ) : (
         <Flex direction={"column"}>

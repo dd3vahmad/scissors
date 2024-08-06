@@ -1,4 +1,4 @@
 export default interface IQrCode {
-  title: string;
-  refLink: string;
+  qrCode: string;
+  link: string;
 }
