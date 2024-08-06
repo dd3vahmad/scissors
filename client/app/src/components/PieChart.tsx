@@ -1,8 +1,11 @@
-import { ChartData } from "chart.js";
-import { Pie } from "react-chartjs-2";
+import { ChartData, Chart as ChartJS, ArcElement, Title, Tooltip, Legend } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
+
+// Register the necessary components
+ChartJS.register(ArcElement, Title, Tooltip, Legend);
 
 interface IProps {
-  chartData: ChartData<"pie", (number | [number, number] | null)[], unknown>;
+  chartData: ChartData<'pie', (number | [number, number] | null)[], unknown>;
 }
 
 const PieChart = ({ chartData }: IProps) => {

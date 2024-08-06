@@ -1,5 +1,28 @@
-import { ChartData } from "chart.js";
+import {
+  ChartData,
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  LineController,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import { Line } from "react-chartjs-2";
+
+// Register the necessary components
+ChartJS.register(
+  LineElement,
+  PointElement,
+  LineController,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface IProps {
   chartData: ChartData<"line", (number | [number, number] | null)[], unknown>;
