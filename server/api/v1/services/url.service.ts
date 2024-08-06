@@ -85,7 +85,14 @@ export const getUserUrls = async (userId: string) => {
       postedBy: userId,
     });
     if (urls) {
-      return urls;
+      const formattedUrls = urls.map((url) => {
+        const { __v, _id, ...rest } = url.toObject();
+        return {
+          id: _id,
+          ...rest,
+        };
+      });
+      return formattedUrls;
     }
     throw new Error(`Urls for this user ${userId} cannot not found`);
   } catch (err: IError | any) {

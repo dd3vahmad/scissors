@@ -36,6 +36,7 @@ export const redirectUrl = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log(req.useragent);
   const { code } = req.params;
 
   try {
@@ -82,6 +83,39 @@ export const getUserUrlHistory: (
       failed: false,
       message: "User urls fetched successfully",
       data: urls,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getUserQrCodeHistory: (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => void = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userObj = req.user as any;
+    const urls = await getUserUrls(userObj._id);
+    const formattedCodesObj = urls.map((url) => {
+      const { longUrl, qrCode, id, ...rest } = url;
+
+      if (qrCode)
+        return {
+          id,
+          link: longUrl,
+          qrCode,
+        };
+    });
+    if (!formattedCodesObj) {
+      return res
+        .status(404)
+        .json({ message: "No Qr Code found", failed: true });
+    }
+    res.status(200).json({
+      failed: false,
+      message: "User qr codes fetched successfully",
+      data: formattedCodesObj,
     });
   } catch (err) {
     next(err);
