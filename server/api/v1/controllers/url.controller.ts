@@ -36,11 +36,10 @@ export const redirectUrl = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(req.useragent);
   const { code } = req.params;
 
   try {
-    const url = await getOriginalUrl(code);
+    const url = await getOriginalUrl(code, req.useragent?.platform);
     if (!url) {
       return res.status(404).json({ message: "No URL found", failed: true });
     }
@@ -58,7 +57,7 @@ export const getUrl = async (
   const { code } = req.params;
 
   try {
-    const url = await getOriginalUrl(code);
+    const url = await getOriginalUrl(code, req.useragent?.platform);
     if (!url) {
       return res.status(404).json({ message: "No URL found", failed: true });
     }

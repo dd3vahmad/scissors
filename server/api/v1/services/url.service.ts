@@ -62,7 +62,10 @@ export const shortenNewUrl = async (
   }
 };
 
-export const getOriginalUrl = async (code: string) => {
+export const getOriginalUrl = async (
+  code: string,
+  platform: string | undefined
+) => {
   try {
     const cleanCode = code.replace(" ", "");
     const url = await Url.findOne({
@@ -70,6 +73,10 @@ export const getOriginalUrl = async (code: string) => {
     });
     if (url) {
       url.clicks++;
+      url.clicksData = [
+        ...url.clicksData,
+        { at: platform || "Unknown", on: new Date() },
+      ];
       await url.save();
       return url.longUrl;
     }

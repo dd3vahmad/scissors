@@ -7,10 +7,11 @@ export default interface IUrl extends Document {
   backHalf?: string;
   qrCode?: string;
   clicks: number;
+  clicksData: IClick[];
   postedBy: string;
 }
 
-export interface IClick extends Document {
+export interface IClick {
   at: string;
   on: Date;
 }
