@@ -1,19 +1,35 @@
 import { Button, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import LinkList from "../components/LinkList";
 import NoData from "../components/NoData";
-import links from "../data/links";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Links = () => {
+  const [linkHistory, setLinkHistory] = useState([]);
   const goTo = useNavigate();
   const bgColor = useColorModeValue("gray.100", "gray.800");
   const bgColor1 = useColorModeValue("white", "gray.800");
   const color = useColorModeValue("gray.400", "whitesmoke");
 
+  const getLinkHistory = async () => {
+    try {
+      const response: any = await axios.get("/url/history");
+
+      return setLinkHistory(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getLinkHistory();
+  }, []);
+
   return (
     <>
-      {links.length ? (
-        <LinkList links={links} />
+      {linkHistory.length ? (
+        <LinkList links={linkHistory} />
       ) : (
         <Flex direction={"column"}>
           <NoData message="No Link Found" />
