@@ -7,6 +7,7 @@ export default interface IUrl extends Document {
   backHalf?: string;
   qrCode?: string;
   clicks: number;
+  postedBy: string;
 }
 
 export interface IClick extends Document {

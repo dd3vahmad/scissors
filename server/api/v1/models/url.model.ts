@@ -10,6 +10,7 @@ const UrlSchema: Schema = new Schema(
     qrCode: { type: String },
     clicks: { type: Number, default: 0 },
     clicksData: { type: Array, default: [] },
+    postedBy: { type: String, ref: "user", required: true },
   },
   { timestamps: true }
 );

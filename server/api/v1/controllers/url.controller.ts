@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { getOriginalUrl, getUserUrls, shortenNewUrl } from "../services/url.service";
+import {
+  getOriginalUrl,
+  getUserUrls,
+  shortenNewUrl,
+} from "../services/url.service";
 import config from "../../../config/config";
 
 const client_base_url: string = config.client.app.BASE_URL || "";
@@ -12,11 +16,13 @@ export const shortenUrl = async (
   const { title, longUrl, backHalf, generateQrCode } = req.body;
 
   try {
+    const userObj = req.user as any;
     const shortUrl = await shortenNewUrl(
       title,
       backHalf,
       longUrl,
-      generateQrCode
+      generateQrCode,
+      userObj._id
     );
 
     res.status(201).json(shortUrl);
@@ -67,7 +73,8 @@ export const getUserUrlHistory: (
   next: NextFunction
 ) => void = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const urls = await getUserUrls(req.user?.trim());
+    const userObj = req.user as any;
+    const urls = await getUserUrls(userObj._id);
     if (!urls) {
       return res.status(404).json({ message: "No URL found", failed: true });
     }

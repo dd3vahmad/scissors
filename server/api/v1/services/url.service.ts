@@ -21,7 +21,8 @@ export const shortenNewUrl = async (
   title: string,
   backHalf: string,
   longUrl: string,
-  generateQrCode: boolean
+  generateQrCode: boolean,
+  userId: string
 ) => {
   const cleanBackHalf = backHalf.replace(" ", "");
   const urlCode = cleanBackHalf || uuidv4().slice(0, 8);
@@ -45,7 +46,14 @@ export const shortenNewUrl = async (
       qrCode = newQrCode;
     }
 
-    url = new Url({ title, longUrl, shortUrl, backHalf: urlCode, qrCode });
+    url = new Url({
+      title,
+      longUrl,
+      shortUrl,
+      backHalf: urlCode,
+      qrCode,
+      postedBy: userId,
+    });
     await url.save();
 
     return url;
