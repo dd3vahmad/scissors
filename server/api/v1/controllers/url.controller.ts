@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import {
+  formatChartData,
   getOriginalUrl,
+  getUrlsStats,
   getUserUrls,
   shortenNewUrl,
 } from "../services/url.service";
@@ -39,7 +41,10 @@ export const redirectUrl = async (
   const { code } = req.params;
 
   try {
-    const url = await getOriginalUrl(code, req.useragent?.platform);
+    const url = await getOriginalUrl(
+      code,
+      req.location?.country + ", " + req.location?.city
+    );
     if (!url) {
       return res.status(404).json({ message: "No URL found", failed: true });
     }
@@ -115,6 +120,63 @@ export const getUserQrCodeHistory: (
       failed: false,
       message: "User qr codes fetched successfully",
       data: formattedCodesObj,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getUserLinkStats: (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => void = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userObj = req.user as any;
+    const urls = await getUserUrls(userObj._id);
+    const formattedCodesObj = urls.map((url) => {
+      const { longUrl, qrCode, id, ...rest } = url;
+
+      if (qrCode)
+        return {
+          id,
+          link: longUrl,
+          qrCode,
+        };
+    });
+    if (!formattedCodesObj) {
+      return res
+        .status(404)
+        .json({ message: "No Qr Code found", failed: true });
+    }
+    res.status(200).json({
+      failed: false,
+      message: "User qr codes fetched successfully",
+      data: formattedCodesObj,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getUserLinksStats: (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => void = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const by = req.query.by;
+    const userObj = req.user as any;
+    const clicksData = await getUrlsStats(userObj._id);
+    const chartClicksData = formatChartData(clicksData, by);
+
+    if (!clicksData) {
+      return res.status(404).json({ message: "No Data found", failed: true });
+    }
+    res.status(200).json({
+      failed: false,
+      message: "Url data fetched successfully",
+      data: chartClicksData,
     });
   } catch (err) {
     next(err);

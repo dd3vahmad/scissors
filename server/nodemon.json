@@ -1,6 +1,11 @@
 {
-  "watch": ["./**"],
-  "ext": "ts",
-  "ignore": ["*.log", "C:\\DumpStack.log.tmp"],
-  "exec": "ts-node-esm server.ts"
+  "watch": ["."],
+  "ext": "ts,js",
+  "ignore": [
+    "*.log",
+    "C:\\DumpStack.log.tmp",
+    "/**/*.spec.ts",
+    "node_modules/**/*"
+  ],
+  "exec": "ts-node server.ts"
 }

@@ -8,6 +8,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "."],
   "exclude": ["node_modules", "*.env", "**/*.test.ts", "**/*.spec.ts"]
 }

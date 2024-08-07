@@ -3,6 +3,7 @@ import QRCode from "qrcode";
 import Url from "../models/url.model";
 import config from "../../../config/config";
 import IError from "../entities/error.entity";
+import { IClick } from "../entities/url.entity";
 
 const server_base_url: string = config.server.app.BASE_URL || "";
 
@@ -64,7 +65,7 @@ export const shortenNewUrl = async (
 
 export const getOriginalUrl = async (
   code: string,
-  platform: string | undefined
+  location: string | undefined
 ) => {
   try {
     const cleanCode = code.replace(" ", "");
@@ -75,7 +76,7 @@ export const getOriginalUrl = async (
       url.clicks++;
       url.clicksData = [
         ...url.clicksData,
-        { at: platform || "Unknown", on: new Date() },
+        { at: location || "Unknown", on: new Date() },
       ];
       await url.save();
       return url.longUrl;
@@ -107,13 +108,84 @@ export const getUserUrls = async (userId: string) => {
   }
 };
 
-export const getUrlStats = async (code: string) => {
+export const getUrlsStats = async (userId: string) => {
   try {
-    const cleanCode = code.replace(" ", "");
-    const url = await Url.findOne({
-      shortUrl: `${server_base_url}/${cleanCode}`,
+    const urls = await Url.find({
+      postedBy: userId,
     });
+    if (urls) {
+      const clicksDataArray = urls.map((url) => {
+        const { __v, _id, clicksData, ...rest } = url.toObject();
+        return [...clicksData];
+      });
+      return clicksDataArray.flat();
+    }
   } catch (error: IError | any) {
+    throw new Error(error.message);
+  }
+};
+
+type OutputDataByDay = { on: string; clicks: number };
+type OutputDataByLocation = { on: string; clicks: number; location: string };
+
+export const formatChartData = (
+  data: IClick[] | undefined,
+  by: string | string[] | any
+): (OutputDataByDay | OutputDataByLocation)[] => {
+  try {
+    if (by === "day") {
+      // Create a map to store the number of clicks per day
+      const clicksPerDay: { [day: string]: number } = {};
+
+      data?.forEach((entry) => {
+        const day = entry.on.toISOString().split("T")[0]; // Extract the date part (YYYY-MM-DD)
+
+        if (!clicksPerDay[day]) {
+          clicksPerDay[day] = 0;
+        }
+
+        clicksPerDay[day]++;
+      });
+
+      // Convert the map to an array of objects
+      const result: OutputDataByDay[] = Object.keys(clicksPerDay).map(
+        (day) => ({
+          on: day,
+          clicks: clicksPerDay[day],
+        })
+      );
+
+      return result;
+    } else if (by === "location") {
+      // Create a map to store the number of clicks per location
+      const clicksPerLocation: { [location: string]: number } = {};
+
+      data?.forEach((entry) => {
+        const location = entry.at; // Use the 'at' field as the location
+
+        if (!clicksPerLocation[location]) {
+          clicksPerLocation[location] = 0;
+        }
+
+        clicksPerLocation[location]++;
+      });
+
+      // Convert the map to an array of objects
+      const result: OutputDataByLocation[] = Object.keys(clicksPerLocation).map(
+        (location) => ({
+          on: new Date().toISOString().split("T")[0], // Assuming the current date for the 'on' field
+          clicks: clicksPerLocation[location],
+          location: location,
+        })
+      );
+
+      return result;
+    } else {
+      throw new Error(
+        'Unsupported "by" parameter. Currently only supports "day" and "location".'
+      );
+    }
+  } catch (error: any) {
     throw new Error(error.message);
   }
 };
