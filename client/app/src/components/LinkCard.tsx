@@ -21,7 +21,6 @@ interface IProps {
 const LinkCard = ({ link }: IProps) => {
   const iconColor = useColorModeValue("grey", "gray");
   const goTo = useNavigate();
-  console.log(link);
 
   return (
     <Flex

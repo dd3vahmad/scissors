@@ -22,7 +22,7 @@ const QRCodeCard = ({ qrCode }: IProps) => {
       borderRadius={5}
       maxInlineSize={"fit-content"}
     >
-      <Flex>
+      <Flex gap={2}>
         <Image
           objectFit="cover"
           maxW={{ base: "100px", sm: "50px" }}
