@@ -21,7 +21,9 @@ ChartJS.register(
 );
 
 interface IProps {
-  chartData: ChartData<"bar", (number | [number, number] | null)[], unknown>;
+  chartData:
+    | ChartData<"bar", (number | [number, number] | null)[], unknown>
+    | any;
   title: string;
 }
 

@@ -12,7 +12,9 @@ import { Pie } from "react-chartjs-2";
 ChartJS.register(ArcElement, Title, Tooltip, Legend);
 
 interface IProps {
-  chartData: ChartData<"pie", (number | [number, number] | null)[], unknown>;
+  chartData:
+    | ChartData<"pie", (number | [number, number] | null)[], unknown>
+    | any;
   title: string;
 }
 

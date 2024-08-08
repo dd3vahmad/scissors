@@ -2,7 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import {
   formatChartData,
   getOriginalUrl,
+  getSingleUrl,
   getUrlsStats,
+  getUrlStats,
   getUserUrls,
   shortenNewUrl,
 } from "../services/url.service";
@@ -59,14 +61,15 @@ export const getUrl = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { code } = req.params;
-
   try {
-    const url = await getOriginalUrl(code, req.useragent?.platform);
+    const { id } = req.params;
+    const user = req.user as any;
+    const url = await getSingleUrl(user._id, id);
+    const { postedBy, ...formattedUrl } = url;
     if (!url) {
       return res.status(404).json({ message: "No URL found", failed: true });
     }
-    res.redirect(url || client_base_url);
+    res.status(200).json(formattedUrl);
   } catch (err) {
     next(err);
   }
@@ -132,27 +135,19 @@ export const getUserLinkStats: (
   next: NextFunction
 ) => void = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const urlId = req.params.id;
+    const by = req.query.by || "day";
     const userObj = req.user as any;
-    const urls = await getUserUrls(userObj._id);
-    const formattedCodesObj = urls.map((url) => {
-      const { longUrl, qrCode, id, ...rest } = url;
+    const clicksData = await getUrlStats(userObj._id, urlId);
 
-      if (qrCode)
-        return {
-          id,
-          link: longUrl,
-          qrCode,
-        };
-    });
-    if (!formattedCodesObj) {
-      return res
-        .status(404)
-        .json({ message: "No Qr Code found", failed: true });
+    if (!clicksData) {
+      return res.status(404).json({ message: "No Data found", failed: true });
     }
+    const chartClicksData = formatChartData(clicksData, by);
     res.status(200).json({
       failed: false,
-      message: "User qr codes fetched successfully",
-      data: formattedCodesObj,
+      message: "Url data fetched successfully",
+      data: chartClicksData,
     });
   } catch (err) {
     next(err);
@@ -165,17 +160,17 @@ export const getUserLinksStats: (
   next: NextFunction
 ) => void = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const by = req.query.by;
+    const by = req.query.by || "day";
     const userObj = req.user as any;
     const clicksData = await getUrlsStats(userObj._id);
-    const chartClicksData = formatChartData(clicksData, by);
 
     if (!clicksData) {
       return res.status(404).json({ message: "No Data found", failed: true });
     }
+    const chartClicksData = formatChartData(clicksData, by);
     res.status(200).json({
       failed: false,
-      message: "Url data fetched successfully",
+      message: "Urls data fetched successfully",
       data: chartClicksData,
     });
   } catch (err) {

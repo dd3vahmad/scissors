@@ -4,16 +4,13 @@ import PieChart from "../components/PieChart";
 import LineChart from "../components/LineChart";
 import formatDay from "../Utils/formatDay";
 import { useEffect, useState } from "react";
-import { IClickData } from "../data/links";
 import axios from "axios";
+import { IClickData } from "../entites/Link";
 
 const Analytics = () => {
-  const [clicksByDayData, setClicksByDayData] = useState<IClickData[]>([
-    { on: new Date(), location: "New York", clicks: 10 },
-  ]);
-  const [clicksByLocationData, setClicksByLocationData] = useState<
-    IClickData[]
-  >([{ on: new Date(), location: "New York", clicks: 10 }]);
+  const [clicksByDayData, setClicksByDayData] = useState<IClickData[]>();
+  const [clicksByLocationData, setClicksByLocationData] =
+    useState<IClickData[]>();
 
   const getChartDataByDay = async () => {
     try {
@@ -36,13 +33,13 @@ const Analytics = () => {
   };
 
   const chartData = {
-    labels: clicksByDayData.map((data) =>
+    labels: clicksByDayData?.map((data) =>
       formatDay(data.on, true).toUpperCase()
     ),
     datasets: [
       {
         label: "Clicks",
-        data: clicksByDayData.map((data) => data.clicks),
+        data: clicksByDayData?.map((data) => data.clicks),
         backgroundColor: [
           "rgba(75,192,192,1)",
           "#50AF95",
@@ -56,11 +53,11 @@ const Analytics = () => {
   };
 
   const chartDataByLocation = {
-    labels: clicksByLocationData.map((data) => data.location),
+    labels: clicksByLocationData?.map((data) => data.location),
     datasets: [
       {
         label: "Clicks",
-        data: clicksByLocationData.map((data) => data.clicks),
+        data: clicksByLocationData?.map((data) => data.clicks),
         backgroundColor: [
           "rgba(75,192,192,1)",
           "#50AF95",
@@ -80,7 +77,7 @@ const Analytics = () => {
 
   return (
     <Container px={3} py={2}>
-      <Text fontSize={"xl"}>Analytics</Text>
+      <Text fontSize={"xl"}>General Analytics</Text>
       <Stack gap={5}>
         <BarChart
           chartData={chartData}

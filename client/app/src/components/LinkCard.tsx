@@ -13,9 +13,10 @@ import ILink from "../entites/Link";
 import getCroppedImageUrl from "../Utils/image-url";
 import { FaCopy, FaDownload, FaShare } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import NoData from "./NoData";
 
 interface IProps {
-  link: ILink;
+  link: ILink | undefined;
 }
 
 const LinkCard = ({ link }: IProps) => {
@@ -33,26 +34,30 @@ const LinkCard = ({ link }: IProps) => {
       <Image
         objectFit="cover"
         maxW={{ base: "100px", sm: "50px" }}
-        src={getCroppedImageUrl(link.qrCode || "")}
+        src={getCroppedImageUrl(link?.qrCode || "")}
         alt="Link QR Code"
         borderRadius={5}
-        onClick={() => goTo(`/links/${link.id}`)}
+        onClick={() => goTo(`/links/${link?.id}`)}
       />
 
       <Stack mt={2}>
-        <Box>
-          <Heading size="sm">{link.title}</Heading>
-          <Text py="1" fontSize={14} fontWeight={500}>
-            <a target="_blank" href={link.shortUrl}>
-              {link.shortUrl}
-            </a>
-          </Text>
-          <Text fontSize={10}>
-            <a target="_blank" href={link.longUrl}>
-              {link.longUrl}
-            </a>
-          </Text>
-        </Box>
+        {link ? (
+          <Box>
+            <Heading size="sm">{link.title}</Heading>
+            <Text py="1" fontSize={14} fontWeight={500}>
+              <a target="_blank" href={link.shortUrl}>
+                {link.shortUrl}
+              </a>
+            </Text>
+            <Text fontSize={10}>
+              <a target="_blank" href={link.longUrl}>
+                {link.longUrl}
+              </a>
+            </Text>
+          </Box>
+        ) : (
+          <NoData message="No Link Data" />
+        )}
       </Stack>
       <VStack
         display={"flex"}

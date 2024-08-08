@@ -87,6 +87,27 @@ export const getOriginalUrl = async (
   }
 };
 
+export const getSingleUrl = async (userId: string, urlId: string) => {
+  try {
+    let url = await Url.findOne({
+      postedBy: userId,
+      _id: urlId,
+    });
+    if (url) {
+      const { __v, _id, ...rest } = url.toObject();
+      return {
+        id: _id,
+        ...rest,
+      };
+    }
+    throw new Error(
+      `Url with this Id: ${urlId} for this user ${userId} cannot not found`
+    );
+  } catch (err: IError | any) {
+    throw new Error(err.message);
+  }
+};
+
 export const getUserUrls = async (userId: string) => {
   try {
     const urls = await Url.find({
@@ -108,6 +129,21 @@ export const getUserUrls = async (userId: string) => {
   }
 };
 
+export const getUrlStats = async (userId: string, urlId: string) => {
+  try {
+    const url = await Url.findOne({
+      postedBy: userId,
+      _id: urlId,
+    });
+    if (url) {
+      const { __v, _id, clicksData, ...rest } = url.toObject();
+      return clicksData;
+    }
+    throw new Error("Url has no stats");
+  } catch (error: IError | any) {
+    throw new Error(error.message);
+  }
+};
 export const getUrlsStats = async (userId: string) => {
   try {
     const urls = await Url.find({

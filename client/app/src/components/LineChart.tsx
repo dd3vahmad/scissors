@@ -25,7 +25,9 @@ ChartJS.register(
 );
 
 interface IProps {
-  chartData: ChartData<"line", (number | [number, number] | null)[], unknown>;
+  chartData:
+    | ChartData<"line", (number | [number, number] | null)[], unknown>
+    | any;
   title: string;
 }
 

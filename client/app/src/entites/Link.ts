@@ -14,3 +14,9 @@ export default interface ILink {
   qrCode?: string;
   clicks: number;
 }
+
+export interface IClickData {
+  clicks: number;
+  on: Date;
+  location?: string;
+}
