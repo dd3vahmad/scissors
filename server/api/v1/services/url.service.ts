@@ -63,6 +63,28 @@ export const shortenNewUrl = async (
   }
 };
 
+export const generateQrCodeForLink = async (
+  urlId?: string,
+  backHalf?: string
+) => {
+  try {
+    let url;
+    if (urlId) url = await Url.findById(urlId);
+    if (backHalf) url = await Url.findOne({ backHalf });
+    if (url) {
+      const qrCode: any = await generateNewQrCode(url.shortUrl);
+      if (!qrCode) {
+        throw new Error("No QrCode for this link");
+      }
+      url.qrCode = qrCode;
+      await url.save();
+      return qrCode;
+    }
+  } catch (err: IError | any) {
+    throw new Error(err.message);
+  }
+};
+
 export const getOriginalUrl = async (
   code: string,
   location: string | undefined

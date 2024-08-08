@@ -1,16 +1,19 @@
 import { useParams } from "react-router-dom";
 import LinkCard from "../components/LinkCard";
-import { Container, Stack, Text } from "@chakra-ui/react";
+import { Container, Flex, Stack, Text, Icon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ILink, { IClickData } from "../entites/Link";
 import BarChart from "../components/BarChart";
 import PieChart from "../components/PieChart";
 import formatDay from "../Utils/formatDay";
+import { FaSpinner } from "react-icons/fa6";
 
 const Link = () => {
   const { id } = useParams();
   const [link, setLink] = useState<ILink>();
+  const [generatedQrCode, setGeneratedQrCode] = useState<string | undefined>();
+  const [loading, setLoading] = useState<boolean>(true);
   const [clicksByDayData, setClicksByDayData] = useState<IClickData[]>();
   const [clicksByLocationData, setClicksByLocationData] =
     useState<IClickData[]>();
@@ -83,18 +86,40 @@ const Link = () => {
     ],
   };
 
+  const generateQRCode = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.put(
+        `/url/generate-qrcode/${link?.id}/${link?.backHalf}`
+      );
+      console.log(response.data);
+      const resData = response.data as any;
+      setGeneratedQrCode(resData.qrCode);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getLink();
     getLinkByDayStats();
     getLinkByLocationStats();
-  }, []);
+    setLoading(false);
+  }, [generatedQrCode]);
 
   return (
     <Container>
-      <Text fontSize={"larger"} mb={2} fontWeight={600}>
-        Link Details
-      </Text>
-      <LinkCard link={link} />
+      <Flex justifyContent={"space-between"} alignItems={"center"}>
+        <Text fontSize={"larger"} mb={2} fontWeight={600}>
+          Link Details
+        </Text>
+        {!link?.qrCode && (
+          <Flex alignItems={"center"}>
+            <Text onClick={() => generateQRCode()}>Generate QrCode</Text>
+          </Flex>
+        )}
+      </Flex>
+      {loading ? <Icon as={FaSpinner} /> : <LinkCard link={link} />}
       <Text fontSize={"larger"} mt={3} fontWeight={600}>
         Link Stats
       </Text>

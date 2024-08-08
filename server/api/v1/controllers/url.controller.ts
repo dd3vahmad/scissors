@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import {
   formatChartData,
+  generateQrCodeForLink,
   getOriginalUrl,
   getSingleUrl,
   getUrlsStats,
@@ -70,6 +71,27 @@ export const getUrl = async (
       return res.status(404).json({ message: "No URL found", failed: true });
     }
     res.status(200).json(formattedUrl);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const generateQrCode = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id, backHalf } = req.params;
+    const qrCodeGenerated = await generateQrCodeForLink(id, backHalf);
+    if (!qrCodeGenerated) {
+      return res.status(404).json({ message: "No URL found", failed: true });
+    }
+    res.status(200).json({
+      failed: false,
+      message: "QrCode generated successfully",
+      qrCode: qrCodeGenerated,
+    });
   } catch (err) {
     next(err);
   }
