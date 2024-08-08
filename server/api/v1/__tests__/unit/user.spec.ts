@@ -44,9 +44,7 @@ describe("getDetails", () => {
   });
 
   it("should throw an error when userId is undefined", async () => {
-    await expect(getDetails(undefined)).rejects.toThrow(
-      "Error getting user details"
-    );
+    await expect(getDetails(undefined)).rejects.toThrow("User id is undefined");
     expect(User.findById).not.toHaveBeenCalled();
   });
 
