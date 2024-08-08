@@ -22,9 +22,10 @@ ChartJS.register(
 
 interface IProps {
   chartData: ChartData<"bar", (number | [number, number] | null)[], unknown>;
+  title: string;
 }
 
-const BarChart = ({ chartData }: IProps) => {
+const BarChart = ({ chartData, title }: IProps) => {
   return (
     <div className="self-center w-1/2">
       <Bar
@@ -33,7 +34,7 @@ const BarChart = ({ chartData }: IProps) => {
           plugins: {
             title: {
               display: true,
-              text: "Link impressions for the past 5 days",
+              text: title,
             },
             legend: {
               display: false,

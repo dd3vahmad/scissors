@@ -26,9 +26,10 @@ ChartJS.register(
 
 interface IProps {
   chartData: ChartData<"line", (number | [number, number] | null)[], unknown>;
+  title: string;
 }
 
-const LineChart = ({ chartData }: IProps) => {
+const LineChart = ({ chartData, title }: IProps) => {
   return (
     <div className="self-center w-1/2">
       <Line
@@ -37,7 +38,7 @@ const LineChart = ({ chartData }: IProps) => {
           plugins: {
             title: {
               display: true,
-              text: "Link impressions for the past 5 days",
+              text: title,
             },
             legend: {
               display: false,

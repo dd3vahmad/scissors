@@ -1,39 +1,48 @@
-import { Container, Text } from "@chakra-ui/react";
+import { Container, Stack, Text } from "@chakra-ui/react";
 import BarChart from "../components/BarChart";
 import PieChart from "../components/PieChart";
 import LineChart from "../components/LineChart";
 import formatDay from "../Utils/formatDay";
+import { useEffect, useState } from "react";
+import { IClickData } from "../data/links";
+import axios from "axios";
 
 const Analytics = () => {
-  const clicksData = [
-    {
-      on: new Date().getDay(),
-      clicks: 10,
-    },
-    {
-      on: new Date().getDay() + 1,
-      clicks: 20,
-    },
-    {
-      on: new Date().getDay() + 2,
-      clicks: 18,
-    },
-    {
-      on: new Date().getDay() + 3,
-      clicks: 11,
-    },
-    {
-      on: new Date().getDay() + 4,
-      clicks: 13,
-    },
-  ];
+  const [clicksByDayData, setClicksByDayData] = useState<IClickData[]>([
+    { on: new Date(), location: "New York", clicks: 10 },
+  ]);
+  const [clicksByLocationData, setClicksByLocationData] = useState<
+    IClickData[]
+  >([{ on: new Date(), location: "New York", clicks: 10 }]);
+
+  const getChartDataByDay = async () => {
+    try {
+      const response = await axios.get("/url/stats?by=day");
+      const chartRes = response.data as any;
+      setClicksByDayData(chartRes.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getChartDataByLocation = async () => {
+    try {
+      const response = await axios.get("/url/stats?by=location");
+      const chartRes = response.data as any;
+      setClicksByLocationData(chartRes.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const chartData = {
-    labels: clicksData.map((data) => formatDay(data.on, true).toUpperCase()),
+    labels: clicksByDayData.map((data) =>
+      formatDay(data.on, true).toUpperCase()
+    ),
     datasets: [
       {
-        label: "Users Gained",
-        data: clicksData.map((data) => data.clicks),
+        label: "Clicks",
+        data: clicksByDayData.map((data) => data.clicks),
         backgroundColor: [
           "rgba(75,192,192,1)",
           "#50AF95",
@@ -46,12 +55,46 @@ const Analytics = () => {
     ],
   };
 
+  const chartDataByLocation = {
+    labels: clicksByLocationData.map((data) => data.location),
+    datasets: [
+      {
+        label: "Clicks",
+        data: clicksByLocationData.map((data) => data.clicks),
+        backgroundColor: [
+          "rgba(75,192,192,1)",
+          "#50AF95",
+          "#f3ba2f",
+          "#2a71d0",
+        ],
+        borderColor: "black",
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  useEffect(() => {
+    getChartDataByDay();
+    getChartDataByLocation();
+  }, []);
+
   return (
     <Container px={3} py={2}>
       <Text fontSize={"xl"}>Analytics</Text>
-      <BarChart chartData={chartData} />
-      <PieChart chartData={chartData} />
-      <LineChart chartData={chartData} />
+      <Stack gap={5}>
+        <BarChart
+          chartData={chartData}
+          title={`Clicks Per Day For The Last ${5} Day`}
+        />
+        <PieChart
+          chartData={chartDataByLocation}
+          title={`Clicks Per Location For The Last ${5} Day`}
+        />
+        <LineChart
+          chartData={chartDataByLocation}
+          title={`Link CLicks Comparison For The Last ${5} Day`}
+        />
+      </Stack>
     </Container>
   );
 };

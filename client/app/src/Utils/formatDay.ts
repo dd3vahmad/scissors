@@ -1,4 +1,4 @@
-const formatDay = (index: number, inShortForm: boolean) => {
+const formatDay = (date: Date, inShortForm: boolean) => {
   const days = [
     "sunday",
     "monday",
@@ -9,7 +9,9 @@ const formatDay = (index: number, inShortForm: boolean) => {
     "saturday",
   ];
 
-  return inShortForm ? days[index].replace(/day/, "") : days[index];
+  return inShortForm
+    ? days[new Date(date).getDay() + 1].replace(/day/, "")
+    : "a";
 };
 
 export default formatDay;

@@ -40,4 +40,10 @@ const links: ILink[] = [
   },
 ];
 
+export interface IClickData {
+  clicks: number;
+  on: Date;
+  location?: string;
+}
+
 export default links;
