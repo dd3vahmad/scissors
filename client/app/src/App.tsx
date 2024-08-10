@@ -8,7 +8,6 @@ import CreateNew from "./pages/CreateNew";
 import QrCodes from "./pages/QrCodes";
 import Pages from "./pages/Pages";
 import Analytics from "./pages/Analytics";
-import Settings from "./pages/Settings";
 import CustomUrls from "./pages/CustomUrls";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
@@ -19,10 +18,12 @@ import AuthProvider from "./context/auth";
 import VerifyEmail from "./pages/VerifyEmail";
 import EVerificationRoute from "./rbac/EVerification";
 import config from "../config/app.config";
+import UserProfile from "./pages/UserProfile";
 
 function App() {
   axios.defaults.baseURL = config.server_base_url;
   axios.defaults.withCredentials = true;
+
   return (
     <>
       <AuthProvider>
@@ -48,7 +49,7 @@ function App() {
                 <Route path="pages" element={<Pages />} />
                 <Route path="custom-urls" element={<CustomUrls />} />
                 <Route path="analytics" element={<Analytics />} />
-                <Route path="settings" element={<Settings />} />
+                <Route path="user-profile" element={<UserProfile />} />
               </Route>
             </Route>
           </Routes>

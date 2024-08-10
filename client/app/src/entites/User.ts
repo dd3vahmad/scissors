@@ -4,4 +4,6 @@ export default interface IUser {
   username: string;
   email: string;
   password: string;
+  numberOfUrls: number;
+  totalClicks: number;
 }
