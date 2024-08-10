@@ -53,6 +53,8 @@ export const signin = async (
       .cookie("access_token", token, {
         httpOnly: true,
         maxAge: 7200000,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       })
       .status(200)
       .json({
