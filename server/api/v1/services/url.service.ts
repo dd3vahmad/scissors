@@ -109,6 +109,25 @@ export const getOriginalUrl = async (
   }
 };
 
+export const updateUrl = async (
+  id: string,
+  title: string,
+  longUrl: string,
+  backHalf: string
+) => {
+  try {
+    let updatedDatas = { title: "", longUrl: "", backHalf: "" };
+    if (title) updatedDatas.title = title;
+    if (longUrl) updatedDatas.longUrl = longUrl;
+    if (backHalf) updatedDatas.backHalf = backHalf;
+
+    await Url.updateOne({ id }, updatedDatas);
+    throw new Error("");
+  } catch (err: IError | any) {
+    throw new Error(err.message);
+  }
+};
+
 export const getSingleUrl = async (userId: string, urlId: string) => {
   try {
     let url = await Url.findOne({
