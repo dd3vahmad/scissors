@@ -1,4 +1,4 @@
-import config from "../config/config";
+import config from "../config/server.config";
 import mongoose from "mongoose";
 import logger from "../utils/logger.util";
 

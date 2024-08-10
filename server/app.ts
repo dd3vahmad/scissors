@@ -5,7 +5,7 @@ import authRoutes from "./api/v1/routes/auth.route";
 import userAgent from "express-useragent";
 import apiRoutes from "./api/v1/routes";
 import cors, { CorsOptions } from "cors";
-import config from "./config/config";
+import config from "./config/server.config";
 import { redirectUrl } from "./api/v1/controllers/url.controller";
 import connectDb from "./database/database";
 import IError from "./api/v1/entities/error.entity";

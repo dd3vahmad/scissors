@@ -1,5 +1,5 @@
 import http from "http";
-import config from "./config/config";
+import config from "./config/server.config";
 import logger from "./utils/logger.util";
 import app from "./app";
 

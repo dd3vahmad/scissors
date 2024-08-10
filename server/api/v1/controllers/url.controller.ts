@@ -9,7 +9,7 @@ import {
   getUserUrls,
   shortenNewUrl,
 } from "../services/url.service";
-import config from "../../../config/config";
+import config from "../../../config/server.config";
 
 const client_base_url: string = config.client.app.BASE_URL || "";
 

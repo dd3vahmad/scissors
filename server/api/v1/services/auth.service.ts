@@ -7,7 +7,7 @@ import IUser from "../entities/user.entity";
 import Token from "../models/token.model";
 import { sendOTP } from "../../../utils/sendotp.util";
 import jwt from "jsonwebtoken";
-import config from "../../../config/config";
+import config from "../../../config/server.config";
 
 export const createNewUser: (
   firstname: string,

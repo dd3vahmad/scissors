@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import QRCode from "qrcode";
 import Url from "../models/url.model";
-import config from "../../../config/config";
+import config from "../../../config/server.config";
 import IError from "../entities/error.entity";
 import { IClick } from "../entities/url.entity";
 

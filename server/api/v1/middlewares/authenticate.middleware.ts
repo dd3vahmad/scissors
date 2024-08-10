@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload, VerifyErrors } from "jsonwebtoken";
-import config from "../../../config/config";
+import config from "../../../config/server.config";
 import { error } from "../../../utils/error.util";
 
 // Extend the Express Request interface to include the user property
