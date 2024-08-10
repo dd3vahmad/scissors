@@ -18,9 +18,10 @@ import ProtectedRoute from "./rbac/ProtectedRoute";
 import AuthProvider from "./context/auth";
 import VerifyEmail from "./pages/VerifyEmail";
 import EVerificationRoute from "./rbac/EVerification";
+import config from "../config/app.config";
 
 function App() {
-  axios.defaults.baseURL = "http://localhost:5700/api/v1";
+  axios.defaults.baseURL = config.server_base_url;
   axios.defaults.withCredentials = true;
   return (
     <>
