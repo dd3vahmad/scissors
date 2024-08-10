@@ -4,8 +4,9 @@
   "main": "server.ts",
   "type": "module",
   "scripts": {
+    "build": "tsc",
     "test": "jest",
-    "start": "ts-node server.ts",
+    "start": "npx tsx server.ts",
     "dev": "nodemon",
     "local:dev": "npx tsx server.ts"
   },
@@ -46,7 +47,6 @@
     "nodemon": "^3.1.4",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.4",
-    "tsx": "^4.16.2",
     "typescript": "^5.5.3"
   },
   "dependencies": {
@@ -70,6 +70,7 @@
     "qrcode": "^1.5.3",
     "redis": "^4.6.15",
     "ts-node": "^10.9.2",
+    "tsx": "^4.17.0",
     "uuid": "^10.0.0",
     "winston": "^3.13.1"
   }
