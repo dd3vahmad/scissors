@@ -14,6 +14,7 @@ import getCroppedImageUrl from "../Utils/image-url";
 import { FaCopy, FaDownload, FaShare } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import NoData from "./NoData";
+import { FaEdit } from "react-icons/fa";
 
 interface IProps {
   link: ILink | undefined;
@@ -68,6 +69,7 @@ const LinkCard = ({ link }: IProps) => {
         <Icon as={FaCopy} color={iconColor} />
         <Icon as={FaShare} color={iconColor} />
         <Icon as={FaDownload} color={iconColor} />
+        <Icon as={FaEdit} color={iconColor} />
       </VStack>
     </Flex>
   );
