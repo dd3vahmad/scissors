@@ -8,7 +8,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { IoSettingsOutline } from "react-icons/io5";
+import { FaUserSecret } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import tabs from "../data/tabs";
 import { Dispatch, SetStateAction } from "react";
@@ -53,7 +53,7 @@ const TabList = ({ onClose = () => {}, activeTab, setActiveTab }: IProps) => {
         })}
         <Divider />
         <ListItem paddingY="10px">
-          <Link to="/settings">
+          <Link to="/user-profile">
             <HStack
               _hover={{ bg: bgColor }}
               bg={activeTab === tabs.length ? bgColor : "none"}
@@ -66,8 +66,8 @@ const TabList = ({ onClose = () => {}, activeTab, setActiveTab }: IProps) => {
               }}
               cursor={"pointer"}
             >
-              <Icon boxSize={5} borderRadius={8} as={IoSettingsOutline} />
-              <Text>Settings</Text>
+              <Icon boxSize={5} borderRadius={8} as={FaUserSecret} />
+              <Text>Me</Text>
             </HStack>
           </Link>
         </ListItem>
