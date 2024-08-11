@@ -35,10 +35,11 @@ const CreateNew = () => {
   const createNewLink = async (linkData: ICreateLink) => {
     try {
       setShorteningLink(true);
-      showToast("info", "Creating....");
       if (!linkData.longUrl) {
+        setShorteningLink(false);
         return showToast("error", "No url to be shortened");
       }
+      showToast("info", "Creating....");
       await axios.post("/url/shorten", linkData);
       setShorteningLink(false);
       showToast("success", "Creation successful");

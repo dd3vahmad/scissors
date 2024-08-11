@@ -23,14 +23,13 @@ export const shortenUrl = async (
   const { title, longUrl, backHalf, generateQrCode } = req.body;
 
   try {
-    console.log(req.body);
     const userObj = req.user as any;
     const shortUrl = await shortenNewUrl(
       title,
-      backHalf,
       longUrl,
       generateQrCode,
-      userObj._id
+      userObj._id,
+      backHalf
     );
 
     res.status(201).json(shortUrl);
