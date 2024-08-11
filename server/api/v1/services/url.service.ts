@@ -248,9 +248,9 @@ export const formatChartData = (
   }
 };
 type UData = {
-  title: string;
-  longUrl: string;
-  backHalf: string;
+  title?: string;
+  longUrl?: string;
+  backHalf?: string;
 };
 export const updateLink = async (id: string, data: UData) => {
   try {

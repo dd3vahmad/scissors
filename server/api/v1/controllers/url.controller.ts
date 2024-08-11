@@ -9,6 +9,7 @@ import {
   getUrlStats,
   getUserUrls,
   shortenNewUrl,
+  updateLink,
 } from "../services/url.service";
 import config from "../../../config/server.config";
 
@@ -209,7 +210,8 @@ export const updateUrl = async (
 ) => {
   try {
     const { id } = req.params;
-    const urlDeleted = await deleteLink(id);
+    const data = req.body;
+    const urlDeleted = await updateLink(id, data);
     if (!urlDeleted) {
       return res
         .status(400)
