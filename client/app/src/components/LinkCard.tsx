@@ -68,8 +68,12 @@ const LinkCard = ({ link, onDelete, detailsPage }: IProps) => {
                 {link.shortUrl}
               </a>
             </Text>
-            <Text fontSize={10}>
-              <a target="_blank" href={link.longUrl}>
+            <Text fontSize={10} maxWidth={"100%"}>
+              <a
+                className="text-wrap truncate"
+                target="_blank"
+                href={link.longUrl}
+              >
                 {link.longUrl}
               </a>
             </Text>

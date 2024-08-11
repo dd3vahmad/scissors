@@ -10,8 +10,16 @@ const formatDay = (date: Date, inShortForm: boolean) => {
   ];
 
   return inShortForm
-    ? days[new Date(date).getDay() + 1].replace(/day/, "")
-    : "a";
+    ? days[
+        (new Date(date).getDay() + 1 !== days.length &&
+          new Date(date).getDay() + 1) ||
+          0
+      ].replace(/day/, "")
+    : days[
+        (new Date(date).getDay() + 1 !== days.length &&
+          new Date(date).getDay() + 1) ||
+          0
+      ];
 };
 
 export default formatDay;

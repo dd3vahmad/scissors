@@ -93,7 +93,6 @@ const Link = () => {
       const response = await axios.put(
         `/url/generate-qrcode/${link?.id}/${link?.backHalf}`
       );
-      console.log(response.data);
       const resData = response.data as any;
       setGeneratedQrCode(resData.qrCode);
     } catch (error) {
