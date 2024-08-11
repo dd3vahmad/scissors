@@ -47,10 +47,10 @@ describe("URL Shortening Service", () => {
 
       const url = await shortenNewUrl(
         "My Title",
-        "custom-backhalf",
         "http://example.com",
         true,
-        "user123"
+        "user123",
+        "custom-backhalf",
       );
 
       expect(Url.findOne).toHaveBeenCalledWith({
@@ -66,10 +66,10 @@ describe("URL Shortening Service", () => {
 
       const url = await shortenNewUrl(
         "My Title",
-        "custom-backhalf",
         "http://example.com",
         true,
-        "user123"
+        "user123",
+        "custom-backhalf",
       );
 
       expect(Url.findOne).toHaveBeenCalledWith({

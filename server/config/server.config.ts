@@ -8,6 +8,7 @@ const config = {
     HOSTNAME: process.env.HOSTNAME,
     BACKLOG: process.env.BACKLOG,
     NODE_ENV: process.env.NODE_ENV,
+    REDIS_URL: process.env.REDIS_URL,
     app: {
       BASE_URL:
         process.env.NODE_ENV !== "production"

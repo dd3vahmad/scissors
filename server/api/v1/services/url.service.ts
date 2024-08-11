@@ -252,6 +252,7 @@ type UData = {
   longUrl?: string;
   backHalf?: string;
 };
+
 export const updateLink = async (id: string, data: UData) => {
   try {
     let updatedDatas = { title: "", longUrl: "", backHalf: "" };

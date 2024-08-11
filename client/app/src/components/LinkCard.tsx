@@ -1,6 +1,7 @@
 import {
   Box,
-  Flex,
+  Grid,
+  GridItem,
   Heading,
   Icon,
   Image,
@@ -43,47 +44,53 @@ const LinkCard = ({ link, onDelete, detailsPage }: IProps) => {
   };
 
   return (
-    <Flex
+    <Grid
       gap={3}
       p={2}
       alignItems={"start"}
       border={"1px solid gray"}
       borderRadius={5}
+      templateColumns={"1fr 2fr 0.2fr"}
     >
-      <Image
-        objectFit="cover"
-        maxW={{ base: "100px", sm: "50px" }}
-        src={getCroppedImageUrl(link?.qrCode || "")}
-        alt="Link QR Code"
-        borderRadius={5}
-        onClick={() => goTo(`/links/${link?.id}`)}
-      />
-
-      <Stack>
-        {link ? (
-          <Box>
-            <Heading size="sm">{link.title}</Heading>
-            <Text
-              noOfLines={2}
-              py="1"
-              fontSize={14}
-              fontWeight={500}
-              maxWidth={"200px"}
-            >
-              <a target="_blank" href={link.shortUrl}>
-                {link.shortUrl}
-              </a>
-            </Text>
-            <Text noOfLines={2} fontSize={12} maxWidth={"200px"}>
-              <a target="_blank" href={link.longUrl}>
-                {link.longUrl}
-              </a>
-            </Text>
-          </Box>
-        ) : (
-          <NoData message="No Link Data" />
-        )}
-      </Stack>
+      <GridItem>
+        <Image
+          objectFit="cover"
+          maxW={{ base: "100px", sm: "50px" }}
+          src={getCroppedImageUrl(link?.qrCode || "")}
+          alt="Link QR Code"
+          borderRadius={5}
+          onClick={() => goTo(`/links/${link?.id}`)}
+        />
+      </GridItem>
+      <GridItem>
+        <Stack>
+          {link ? (
+            <Box>
+              <Heading size="sm" noOfLines={1} maxWidth={"200px"}>
+                {link.title}
+              </Heading>
+              <Text
+                noOfLines={2}
+                py="1"
+                fontSize={14}
+                fontWeight={500}
+                maxWidth={"200px"}
+              >
+                <a target="_blank" href={link.shortUrl}>
+                  {link.shortUrl}
+                </a>
+              </Text>
+              <Text noOfLines={2} fontSize={12} maxWidth={"200px"}>
+                <a target="_blank" href={link.longUrl}>
+                  {link.longUrl}
+                </a>
+              </Text>
+            </Box>
+          ) : (
+            <NoData message="No Link Data" />
+          )}
+        </Stack>
+      </GridItem>
       <VStack
         display={"flex"}
         justifyContent={"start"}
@@ -105,7 +112,7 @@ const LinkCard = ({ link, onDelete, detailsPage }: IProps) => {
           onClick={deleteLink}
         />
       </VStack>
-    </Flex>
+    </Grid>
   );
 };
 

@@ -1,7 +1,7 @@
-import { redirectUrl } from "./url.controller";
-import { getOriginalUrl } from "../services/url.service";
+import { redirectUrl } from "../../controllers/url.controller";
+import { getOriginalUrl } from "../../services/url.service";
 import { Request, Response, NextFunction } from "express";
-import config from "../../../config/config";
+import config from "../../../../config/server.config";
 
 jest.mock("../services/url.service");
 jest.mock("../../../config/config", () => ({

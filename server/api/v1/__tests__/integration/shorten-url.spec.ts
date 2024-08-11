@@ -1,5 +1,5 @@
-import { shortenUrl } from "./url.controller";
-import { shortenNewUrl } from "../services/url.service";
+import { shortenUrl } from "../../controllers/url.controller";
+import { shortenNewUrl } from "../../services/url.service";
 import { Request, Response, NextFunction } from "express";
 
 jest.mock("../services/url.service");
