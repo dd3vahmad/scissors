@@ -9,7 +9,7 @@ export const validateUrl = (
   const schema = Joi.object({
     title: Joi.string().required(),
     longUrl: Joi.string().uri().required(),
-    backHalf: Joi.string().optional(),
+    backHalf: Joi.string().optional().allow(""),
     generateQrCode: Joi.boolean().required(),
   });
 
