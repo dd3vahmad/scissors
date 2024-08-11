@@ -41,6 +41,7 @@ const CreateNew = () => {
       showToast("error", "Creation successful");
       return goTo("/links");
     } catch (error: any) {
+      setShorteningLink(false);
       showToast("error", error.response.data.message || error.message);
     }
   };
