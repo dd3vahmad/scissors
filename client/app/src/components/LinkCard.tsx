@@ -1,14 +1,11 @@
 import {
-  Box,
-  Grid,
-  GridItem,
+  Flex,
   Heading,
+  HStack,
   Icon,
   Image,
-  Stack,
   Text,
   useColorModeValue,
-  VStack,
 } from "@chakra-ui/react";
 import ILink from "../entites/Link";
 import getCroppedImageUrl from "../Utils/image-url";
@@ -44,97 +41,86 @@ const LinkCard = ({ link, onDelete, detailsPage }: IProps) => {
   };
 
   return (
-    <Grid
-      templateColumns={{ base: "auto 1fr auto", md: "auto 1fr 0.2fr" }}
-      gap={4}
-      p={4}
-      alignItems="center"
+    <Flex
+      gap={2}
+      p={2}
       border="1px solid"
       borderColor={useColorModeValue("gray.200", "gray.600")}
       borderRadius="md"
       maxW="full"
-      overflow="hidden"
     >
-      <GridItem>
-        <Image
-          objectFit="cover"
-          maxW={{ base: "80px", md: "100px" }}
-          maxH={{ base: "80px", md: "100px" }}
-          src={getCroppedImageUrl(link?.qrCode || "")}
-          alt="Link QR Code"
-          borderRadius="md"
-          cursor="pointer"
-          onClick={() => goTo(`/links/${link?.id}`)}
-        />
-      </GridItem>
-      <GridItem>
-        <Stack spacing={2} overflow="hidden">
-          {link ? (
-            <Box>
-              <Heading size="sm" noOfLines={1} overflow="hidden">
-                {link.title}
-              </Heading>
-              <Text
-                noOfLines={1}
-                fontSize={{ base: "sm", md: "md" }}
-                fontWeight={500}
-              >
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={link.shortUrl}
-                >
-                  {link.shortUrl}
-                </a>
-              </Text>
-              <Text
-                noOfLines={1}
-                fontSize={{ base: "xs", md: "sm" }}
-                maxWidth={"170px"}
-              >
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={link.longUrl}
-                >
-                  {link.longUrl}
-                </a>
-              </Text>
-            </Box>
-          ) : (
-            <NoData message="No Link Data" />
-          )}
-        </Stack>
-      </GridItem>
-      <VStack spacing={3} alignItems="center" justifyContent="center">
-        <Icon
-          as={detailsPage ? FaDownload : BsEyeFill}
-          boxSize={{ base: 4, md: 5 }}
-          color={iconColor}
-          cursor="pointer"
-          onClick={() => goTo(`/links/${link?.id}`)}
-        />
-        <Icon
-          as={FaCopy}
-          boxSize={{ base: 4, md: 5 }}
-          color={iconColor}
-          cursor="pointer"
-        />
-        <Icon
-          as={FiEdit}
-          boxSize={{ base: 4, md: 5 }}
-          color={iconColor}
-          cursor="pointer"
-        />
-        <Icon
-          as={MdDelete}
-          boxSize={{ base: 4, md: 5 }}
-          color={"red.500"}
-          cursor="pointer"
-          onClick={deleteLink}
-        />
-      </VStack>
-    </Grid>
+      <Image
+        objectFit="cover"
+        src={getCroppedImageUrl(link?.qrCode || "")}
+        boxSize={24}
+        alt="Link QR Code"
+        borderRadius="md"
+        cursor="pointer"
+        onClick={() => goTo(`/links/${link?.id}`)}
+      />
+      {link ? (
+        <Flex direction={"column"} justifyContent={"space-between"} flex={1}>
+          <Heading size="md" noOfLines={1} overflow="hidden">
+            {link.title}
+          </Heading>
+          <Text
+            noOfLines={1}
+            fontSize={{ base: "sm", md: "md" }}
+            fontWeight={500}
+          >
+            <a target="_blank" rel="noopener noreferrer" href={link.shortUrl}>
+              {link.shortUrl}
+            </a>
+          </Text>
+          <Text
+            noOfLines={1}
+            fontSize={{ base: "xs", md: "sm" }}
+            maxWidth={"190px"}
+          >
+            <a target="_blank" rel="noopener noreferrer" href={link.longUrl}>
+              {link.longUrl}
+            </a>
+          </Text>
+          <HStack
+            spacing={3}
+            flex={1}
+            display={"flex"}
+            alignItems={"end"}
+            justifyContent={"end"}
+          >
+            <Icon
+              as={MdDelete}
+              boxSize={{ base: 4, md: 5 }}
+              color={"red.500"}
+              cursor="pointer"
+              onClick={deleteLink}
+            />
+
+            <Icon
+              as={FaCopy}
+              boxSize={{ base: 4, md: 5 }}
+              color={iconColor}
+              cursor="pointer"
+            />
+            <Icon
+              as={FiEdit}
+              boxSize={{ base: 4, md: 5 }}
+              color={iconColor}
+              cursor="pointer"
+            />
+            <Icon
+              as={detailsPage ? FaDownload : BsEyeFill}
+              boxSize={{ base: 4, md: 5 }}
+              color={iconColor}
+              cursor="pointer"
+              onClick={() => goTo(`/links/${link?.id}`)}
+            />
+          </HStack>
+        </Flex>
+      ) : (
+        <NoData message="No Link Data" />
+      )}
+    </Flex>
   );
 };
 
