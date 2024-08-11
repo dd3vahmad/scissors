@@ -126,15 +126,16 @@ export const getUserQrCodeHistory: (
   try {
     const userObj = req.user as any;
     const urls = await getUserUrls(userObj._id);
-    const formattedCodesObj = urls.map((url) => {
-      const { longUrl, qrCode, id, ...rest } = url;
+    const formattedCodesObj = urls.flatMap((url) => {
+      const { longUrl, qrCode, id } = url;
 
-      if (qrCode)
-        return {
-          id,
-          link: longUrl,
-          qrCode,
-        };
+      return qrCode
+        ? {
+            id,
+            link: longUrl,
+            qrCode,
+          }
+        : [];
     });
     if (!formattedCodesObj) {
       return res
