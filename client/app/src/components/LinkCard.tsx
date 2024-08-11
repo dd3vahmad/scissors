@@ -59,21 +59,23 @@ const LinkCard = ({ link, onDelete, detailsPage }: IProps) => {
         onClick={() => goTo(`/links/${link?.id}`)}
       />
 
-      <Stack mt={2}>
+      <Stack>
         {link ? (
           <Box>
             <Heading size="sm">{link.title}</Heading>
-            <Text py="1" fontSize={14} fontWeight={500}>
-              <a target="_blank" href={link.shortUrl} className="text-wrap">
+            <Text
+              noOfLines={2}
+              py="1"
+              fontSize={14}
+              fontWeight={500}
+              maxWidth={"200px"}
+            >
+              <a target="_blank" href={link.shortUrl}>
                 {link.shortUrl}
               </a>
             </Text>
-            <Text fontSize={10} maxWidth={"100%"}>
-              <a
-                className="text-wrap truncate"
-                target="_blank"
-                href={link.longUrl}
-              >
+            <Text noOfLines={2} fontSize={12} maxWidth={"200px"}>
+              <a target="_blank" href={link.longUrl}>
                 {link.longUrl}
               </a>
             </Text>
