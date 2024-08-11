@@ -8,6 +8,7 @@ import axios from "axios";
 
 const QrCodes = () => {
   const [loading, setLoading] = useState(true);
+  const [refreshing, refresh] = useState<number>(0);
   const [qrCodeHistory, setQrCodeHistory] = useState([]);
   const bgColor = useColorModeValue("gray.100", "gray.800");
   const bgColor1 = useColorModeValue("white", "gray.800");
@@ -27,14 +28,17 @@ const QrCodes = () => {
 
   useEffect(() => {
     getLinkHistory();
-  }, []);
+  }, [refreshing]);
 
   return (
     <>
       {loading ? (
         <Icon as={FaSpinner} size={16} />
       ) : qrCodeHistory.length ? (
-        <QrCodeList qrcodes={qrCodeHistory} />
+        <QrCodeList
+          onDeleteQrCode={() => refresh(new Date().getTime())}
+          qrcodes={qrCodeHistory}
+        />
       ) : (
         <Flex direction={"column"}>
           <NoData message="No QR Code Found" />

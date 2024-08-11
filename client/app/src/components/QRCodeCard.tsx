@@ -1,16 +1,40 @@
-import { Flex, Icon, Image, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Flex,
+  Icon,
+  Image,
+  Text,
+  useColorModeValue,
+  VStack,
+} from "@chakra-ui/react";
 import getCroppedImageUrl from "../Utils/image-url";
 import IQrCode from "../entites/QrCode";
-import { FaCopy, FaDownload, FaShare } from "react-icons/fa6";
+import { FaCopy, FaDownload } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { BsEyeFill } from "react-icons/bs";
+import { FiEdit } from "react-icons/fi";
+import { MdDelete } from "react-icons/md";
+import { useCustomToast } from "./Toast";
 
 interface IProps {
   qrCode: IQrCode;
+  onDelete: () => void;
+  detailsPage?: boolean;
 }
 
-const QRCodeCard = ({ qrCode }: IProps) => {
+const QRCodeCard = ({ qrCode, detailsPage, onDelete }: IProps) => {
   const goTo = useNavigate();
+  const { showToast } = useCustomToast();
   const iconColor = useColorModeValue("grey", "gray");
+
+  const deleteLink = async () => {
+    try {
+      await axios.delete(`/url/${qrCode?.id}`);
+      showToast("success", "Link deleted successfully");
+      onDelete();
+    } catch (error: any) {
+      showToast("error", error.response.data.message || error.message);
+    }
+  };
 
   return (
     <Flex
@@ -32,16 +56,27 @@ const QRCodeCard = ({ qrCode }: IProps) => {
           onClick={() => goTo(`/links/${qrCode.id}`)}
         />
 
-        <Flex
-          direction={"column"}
-          justifyContent={"space-evenly"}
-          height={20}
-          my={2}
+        <VStack
+          display={"flex"}
+          justifyContent={"start"}
+          alignItems={"end"}
+          flex={1}
         >
-          <Icon as={FaCopy} color={iconColor} />
-          <Icon as={FaShare} color={iconColor} />
-          <Icon as={FaDownload} color={iconColor} />
-        </Flex>
+          <Icon
+            as={detailsPage ? FaDownload : BsEyeFill}
+            boxSize={5}
+            color={iconColor}
+            onClick={() => goTo(`/links/${qrCode.id}`)}
+          />
+          <Icon as={FaCopy} boxSize={5} color={iconColor} />
+          <Icon as={FiEdit} boxSize={5} color={iconColor} />
+          <Icon
+            as={MdDelete}
+            boxSize={5}
+            color={"red" || iconColor}
+            onClick={deleteLink}
+          />
+        </VStack>
       </Flex>
       <Text
         fontSize={"12px"}

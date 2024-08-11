@@ -6,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 interface IProps {
   qrcodes: IQrCode[];
+  onDeleteQrCode: () => void
 }
 
-const QrCodeList = ({ qrcodes }: IProps) => {
+const QrCodeList = ({ qrcodes, onDeleteQrCode }: IProps) => {
   const location = useNavigate();
 
   return (
@@ -35,7 +36,7 @@ const QrCodeList = ({ qrcodes }: IProps) => {
         rowGap={5}
       >
         {qrcodes.map((qrcode: IQrCode, i) => {
-          return <QRCodeCard key={i} qrCode={qrcode} />;
+          return <QRCodeCard onDelete={onDeleteQrCode} key={i} qrCode={qrcode} />;
         })}
       </Flex>
     </Container>
