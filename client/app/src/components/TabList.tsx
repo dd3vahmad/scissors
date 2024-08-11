@@ -67,7 +67,7 @@ const TabList = ({ onClose = () => {}, activeTab, setActiveTab }: IProps) => {
               cursor={"pointer"}
             >
               <Icon boxSize={5} borderRadius={8} as={FaUserSecret} />
-              <Text>Me</Text>
+              <Text>Me (User)</Text>
             </HStack>
           </Link>
         </ListItem>
