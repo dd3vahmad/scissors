@@ -11,18 +11,35 @@ import {
 } from "@chakra-ui/react";
 import ILink from "../entites/Link";
 import getCroppedImageUrl from "../Utils/image-url";
-import { FaCopy, FaDownload, FaShare } from "react-icons/fa6";
+import { FaCopy, FaDownload } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import NoData from "./NoData";
-import { FaEdit } from "react-icons/fa";
+import axios from "axios";
+import { MdDelete } from "react-icons/md";
+import { useCustomToast } from "./Toast";
+import { BsEyeFill } from "react-icons/bs";
+import { FiEdit } from "react-icons/fi";
 
 interface IProps {
   link: ILink | undefined;
+  onDelete: () => void;
+  detailsPage?: boolean;
 }
 
-const LinkCard = ({ link }: IProps) => {
+const LinkCard = ({ link, onDelete, detailsPage }: IProps) => {
   const iconColor = useColorModeValue("grey", "gray");
   const goTo = useNavigate();
+  const { showToast } = useCustomToast();
+
+  const deleteLink = async () => {
+    try {
+      await axios.delete(`/url/${link?.id}`);
+      showToast("success", "Link deleted successfully");
+      onDelete();
+    } catch (error: any) {
+      showToast("error", error.response.data.message || error.message);
+    }
+  };
 
   return (
     <Flex
@@ -66,10 +83,20 @@ const LinkCard = ({ link }: IProps) => {
         alignItems={"end"}
         flex={1}
       >
-        <Icon as={FaCopy} color={iconColor} />
-        <Icon as={FaShare} color={iconColor} />
-        <Icon as={FaDownload} color={iconColor} />
-        <Icon as={FaEdit} color={iconColor} />
+        <Icon
+          as={detailsPage ? FaDownload : BsEyeFill}
+          boxSize={5}
+          color={iconColor}
+          onClick={() => goTo(`/links/${link?.id}`)}
+        />
+        <Icon as={FaCopy} boxSize={5} color={iconColor} />
+        <Icon as={FiEdit} boxSize={5} color={iconColor} />
+        <Icon
+          as={MdDelete}
+          boxSize={5}
+          color={"red" || iconColor}
+          onClick={deleteLink}
+        />
       </VStack>
     </Flex>
   );

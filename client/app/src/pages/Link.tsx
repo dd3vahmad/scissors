@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LinkCard from "../components/LinkCard";
 import { Container, Flex, Stack, Text, Icon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import { FaSpinner } from "react-icons/fa6";
 
 const Link = () => {
   const { id } = useParams();
+  const goTo = useNavigate();
   const [link, setLink] = useState<ILink>();
   const [generatedQrCode, setGeneratedQrCode] = useState<string | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -119,7 +120,15 @@ const Link = () => {
           </Flex>
         )}
       </Flex>
-      {loading ? <Icon as={FaSpinner} /> : <LinkCard link={link} />}
+      {loading ? (
+        <Icon as={FaSpinner} />
+      ) : (
+        <LinkCard
+          onDelete={() => goTo("/links")}
+          link={link}
+          detailsPage={true}
+        />
+      )}
       <Text fontSize={"larger"} mt={3} fontWeight={600}>
         Link Stats
       </Text>

@@ -1,14 +1,20 @@
 import { Flex, Icon, Switch, Text } from "@chakra-ui/react";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import { ICreateLink } from "../entites/Link";
 
 interface IProps {
   setLinkData: Dispatch<SetStateAction<ICreateLink>>;
+  qrCodePage: boolean | undefined;
 }
 
-const QRCodeShare = ({ setLinkData }: IProps) => {
+const QRCodeShare = ({ setLinkData, qrCodePage }: IProps) => {
   const qrCodeCount = 2;
+
+  useEffect(() => {
+    if (!qrCodePage)
+      setLinkData((prev) => ({ ...prev, generateQrCode: !qrCodePage }));
+  }, []);
 
   return (
     <>
@@ -25,6 +31,7 @@ const QRCodeShare = ({ setLinkData }: IProps) => {
                 });
               }}
               size="md"
+              isChecked={!qrCodePage}
             />
             <Text fontSize={"sm"} fontWeight={600}>
               Generate a QR Code to share anywhere people can see it

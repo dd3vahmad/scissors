@@ -7,6 +7,7 @@ import axios from "axios";
 import { FaSpinner } from "react-icons/fa6";
 
 const Links = () => {
+  const [refreshing, refresh] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [linkHistory, setLinkHistory] = useState([]);
   const goTo = useNavigate();
@@ -27,14 +28,17 @@ const Links = () => {
 
   useEffect(() => {
     getLinkHistory();
-  }, []);
+  }, [refreshing]);
 
   return (
     <>
       {loading ? (
         <Icon as={FaSpinner} size={16} />
       ) : linkHistory.length ? (
-        <LinkList links={linkHistory} />
+        <LinkList
+          onDeleteLink={() => refresh(new Date().getTime())}
+          links={linkHistory}
+        />
       ) : (
         <Flex direction={"column"}>
           <NoData message="No Link Found" />

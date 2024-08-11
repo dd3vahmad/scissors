@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  deleteUrl,
   generateQrCode,
   getUrl,
   getUserLinksStats,
@@ -19,5 +20,7 @@ router.put("/generate-qrcode/:id/:backHalf", generateQrCode);
 router.get("/stats", getUserLinksStats);
 router.get("/:id/stats", getUserLinkStats);
 router.get("/:id", getUrl);
+router.delete("/:id", deleteUrl);
+router.put("/:id", deleteUrl);
 
 export default router;

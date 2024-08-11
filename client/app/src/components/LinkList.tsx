@@ -6,8 +6,9 @@ import { IoAddSharp } from "react-icons/io5";
 
 interface IProps {
   links: ILink[];
+  onDeleteLink: () => void;
 }
-const LinkList = ({ links }: IProps) => {
+const LinkList = ({ links, onDeleteLink }: IProps) => {
   const location = useNavigate();
 
   return (
@@ -29,7 +30,7 @@ const LinkList = ({ links }: IProps) => {
       </Flex>
       <Stack>
         {links.map((link: ILink, i) => {
-          return <LinkCard key={i} link={link} />;
+          return <LinkCard onDelete={onDeleteLink} key={i} link={link} />;
         })}
       </Stack>
     </Container>

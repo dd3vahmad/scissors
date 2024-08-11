@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import {
+  deleteLink,
   formatChartData,
   generateQrCodeForLink,
   getOriginalUrl,
@@ -196,6 +197,48 @@ export const getUserLinksStats: (
       message: "Urls data fetched successfully",
       data: chartClicksData,
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateUrl = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const urlDeleted = await deleteLink(id);
+    if (!urlDeleted) {
+      return res
+        .status(400)
+        .json({ failed: false, message: "Unable to delete url" });
+    }
+    res
+      .status(200)
+      .json({ failed: false, message: "Url deleted successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteUrl = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const urlDeleted = await deleteLink(id);
+    if (!urlDeleted) {
+      return res
+        .status(400)
+        .json({ failed: false, message: "Unable to delete url" });
+    }
+    res
+      .status(200)
+      .json({ failed: false, message: "Url deleted successfully" });
   } catch (err) {
     next(err);
   }

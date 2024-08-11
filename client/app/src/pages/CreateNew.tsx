@@ -13,9 +13,12 @@ import { ICreateLink } from "../entites/Link";
 import { useState } from "react";
 import axios from "axios";
 import { FaSpinner } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useCustomToast } from "../components/Toast";
 
 const CreateNew = () => {
+  const { showToast } = useCustomToast();
+  const { qrcode } = useParams();
   const goTo = useNavigate();
   const [shorteningLink, setShorteningLink] = useState(false);
   const [linkData, setLinkData] = useState<ICreateLink>({
@@ -35,9 +38,10 @@ const CreateNew = () => {
       await axios.post("/url/shorten", linkData);
       if (!linkData?.longUrl) alert("Oops an error occurred");
       setShorteningLink(false);
+      showToast("error", "Creation successful");
       return goTo("/links");
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      showToast("error", error.response.data.message || error.message);
     }
   };
 
@@ -47,9 +51,9 @@ const CreateNew = () => {
       <Text fontSize={"2xl"} fontWeight={700} mt={5} mb={3}>
         Ways To Share
       </Text>
-      <ShortLinkShare setLinkData={setLinkData} />
-      <QRCodeShare setLinkData={setLinkData} />
-      <LinkPageShare />
+      {!qrcode && <ShortLinkShare setLinkData={setLinkData} />}
+      <QRCodeShare qrCodePage={!qrcode} setLinkData={setLinkData} />
+      {!qrcode && <LinkPageShare />}
       <Flex direction={"column"} mt={5} gap={3}>
         <Button
           onClick={() => createNewLink(linkData)}

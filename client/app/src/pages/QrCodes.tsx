@@ -66,7 +66,7 @@ const QrCodes = () => {
               fontSize={"lg"}
               mt={5}
               mx={10}
-              onClick={() => goTo("/create-new")}
+              onClick={() => goTo("/create-new/qrcode")}
             >
               Create A Code
             </Button>

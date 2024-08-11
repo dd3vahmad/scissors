@@ -17,7 +17,7 @@ const QrCodeList = ({ qrcodes }: IProps) => {
         <Text fontSize={"larger"} py={2} fontWeight={600}>
           My Sicsly QrCodes:
         </Text>
-        <Flex gap={2} onClick={() => location("/create-new")}>
+        <Flex gap={2} onClick={() => location("/create-new/qrcode")}>
           <Text fontWeight={600}>Create</Text>
           <Icon
             as={IoAddSharp}

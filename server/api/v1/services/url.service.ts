@@ -20,12 +20,12 @@ export const generateNewQrCode: (
 
 export const shortenNewUrl = async (
   title: string,
-  backHalf: string,
   longUrl: string,
   generateQrCode: boolean,
-  userId: string
+  userId: string,
+  backHalf?: string
 ) => {
-  const cleanBackHalf = backHalf.replace(" ", "");
+  const cleanBackHalf = backHalf?.replace(" ", "");
   const urlCode = cleanBackHalf || uuidv4().slice(0, 8);
 
   try {
@@ -104,25 +104,6 @@ export const getOriginalUrl = async (
       return url.longUrl;
     }
     throw new Error(`Url with this back half ${cleanCode} is not found`);
-  } catch (err: IError | any) {
-    throw new Error(err.message);
-  }
-};
-
-export const updateUrl = async (
-  id: string,
-  title: string,
-  longUrl: string,
-  backHalf: string
-) => {
-  try {
-    let updatedDatas = { title: "", longUrl: "", backHalf: "" };
-    if (title) updatedDatas.title = title;
-    if (longUrl) updatedDatas.longUrl = longUrl;
-    if (backHalf) updatedDatas.backHalf = backHalf;
-
-    await Url.updateOne({ id }, updatedDatas);
-    throw new Error("");
   } catch (err: IError | any) {
     throw new Error(err.message);
   }
@@ -264,5 +245,33 @@ export const formatChartData = (
     }
   } catch (error: any) {
     throw new Error(error.message);
+  }
+};
+type UData = {
+  title: string;
+  longUrl: string;
+  backHalf: string;
+};
+export const updateLink = async (id: string, data: UData) => {
+  try {
+    let updatedDatas = { title: "", longUrl: "", backHalf: "" };
+    if (data.title) updatedDatas.title = data.title;
+    if (data.longUrl) updatedDatas.longUrl = data.longUrl;
+    if (data.backHalf) updatedDatas.backHalf = data.backHalf;
+
+    await Url.updateOne({ id }, updatedDatas);
+    throw new Error("");
+  } catch (err: IError | any) {
+    throw new Error(err.message);
+  }
+};
+
+export const deleteLink = async (id: string) => {
+  try {
+    const item = await Url.findByIdAndDelete(id);
+    if (!item) throw new Error("Cannot find url with this Id to delete");
+    return item;
+  } catch (err: IError | any) {
+    throw new Error(err.message);
   }
 };

@@ -44,7 +44,7 @@ function App() {
                 <Route index element={<Dashboard />} />
                 <Route path="links/:id" element={<Link />} />
                 <Route path="links" element={<Links />} />
-                <Route path="create-new" element={<CreateNew />} />
+                <Route path="create-new/:qrcode?" element={<CreateNew />} />
                 <Route path="qrcodes" element={<QrCodes />} />
                 <Route path="pages" element={<Pages />} />
                 <Route path="custom-urls" element={<CustomUrls />} />
