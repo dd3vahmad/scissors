@@ -33,6 +33,7 @@ const LinkCard = ({ link, onDelete, detailsPage }: IProps) => {
 
   const deleteLink = async () => {
     try {
+      showToast("info", "Deleting...");
       await axios.delete(`/url/${link?.id}`);
       showToast("success", "Link deleted successfully");
       onDelete();
