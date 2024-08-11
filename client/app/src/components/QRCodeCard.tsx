@@ -14,6 +14,7 @@ import { BsEyeFill } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { useCustomToast } from "./Toast";
+import axios from "axios";
 
 interface IProps {
   qrCode: IQrCode;
