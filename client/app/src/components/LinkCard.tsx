@@ -28,7 +28,7 @@ interface IProps {
 }
 
 const LinkCard = ({ link, onDelete, detailsPage }: IProps) => {
-  const iconColor = useColorModeValue("grey", "gray");
+  const iconColor = useColorModeValue("gray.500", "gray.300");
   const goTo = useNavigate();
   const { showToast } = useCustomToast();
 
@@ -45,43 +45,67 @@ const LinkCard = ({ link, onDelete, detailsPage }: IProps) => {
 
   return (
     <Grid
-      gap={3}
-      p={2}
-      alignItems={"start"}
-      border={"1px solid gray"}
-      borderRadius={5}
-      templateColumns={"1fr 2fr 0.2fr"}
+      templateColumns={{ base: "auto 1fr auto", md: "auto 1fr 0.2fr" }}
+      gap={4}
+      p={4}
+      alignItems="center"
+      border="1px solid"
+      borderColor={useColorModeValue("gray.200", "gray.600")}
+      borderRadius="md"
+      maxW="full"
+      overflow="hidden"
     >
       <GridItem>
         <Image
           objectFit="cover"
-          maxW={{ base: "100px", sm: "50px" }}
+          maxW={{ base: "80px", md: "100px" }}
+          maxH={{ base: "80px", md: "100px" }}
           src={getCroppedImageUrl(link?.qrCode || "")}
           alt="Link QR Code"
-          borderRadius={5}
+          borderRadius="md"
+          cursor="pointer"
           onClick={() => goTo(`/links/${link?.id}`)}
         />
       </GridItem>
       <GridItem>
-        <Stack>
+        <Stack spacing={2} overflow="hidden">
           {link ? (
             <Box>
-              <Heading size="sm" noOfLines={1} maxWidth={"200px"}>
+              <Heading
+                size="sm"
+                noOfLines={1}
+                overflow="hidden"
+                whiteSpace="nowrap"
+              >
                 {link.title}
               </Heading>
               <Text
-                noOfLines={2}
-                py="1"
-                fontSize={14}
+                noOfLines={1}
+                fontSize={{ base: "sm", md: "md" }}
                 fontWeight={500}
-                maxWidth={"200px"}
+                overflow="hidden"
+                whiteSpace="wrap"
               >
-                <a target="_blank" href={link.shortUrl}>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={link.shortUrl}
+                >
                   {link.shortUrl}
                 </a>
               </Text>
-              <Text noOfLines={2} fontSize={12} maxWidth={"200px"}>
-                <a target="_blank" href={link.longUrl}>
+              <Text
+                noOfLines={1}
+                fontSize={{ base: "xs", md: "sm" }}
+                overflow="hidden"
+                whiteSpace="wrap"
+                maxWidth={"200px"}
+              >
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={link.longUrl}
+                >
                   {link.longUrl}
                 </a>
               </Text>
@@ -91,24 +115,31 @@ const LinkCard = ({ link, onDelete, detailsPage }: IProps) => {
           )}
         </Stack>
       </GridItem>
-      <VStack
-        display={"flex"}
-        justifyContent={"start"}
-        alignItems={"end"}
-        flex={1}
-      >
+      <VStack spacing={3} alignItems="center" justifyContent="center">
         <Icon
           as={detailsPage ? FaDownload : BsEyeFill}
-          boxSize={5}
+          boxSize={{ base: 4, md: 5 }}
           color={iconColor}
+          cursor="pointer"
           onClick={() => goTo(`/links/${link?.id}`)}
         />
-        <Icon as={FaCopy} boxSize={5} color={iconColor} />
-        <Icon as={FiEdit} boxSize={5} color={iconColor} />
+        <Icon
+          as={FaCopy}
+          boxSize={{ base: 4, md: 5 }}
+          color={iconColor}
+          cursor="pointer"
+        />
+        <Icon
+          as={FiEdit}
+          boxSize={{ base: 4, md: 5 }}
+          color={iconColor}
+          cursor="pointer"
+        />
         <Icon
           as={MdDelete}
-          boxSize={5}
-          color={"red" || iconColor}
+          boxSize={{ base: 4, md: 5 }}
+          color={"red.500"}
+          cursor="pointer"
           onClick={deleteLink}
         />
       </VStack>
