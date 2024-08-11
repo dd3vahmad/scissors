@@ -8,6 +8,7 @@ import {
   getUserQrCodeHistory,
   getUserUrlHistory,
   shortenUrl,
+  updateUrl,
 } from "../controllers/url.controller";
 import { validateUrl } from "../validations/url";
 
@@ -21,6 +22,6 @@ router.get("/stats", getUserLinksStats);
 router.get("/:id/stats", getUserLinkStats);
 router.get("/:id", getUrl);
 router.delete("/:id", deleteUrl);
-router.put("/:id", deleteUrl);
+router.put("/:id", updateUrl);
 
 export default router;
