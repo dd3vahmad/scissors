@@ -32,13 +32,16 @@ const CreateNew = () => {
   const color1 = useColorModeValue("white", "gray.700");
   const color2 = useColorModeValue("gray.400", "white");
 
-  const createNewLink = async (linkData: ICreateLink | undefined) => {
+  const createNewLink = async (linkData: ICreateLink) => {
     try {
       setShorteningLink(true);
+      showToast("info", "Creating....");
+      if (!linkData.longUrl) {
+        return showToast("error", "No url to be shortened");
+      }
       await axios.post("/url/shorten", linkData);
-      if (!linkData?.longUrl) alert("Oops an error occurred");
       setShorteningLink(false);
-      showToast("error", "Creation successful");
+      showToast("success", "Creation successful");
       return goTo("/links");
     } catch (error: any) {
       setShorteningLink(false);

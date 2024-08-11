@@ -6,6 +6,7 @@ export const validateUrl = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log(req.body);
   const schema = Joi.object({
     title: Joi.string().required(),
     longUrl: Joi.string().uri().required(),
