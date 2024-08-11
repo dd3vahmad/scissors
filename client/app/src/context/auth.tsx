@@ -8,6 +8,7 @@ import {
 } from "react";
 import IUser from "../entites/User";
 import { FaSpinner } from "react-icons/fa6";
+import { useCustomToast } from "../components/Toast";
 
 interface AuthContextType {
   currentUser: IUser | null;
@@ -43,15 +44,16 @@ interface AuthProviderProps {
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
+  const { showToast } = useCustomToast();
   const [currentUser, setCurrentUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const getCurrentUser = async (): Promise<IUser | null> => {
+  const getCurrentUser = async (): Promise<IUser | void> => {
     try {
       const response = await axios.get("/user/user-details");
       return response.data as IUser;
-    } catch (error) {
-      return null;
+    } catch (error: any) {
+      return showToast("error", error.response.data.message || error.message);
     }
   };
 
