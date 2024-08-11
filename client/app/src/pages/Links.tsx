@@ -5,8 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { FaSpinner } from "react-icons/fa6";
+import { useCustomToast } from "../components/Toast";
 
 const Links = () => {
+  const { showToast } = useCustomToast();
   const [refreshing, refresh] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [linkHistory, setLinkHistory] = useState([]);
@@ -21,8 +23,8 @@ const Links = () => {
 
       setLinkHistory(response.data.data);
       return setLoading(false);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      showToast("error", error.response.data.message || error.message);
     }
   };
 

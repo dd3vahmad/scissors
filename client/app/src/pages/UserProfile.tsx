@@ -17,6 +17,7 @@ import formatDay from "../Utils/formatDay";
 import { IClickData } from "../entites/Link";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useCustomToast } from "../components/Toast";
 
 interface IUserProfile {
   firstName: string;
@@ -30,6 +31,7 @@ interface IUserProfile {
 
 const UserProfile = () => {
   const { currentUser } = useAuth();
+  const { showToast } = useCustomToast();
   const [clicksByDayData, setClicksByDayData] = useState<IClickData[]>();
 
   const user: IUserProfile = {
@@ -47,8 +49,8 @@ const UserProfile = () => {
       const response = await axios.get("/url/stats?by=day");
       const chartRes = response.data as any;
       setClicksByDayData(chartRes.data);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      showToast('error', error.response.data.message || error.message);
     }
   };
 

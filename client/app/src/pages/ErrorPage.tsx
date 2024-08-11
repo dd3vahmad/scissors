@@ -9,7 +9,6 @@ import MNavBar from "../components/mobile/MNavbar";
 const ErrorPage = () => {
   const navigate = useNavigate();
   const error = useRouteError();
-  console.log(error);
 
   return (
     <Box paddingX={3}>

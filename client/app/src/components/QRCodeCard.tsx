@@ -80,11 +80,13 @@ const QRCodeCard = ({ qrCode, detailsPage, onDelete }: IProps) => {
       </Flex>
       <Text
         fontSize={"12px"}
-        className="truncate leading-10"
+        noOfLines={2}
         maxWidth={"100px"}
         textAlign={"center"}
       >
-        {qrCode.link}
+        <a target="_blank" href={qrCode.link}>
+          {qrCode.link}
+        </a>
       </Text>
     </Flex>
   );

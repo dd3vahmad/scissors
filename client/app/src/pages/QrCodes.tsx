@@ -5,8 +5,10 @@ import QrCodeList from "../components/QrCodeList";
 import { useEffect, useState } from "react";
 import { FaSpinner } from "react-icons/fa6";
 import axios from "axios";
+import { useCustomToast } from "../components/Toast";
 
 const QrCodes = () => {
+  const { showToast } = useCustomToast();
   const [loading, setLoading] = useState(true);
   const [refreshing, refresh] = useState<number>(0);
   const [qrCodeHistory, setQrCodeHistory] = useState([]);
@@ -15,19 +17,19 @@ const QrCodes = () => {
   const color = useColorModeValue("gray.400", "whitesmoke");
   const goTo = useNavigate();
 
-  const getLinkHistory = async () => {
+  const getQrCodeHistory = async () => {
     try {
       const response: any = await axios.get("/url/qrcode-history");
 
       setQrCodeHistory(response.data.data);
       return setLoading(false);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      showToast("error", error.response.data.message || error.message);
     }
   };
 
   useEffect(() => {
-    getLinkHistory();
+    getQrCodeHistory();
   }, [refreshing]);
 
   return (

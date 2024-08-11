@@ -9,20 +9,21 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import LinkList from "../components/LinkList";
-import links from "../data/links";
 import { BsSearch } from "react-icons/bs";
 import getCroppedImageUrl from "../Utils/image-url";
+import ILink from "../entites/Link";
 
 const CustomUrls = () => {
   const location = useNavigate();
-  const bgColor = useColorModeValue("blue.500", "gray.800");
+  const bgColor = useColorModeValue("grey.500", "gray.800");
   const bgColor1 = useColorModeValue("white", "gray.800");
-  const color = useColorModeValue("blue.500", "blue.500");
+  const color = useColorModeValue("grey.500", "gray.500");
+  const links: ILink[] = [];
 
   return (
     <>
       {links.length ? (
-        <LinkList links={links} />
+        <LinkList onDeleteLink={() => console.log("Goooooo")} links={links} />
       ) : (
         <Flex direction={"column"}>
           <Text
@@ -50,7 +51,7 @@ const CustomUrls = () => {
               alignItems={"center"}
               borderWidth={2}
               borderRadius={4}
-              borderColor={"blue.500"}
+              borderColor={color}
             >
               <Icon as={BsSearch} boxSize={6} mx={3} color={color} />
               <Input
@@ -69,7 +70,7 @@ const CustomUrls = () => {
               fontSize={"lg"}
               mt={5}
               py={2}
-              _hover={{ bg: "blue.600" }}
+              _hover={{ bg: "gray.600" }}
               onClick={() => location("/create-new")}
             >
               Search

@@ -6,8 +6,10 @@ import formatDay from "../Utils/formatDay";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { IClickData } from "../entites/Link";
+import { useCustomToast } from "../components/Toast";
 
 const Analytics = () => {
+  const { showToast } = useCustomToast();
   const [clicksByDayData, setClicksByDayData] = useState<IClickData[]>();
   const [clicksByLocationData, setClicksByLocationData] =
     useState<IClickData[]>();
@@ -17,8 +19,8 @@ const Analytics = () => {
       const response = await axios.get("/url/stats?by=day");
       const chartRes = response.data as any;
       setClicksByDayData(chartRes.data);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      showToast("error", error.response.data.message || error.message);
     }
   };
 
@@ -27,8 +29,8 @@ const Analytics = () => {
       const response = await axios.get("/url/stats?by=location");
       const chartRes = response.data as any;
       setClicksByLocationData(chartRes.data);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      showToast("error", error.response.data.message || error.message);
     }
   };
 
