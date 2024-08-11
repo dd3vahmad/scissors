@@ -46,7 +46,7 @@ const LinkCard = ({ link }: IProps) => {
           <Box>
             <Heading size="sm">{link.title}</Heading>
             <Text py="1" fontSize={14} fontWeight={500}>
-              <a target="_blank" href={link.shortUrl}>
+              <a target="_blank" href={link.shortUrl} className="text-wrap">
                 {link.shortUrl}
               </a>
             </Text>
