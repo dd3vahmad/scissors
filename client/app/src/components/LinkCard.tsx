@@ -71,20 +71,13 @@ const LinkCard = ({ link, onDelete, detailsPage }: IProps) => {
         <Stack spacing={2} overflow="hidden">
           {link ? (
             <Box>
-              <Heading
-                size="sm"
-                noOfLines={1}
-                overflow="hidden"
-                whiteSpace="nowrap"
-              >
+              <Heading size="sm" noOfLines={1} overflow="hidden">
                 {link.title}
               </Heading>
               <Text
                 noOfLines={1}
                 fontSize={{ base: "sm", md: "md" }}
                 fontWeight={500}
-                overflow="hidden"
-                whiteSpace="wrap"
               >
                 <a
                   target="_blank"
@@ -97,9 +90,7 @@ const LinkCard = ({ link, onDelete, detailsPage }: IProps) => {
               <Text
                 noOfLines={1}
                 fontSize={{ base: "xs", md: "sm" }}
-                overflow="hidden"
-                whiteSpace="wrap"
-                maxWidth={"200px"}
+                maxWidth={"170px"}
               >
                 <a
                   target="_blank"
