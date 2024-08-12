@@ -1,5 +1,7 @@
+import IError from "../entities/error.entity";
 import IUser from "../entities/user.entity";
 import User from "../models/user.model";
+import bcryptjs from "bcryptjs";
 
 export const getDetails = async (userId: string | undefined) => {
   try {
@@ -14,5 +16,46 @@ export const getDetails = async (userId: string | undefined) => {
     return undefined;
   } catch (error: any) {
     throw new Error(error.message || "Error getting user details");
+  }
+};
+
+type UData = {
+  firstname?: string;
+  lastname?: string;
+  username?: string;
+  password?: string;
+  oldPassword?: string;
+  apiKey?: string;
+};
+
+export const updateDetails = async (
+  id: string,
+  { firstname, lastname, username, password, oldPassword, apiKey }: UData
+) => {
+  try {
+    let updatedDatas: any = {};
+    if (firstname) updatedDatas.firstname = firstname;
+    if (lastname) updatedDatas.lastname = lastname;
+    if (username) updatedDatas.username = username;
+    if (apiKey) updatedDatas.apiKey = apiKey;
+
+    const validUser = await User.findById(id);
+    if (!validUser) {
+      throw new Error("User details not found");
+    }
+
+    if (validUser && password && oldPassword) {
+      const passwordValid =
+        password && bcryptjs.compareSync(oldPassword, validUser?.password);
+      if (!passwordValid) {
+        throw new Error("Wrong credentials");
+      }
+      updatedDatas.password = password;
+    }
+
+    await validUser.updateOne(updatedDatas);
+    return true;
+  } catch (err: IError | any) {
+    throw new Error(err.message);
   }
 };

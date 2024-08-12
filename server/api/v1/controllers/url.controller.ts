@@ -211,8 +211,8 @@ export const updateUrl = async (
   try {
     const { id } = req.params;
     const data = req.body;
-    const urlDeleted = await updateLink(id, data);
-    if (!urlDeleted) {
+    const updatedUserDetails = await updateLink(id, data);
+    if (!updatedUserDetails) {
       return res
         .status(400)
         .json({ failed: false, message: "Unable to delete url" });

@@ -1,5 +1,4 @@
 import bcryptjs from "bcryptjs";
-import logger from "../../../utils/logger.util";
 import User from "../models/user.model";
 import { error } from "../../../utils/error.util";
 import IError from "../entities/error.entity";
