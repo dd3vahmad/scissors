@@ -33,7 +33,7 @@ interface IUserProfile {
   totalClicks: number;
 }
 
-const UserProfile = () => {
+const Settings = () => {
   const { currentUser, logoutUser } = useAuth();
   const goTo = useNavigate();
   const { showToast } = useCustomToast();
@@ -147,4 +147,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default Settings;

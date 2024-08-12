@@ -35,6 +35,7 @@ const authenticateToken = async (
             return res.status(403).json({ message: "Not authenticated" });
           }
           req.user = user;
+          next();
         }
       );
     } else if (authHeader && authHeader.startsWith("Bearer ")) {
@@ -48,6 +49,7 @@ const authenticateToken = async (
       }
 
       req.user = user;
+      next();
     } else {
       const res_error = error(403, "Token or API key required");
       return res.status(403).json(res_error);

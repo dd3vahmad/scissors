@@ -18,7 +18,7 @@ import AuthProvider from "./context/auth";
 import VerifyEmail from "./pages/VerifyEmail";
 import EVerificationRoute from "./rbac/EVerification";
 import config from "../config/app.config";
-import UserProfile from "./pages/UserProfile";
+import Settings from "./pages/Settings";
 
 function App() {
   axios.defaults.baseURL = config.server_base_url;
@@ -49,7 +49,7 @@ function App() {
                 <Route path="pages" element={<Pages />} />
                 <Route path="custom-urls" element={<CustomUrls />} />
                 <Route path="analytics" element={<Analytics />} />
-                <Route path="user-profile" element={<UserProfile />} />
+                <Route path="account-settings" element={<Settings />} />
               </Route>
             </Route>
           </Routes>
