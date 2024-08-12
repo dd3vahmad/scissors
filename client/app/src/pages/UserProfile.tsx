@@ -10,6 +10,8 @@ import {
   StatNumber,
   Heading,
   Divider,
+  Button,
+  Icon,
 } from "@chakra-ui/react";
 import { useAuth } from "../context/auth";
 import BarChart from "../components/BarChart";
@@ -18,6 +20,8 @@ import { IClickData } from "../entites/Link";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useCustomToast } from "../components/Toast";
+import { LuLogOut } from "react-icons/lu";
+import { useNavigate } from "react-router-dom";
 
 interface IUserProfile {
   firstName: string;
@@ -30,7 +34,8 @@ interface IUserProfile {
 }
 
 const UserProfile = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, logoutUser } = useAuth();
+  const goTo = useNavigate();
   const { showToast } = useCustomToast();
   const [clicksByDayData, setClicksByDayData] = useState<IClickData[]>();
 
@@ -50,7 +55,7 @@ const UserProfile = () => {
       const chartRes = response.data as any;
       setClicksByDayData(chartRes.data);
     } catch (error: any) {
-      showToast('error', error.response.data.message || error.message);
+      showToast("error", error.response.data.message || error.message);
     }
   };
 
@@ -74,6 +79,16 @@ const UserProfile = () => {
     ],
   };
 
+  const logout = async () => {
+    try {
+      await logoutUser();
+      showToast("info", "Logout successful");
+      goTo("/login");
+    } catch (error: any) {
+      showToast("error", error.message);
+    }
+  };
+
   useEffect(() => {
     getChartDataByDay();
   }, []);
@@ -82,13 +97,23 @@ const UserProfile = () => {
     <Box
       maxW="800px"
       mx={3}
-      mt={10}
-      p={5}
+      mt={3}
+      p={4}
       borderWidth="1px"
       borderRadius="lg"
       boxShadow="lg"
     >
       <Flex direction={{ base: "column", md: "row" }} align="center">
+        <Button
+          onClick={logout}
+          alignSelf={"end"}
+          mb={2}
+          bg={"red"}
+          _hover={{ bg: "whitesmoke", textColor: "red" }}
+          fontWeight={600}
+        >
+          <Icon as={LuLogOut} />
+        </Button>
         <Avatar size="2xl" name={user.firstName} src={user.profileImage} />
         <VStack align="start" ml={{ base: 0, md: 6 }} mt={{ base: 4, md: 0 }}>
           <Heading
@@ -103,9 +128,7 @@ const UserProfile = () => {
           </Text>
         </VStack>
       </Flex>
-
       <Divider my={6} />
-
       <HStack spacing={8} justify="space-around">
         <Stat>
           <StatLabel>Shortened URLs</StatLabel>

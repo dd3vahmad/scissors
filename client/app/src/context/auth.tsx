@@ -53,7 +53,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       const response = await axios.get("/user/user-details");
       return response.data as IUser;
     } catch (error: any) {
-      return showToast("error", error.response.data.message || error.message);
+      return showToast(
+        "error",
+        "Not Authenticated: " + error.response.data.message || error.message
+      );
     }
   };
 

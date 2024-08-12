@@ -13,10 +13,12 @@ import {
   AlertIcon,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/auth"; // Adjust the path accordingly
+import { useAuth } from "../context/auth";
+import { useCustomToast } from "../components/Toast";
 
 const VerifyEmail: React.FC = () => {
-  const { verifyUserEmail } = useAuth(); // Add a verifyEmail method in your AuthContext
+  const { verifyUserEmail } = useAuth();
+  const { showToast } = useCustomToast();
   const [otp, setOtp] = useState<number | null>(null);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -29,6 +31,7 @@ const VerifyEmail: React.FC = () => {
       navigate("/login");
     } catch (error: any) {
       setError(error.message);
+      showToast("error", error.message);
     }
   };
 
