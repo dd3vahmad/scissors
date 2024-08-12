@@ -17,6 +17,10 @@ const config = {
       auth: {
         JWT_SECRET: process.env.JWT_SECRET || "",
       },
+      MAIL_SERVICE: {
+        USER: process.env.USER,
+        GOOGLE_APP_PASSWORD: process.env.GOOGLE_APP_PASSWORD,
+      },
     },
   },
   db: {

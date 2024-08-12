@@ -1,4 +1,5 @@
 import Token from "../api/v1/models/token.model";
+import config from "../config/server.config";
 import logger from "./logger.util";
 import nodemailer from "nodemailer";
 
@@ -22,26 +23,31 @@ export const sendOTP = async (
       port: 465,
       secure: true,
       auth: {
-        user: process.env.USER,
-        pass: process.env.GOOGLE_APP_PASSWORD,
+        user: config.server.app.MAIL_SERVICE.USER || "tt242833@gmail.com",
+        pass:
+          config.server.app.MAIL_SERVICE.GOOGLE_APP_PASSWORD ||
+          "ctuk sfhn mekb jaow",
       },
     });
 
     // Sends Email
     let info = await transporter.sendMail({
-      from: process.env.USER,
+      from: `Scissors <${config.server.app.MAIL_SERVICE.USER}>`,
       to: email,
-      subject: "Account Verification",
+      subject: "Account Email Verification",
       html: `
         <div class="border border-green-500 rounded-md px-10 text-center">
-          <h1 class="text-green-500 font-bold">Welcome to Gigsflix ${lastname}!</h1>
+          <h1 class="text-green-500 font-bold">Welcome to Scissors ${lastname}!</h1>
           <p>Here is your OTP</p>
-          <h2 class="text-green-500">${OTPToken.token}</h2>
-          <p>Copy and paste the OTP to verify your Gigsflix account.</p>
+          <strong class="text-green-500">${OTPToken.token}</strong>
+          <p>Copy and paste the OTP to verify your Scissors account.</p>
         </div>
       `,
     });
-  } catch (error) {
-    logger.error("Email fail to send.");
+    logger.info("Email sent successfully:", info.response);
+  } catch (error: any) {
+    logger.error(
+      "Email failed to send. Error: " + error.message + " Stack: " + error.stack
+    );
   }
 };
