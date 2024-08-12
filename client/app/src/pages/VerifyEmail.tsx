@@ -11,13 +11,16 @@ import {
   Text,
   Alert,
   AlertIcon,
+  Icon,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth";
 import { useCustomToast } from "../components/Toast";
+import { FaSpinner } from "react-icons/fa6";
 
 const VerifyEmail: React.FC = () => {
-  const { verifyUserEmail } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const { verifyUserEmail, resendOTP } = useAuth();
   const { showToast } = useCustomToast();
   const [otp, setOtp] = useState<number | null>(null);
   const [error, setError] = useState("");
@@ -25,13 +28,31 @@ const VerifyEmail: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const email = localStorage.getItem("new-user-email");
       await verifyUserEmail(email || "", otp || 0);
+      localStorage.removeItem("new-user-email");
+      setLoading(false);
       navigate("/login");
     } catch (error: any) {
       setError(error.message);
       showToast("error", error.message);
+      setLoading(false);
+    }
+  };
+
+  const resendotp = async () => {
+    try {
+      setLoading(true);
+      const email = localStorage.getItem("new-user-email") || "";
+      await resendOTP(email);
+      showToast("info", "OTP resent successfully");
+      setLoading(false);
+    } catch (error: any) {
+      setError(error.message);
+      showToast("error", error.message);
+      setLoading(false);
     }
   };
 
@@ -65,13 +86,21 @@ const VerifyEmail: React.FC = () => {
                 onChange={(e) => setOtp(Number(e.target.value))}
               />
             </FormControl>
-            <Button colorScheme="blue" type="submit" width="full" mt={4}>
-              Verify
+            <Button
+              disabled={loading}
+              colorScheme="blue"
+              type="submit"
+              width="full"
+              mt={4}
+            >
+              {loading ? <Icon as={FaSpinner} /> : "Verify"}
             </Button>
           </Stack>
         </form>
         <Text mt={4} textAlign="center">
-          <a href="/resend-otp">Resend OTP</a>
+          <Button disabled={loading} onClick={resendotp}>
+            {loading ? <Icon as={FaSpinner} /> : "Resend OTP"}
+          </Button>
         </Text>
       </Box>
     </Container>
