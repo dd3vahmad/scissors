@@ -21,14 +21,14 @@ const redisMiddleware = async (
   const queryKey = JSON.stringify(req.query);
 
   try {
+    // Check cache
     const cachedData = await redisClient.get(queryKey);
 
     if (cachedData) {
-      logger.info("Cache hit");
-      return res.json(JSON.parse(cachedData));
+      return res.status(200).json(JSON.parse(cachedData));
     }
 
-    // Attach redis client to the request object to be used in the route handler
+    // If not cached, proceed to the route handler
     (req as any).redisClient = redisClient;
     (req as any).queryKey = queryKey;
 
