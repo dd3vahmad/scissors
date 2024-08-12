@@ -1,2 +1,14 @@
 2024-08-04T09:54:22.517Z [31merror[39m: An error occurred while shortening url
 2024-08-05T21:21:11.921Z [31merror[39m: Email fail to send.
+2024-08-12T08:29:34.913Z [31merror[39m: Email fail to send.
+2024-08-12T09:10:42.258Z [31merror[39m: Email failed to send. Error: Missing credentials for "PLAIN" Stack: Error: Missing credentials for "PLAIN"
+    at SMTPConnection._formatError (C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\nodemailer\lib\smtp-connection\index.js:798:19)
+    at SMTPConnection.login (C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\nodemailer\lib\smtp-connection\index.js:452:38)
+    at C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\nodemailer\lib\smtp-transport\index.js:272:32
+    at SMTPConnection.<anonymous> (C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\nodemailer\lib\smtp-connection\index.js:215:17)
+    at Object.onceWrapper (node:events:628:28)
+    at SMTPConnection.emit (node:events:514:28)
+    at SMTPConnection._actionEHLO (C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\nodemailer\lib\smtp-connection\index.js:1360:14)
+    at SMTPConnection._processResponse (C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\nodemailer\lib\smtp-connection\index.js:982:20)
+    at SMTPConnection._onData (C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\nodemailer\lib\smtp-connection\index.js:763:14)
+    at SMTPConnection._onSocketData (C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\nodemailer\lib\smtp-connection\index.js:195:44)
