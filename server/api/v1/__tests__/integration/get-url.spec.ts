@@ -2,7 +2,7 @@ import { getUrl } from "../../controllers/url.controller";
 import { getSingleUrl } from "../../services/url.service";
 import { Request, Response, NextFunction } from "express";
 
-jest.mock("../services/url.service");
+jest.mock("../../services/url.service");
 
 describe("getUrl Controller", () => {
   let req: Partial<Request>;
@@ -12,7 +12,7 @@ describe("getUrl Controller", () => {
   beforeEach(() => {
     req = {
       params: { id: "urlId" },
-      user: { _id: "userId" },
+      // user: { _id: "userId" },
     };
     res = {
       status: jest.fn().mockReturnThis(),

@@ -1,11 +1,10 @@
 import { redirectUrl } from "../../controllers/url.controller";
 import { getOriginalUrl } from "../../services/url.service";
 import { Request, Response, NextFunction } from "express";
-import config from "../../../../config/server.config";
 
-jest.mock("../services/url.service");
-jest.mock("../../../config/config", () => ({
-  client: { app: { BASE_URL: "http://client-base.url" } },
+jest.mock("../../services/url.service");
+jest.mock("../../../../config/server.config", () => ({
+  server: { app: { BASE_URL: "http://server-base.url" } },
 }));
 
 describe("redirectUrl Controller", () => {
@@ -16,7 +15,7 @@ describe("redirectUrl Controller", () => {
   beforeEach(() => {
     req = {
       params: { code: "shortCode" },
-      location: { country: "Country", city: "City" },
+      // location: { country: "Country", city: "City" },
     };
     res = {
       redirect: jest.fn(),

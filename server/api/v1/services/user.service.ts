@@ -50,6 +50,7 @@ export const updateDetails = async (
       if (!passwordValid) {
         throw new Error("Wrong credentials");
       }
+      
       updatedDatas.password = password;
     }
 

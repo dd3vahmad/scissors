@@ -2,7 +2,7 @@ import { generateQrCode } from "../../controllers/url.controller";
 import { generateQrCodeForLink } from "../../services/url.service";
 import { Request, Response, NextFunction } from "express";
 
-jest.mock("../services/url.service");
+jest.mock("../../services/url.service");
 
 describe("generateQrCode Controller", () => {
   let req: Partial<Request>;

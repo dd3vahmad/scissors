@@ -58,6 +58,7 @@ export const signInUser = async (email: string, password: string) => {
     if (!validUser) {
       throw new Error("User not found");
     }
+
     if (!validUser.isVerified) {
       await sendOTP(email, validUser._id, validUser.lastname);
       throw new Error("Please verify your email to continue.");

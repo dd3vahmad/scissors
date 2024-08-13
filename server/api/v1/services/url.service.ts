@@ -247,6 +247,7 @@ export const formatChartData = (
     throw new Error(error.message);
   }
 };
+
 type UData = {
   title?: string;
   longUrl?: string;

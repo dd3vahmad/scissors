@@ -2,7 +2,7 @@ import { shortenUrl } from "../../controllers/url.controller";
 import { shortenNewUrl } from "../../services/url.service";
 import { Request, Response, NextFunction } from "express";
 
-jest.mock("../services/url.service");
+jest.mock("../../services/url.service");
 
 describe("shortenUrl Controller", () => {
   let req: Partial<Request>;
@@ -17,7 +17,7 @@ describe("shortenUrl Controller", () => {
         backHalf: "example",
         generateQrCode: false,
       },
-      user: { _id: "userId" },
+      // user: { _id: "userId" },
     };
     res = {
       status: jest.fn().mockReturnThis(),
