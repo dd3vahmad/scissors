@@ -3,7 +3,6 @@ import {
   Flex,
   Avatar,
   Text,
-  VStack,
   HStack,
   Stat,
   StatLabel,
@@ -28,6 +27,7 @@ interface IUserProfile {
   lastName: string;
   username: string;
   email: string;
+  apiKey: string;
   profileImage: string;
   numberOfUrls: number;
   totalClicks: number;
@@ -44,6 +44,7 @@ const Settings = () => {
     lastName: currentUser?.lastname || "John",
     username: currentUser?.username || "John",
     email: currentUser?.email || "John",
+    apiKey: currentUser?.apiKey || "No API Key",
     profileImage: currentUser?.firstname || "John",
     numberOfUrls: currentUser?.numberOfUrls || 0,
     totalClicks: currentUser?.totalClicks || 0,
@@ -115,7 +116,13 @@ const Settings = () => {
           <Icon as={LuLogOut} />
         </Button>
         <Avatar size="2xl" name={user.firstName} src={user.profileImage} />
-        <VStack align="start" ml={{ base: 0, md: 6 }} mt={{ base: 4, md: 0 }}>
+        <Flex
+          direction={"column"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          ml={{ base: 0, md: 6 }}
+          mt={{ base: 4, md: 0 }}
+        >
           <Heading
             as="h1"
             size="lg"
@@ -126,7 +133,13 @@ const Settings = () => {
           <Text fontSize="md" color="gray.500">
             {user.email}
           </Text>
-        </VStack>
+          <Text fontSize="md" color="gray.500">
+            {user.apiKey || "No API Key"}
+          </Text>
+          {/* <Text fontSize="md" color="gray.500">
+            Visit this url for the documentation on how to use sissors API
+          </Text> */}
+        </Flex>
       </Flex>
       <Divider my={6} />
       <HStack spacing={8} justify="space-around">
