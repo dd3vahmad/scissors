@@ -4,11 +4,15 @@ import logger from "../../../utils/logger.util";
 import config from "../../../config/server.config";
 
 const redisClient = redis.createClient({
-  url: config.server.REDIS_URL || "redis://localhost:6379",
+  url: config.server.REDIS_URL,
 });
 
 redisClient.on("error", (err) => {
   logger.error("Redis error:", err);
+});
+
+redisClient.on("ready", () => {
+  logger.info("Redis connection successful");
 });
 
 redisClient.connect();
@@ -18,24 +22,22 @@ const redisMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const queryKey = JSON.stringify(req.query);
+  const queryKey = `${(req as any).user._id}_${req.method}_${
+    req.originalUrl
+  }_${JSON.stringify(req.query)}`;
 
   try {
-    // Check cache
     const cachedData = await redisClient.get(queryKey);
-
     if (cachedData) {
       return res.status(200).json(JSON.parse(cachedData));
     }
 
-    // If not cached, proceed to the route handler
     (req as any).redisClient = redisClient;
     (req as any).queryKey = queryKey;
 
     next();
   } catch (error) {
-    logger.error("Redis Middleware Error:", error);
-    next();
+    next(error);
   }
 };
 

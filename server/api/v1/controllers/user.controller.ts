@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import IUser from "../entities/user.entity";
 import { getDetails, updateDetails } from "../services/user.service";
-import bcryptjs from "bcryptjs";
+import { redisClient } from "../middlewares/redis.middleware";
 
 export const getUserDetails = async (
   req: Request,
@@ -11,6 +11,14 @@ export const getUserDetails = async (
   try {
     const user = req.user as IUser;
     const userDetails: IUser = await getDetails(user._id);
+
+    await (req as any).redisClient.set(
+      (req as any).queryKey,
+      JSON.stringify(userDetails),
+      {
+        EX: 60 * 60 * 24,
+      }
+    );
 
     res.status(201).json(userDetails);
   } catch (error: any) {
@@ -30,6 +38,9 @@ export const updateUserDetails = async (
         .status(400)
         .json({ failed: false, message: "Unable to update details" });
     }
+
+    const queryKey = JSON.stringify(req.query);
+    await redisClient.del(queryKey);
     res
       .status(200)
       .json({ failed: false, message: "Details updated successfully" });

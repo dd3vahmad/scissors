@@ -12,6 +12,7 @@ import {
   updateLink,
 } from "../services/url.service";
 import config from "../../../config/server.config";
+import { redisClient } from "../middlewares/redis.middleware";
 
 const client_base_url: string = config.client.app.BASE_URL || "";
 
@@ -53,6 +54,13 @@ export const redirectUrl = async (
     if (!url) {
       return res.status(404).json({ message: "No URL found", failed: true });
     }
+    await (req as any).redisClient.set(
+      (req as any).queryKey,
+      JSON.stringify(url),
+      {
+        EX: 60 * 60 * 24,
+      }
+    );
     res.redirect(url || client_base_url);
   } catch (err) {
     next(err);
@@ -72,6 +80,13 @@ export const getUrl = async (
     if (!url) {
       return res.status(404).json({ message: "No URL found", failed: true });
     }
+    await (req as any).redisClient.set(
+      (req as any).queryKey,
+      JSON.stringify(formattedUrl),
+      {
+        EX: 60 * 60 * 24,
+      }
+    );
     res.status(200).json(formattedUrl);
   } catch (err) {
     next(err);
@@ -89,6 +104,8 @@ export const generateQrCode = async (
     if (!qrCodeGenerated) {
       return res.status(404).json({ message: "No URL found", failed: true });
     }
+    const queryKey = JSON.stringify(req.query);
+    await redisClient.del(queryKey);
     res.status(200).json({
       failed: false,
       message: "QrCode generated successfully",
@@ -110,11 +127,19 @@ export const getUserUrlHistory: (
     if (!urls) {
       return res.status(404).json({ message: "No URL found", failed: true });
     }
-    res.status(200).json({
+    const resObj = {
       failed: false,
       message: "User urls fetched successfully",
       data: urls,
-    });
+    };
+    await (req as any).redisClient.set(
+      (req as any).queryKey,
+      JSON.stringify(resObj),
+      {
+        EX: 60 * 60 * 24,
+      }
+    );
+    res.status(200).json(resObj);
   } catch (err) {
     next(err);
   }
@@ -144,11 +169,19 @@ export const getUserQrCodeHistory: (
         .status(404)
         .json({ message: "No Qr Code found", failed: true });
     }
-    res.status(200).json({
+    const resObj = {
       failed: false,
       message: "User qr codes fetched successfully",
       data: formattedCodesObj,
-    });
+    };
+    await (req as any).redisClient.set(
+      (req as any).queryKey,
+      JSON.stringify(resObj),
+      {
+        EX: 60 * 60 * 24,
+      }
+    );
+    res.status(200).json(resObj);
   } catch (err) {
     next(err);
   }
@@ -169,11 +202,19 @@ export const getUserLinkStats: (
       return res.status(404).json({ message: "No Data found", failed: true });
     }
     const chartClicksData = formatChartData(clicksData, by);
-    res.status(200).json({
+    const resObj = {
       failed: false,
       message: "Url data fetched successfully",
       data: chartClicksData,
-    });
+    };
+    await (req as any).redisClient.set(
+      (req as any).queryKey,
+      JSON.stringify(resObj),
+      {
+        EX: 60 * 60 * 24,
+      }
+    );
+    res.status(200).json(resObj);
   } catch (err) {
     next(err);
   }
@@ -193,11 +234,19 @@ export const getUserLinksStats: (
       return res.status(404).json({ message: "No Data found", failed: true });
     }
     const chartClicksData = formatChartData(clicksData, by);
-    res.status(200).json({
+    const resObj = {
       failed: false,
       message: "Urls data fetched successfully",
       data: chartClicksData,
-    });
+    };
+    await (req as any).redisClient.set(
+      (req as any).queryKey,
+      JSON.stringify(resObj),
+      {
+        EX: 60 * 60 * 24,
+      }
+    );
+    res.status(200).json(resObj);
   } catch (err) {
     next(err);
   }
@@ -217,6 +266,8 @@ export const updateUrl = async (
         .status(400)
         .json({ failed: false, message: "Unable to delete url" });
     }
+    const queryKey = JSON.stringify(req.query);
+    await redisClient.del(queryKey);
     res
       .status(200)
       .json({ failed: false, message: "Url deleted successfully" });
@@ -238,6 +289,8 @@ export const deleteUrl = async (
         .status(400)
         .json({ failed: false, message: "Unable to delete url" });
     }
+    const queryKey = JSON.stringify(req.query);
+    await redisClient.del(queryKey);
     res
       .status(200)
       .json({ failed: false, message: "Url deleted successfully" });

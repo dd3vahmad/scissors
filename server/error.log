@@ -12,3 +12,4 @@
     at SMTPConnection._processResponse (C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\nodemailer\lib\smtp-connection\index.js:982:20)
     at SMTPConnection._onData (C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\nodemailer\lib\smtp-connection\index.js:763:14)
     at SMTPConnection._onSocketData (C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\nodemailer\lib\smtp-connection\index.js:195:44)
+2024-08-12T21:23:09.110Z [31merror[39m: Redis error: Connection timeout

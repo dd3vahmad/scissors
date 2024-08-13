@@ -11,16 +11,17 @@ import {
   updateUrl,
 } from "../controllers/url.controller";
 import { validateUrl } from "../validations/url";
+import { redisMiddleware } from "../middlewares/redis.middleware";
 
 const router = express.Router();
 
 router.post("/shorten", validateUrl, shortenUrl);
-router.get("/history", getUserUrlHistory);
-router.get("/qrcode-history", getUserQrCodeHistory);
+router.get("/history", redisMiddleware, getUserUrlHistory);
+router.get("/qrcode-history", redisMiddleware, getUserQrCodeHistory);
 router.put("/generate-qrcode/:id/:backHalf", generateQrCode);
-router.get("/stats", getUserLinksStats);
-router.get("/:id/stats", getUserLinkStats);
-router.get("/:id", getUrl);
+router.get("/stats", redisMiddleware, getUserLinksStats);
+router.get("/:id/stats", redisMiddleware, getUserLinkStats);
+router.get("/:id", redisMiddleware, getUrl);
 router.delete("/:id", deleteUrl);
 router.put("/:id", updateUrl);
 
