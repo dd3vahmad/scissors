@@ -21,7 +21,7 @@ describe("User Service", () => {
         username: "username123",
         apiKey: "apikey123",
       };
-  
+
       // Mocking the User.findById method to return the mock user
       (User.findById as jest.Mock).mockResolvedValueOnce({
         toObject: () => ({
@@ -32,37 +32,39 @@ describe("User Service", () => {
           ...mockUser,
         }),
       });
-  
+
       const result = await getDetails(userId);
-  
+
       expect(result).toEqual(mockUser);
       expect(User.findById).toHaveBeenCalledWith(userId);
     });
-  
+
     it("should return undefined if user is not found", async () => {
       const userId = "nonExistentUserId";
-  
+
       // Mocking the User.findById method to return null
       (User.findById as jest.Mock).mockResolvedValueOnce(null);
-  
+
       const result = await getDetails(userId);
-  
+
       expect(result).toBeUndefined();
       expect(User.findById).toHaveBeenCalledWith(userId);
     });
-  
+
     it("should throw an error if userId is undefined", async () => {
-      await expect(getDetails(undefined)).rejects.toThrow("User id is undefined");
+      await expect(getDetails(undefined)).rejects.toThrow(
+        "User id is undefined"
+      );
     });
-  
+
     it("should throw an error if there is an issue retrieving user details", async () => {
       const userId = "validUserId";
-  
+
       // Mocking the User.findById method to throw an error
       (User.findById as jest.Mock).mockRejectedValueOnce(
         new Error("Database error")
       );
-  
+
       await expect(getDetails(userId)).rejects.toThrow("Database error");
     });
   });
@@ -73,59 +75,61 @@ describe("User Service", () => {
       const mockUser: Partial<IUser> = {
         _id: userId,
         password: "hashedPassword",
+        updateOne: jest.fn().mockResolvedValue(true),
       };
-  
+
       const updateData = {
         firstname: "John",
         lastname: "Doe",
         username: "johndoe",
+        email: "email123",
         apiKey: "newApiKey",
       };
-  
+
       (User.findById as jest.Mock).mockResolvedValueOnce(mockUser);
       (User.prototype.updateOne as jest.Mock).mockResolvedValueOnce(true);
-  
+
       const result = await updateDetails(userId, updateData);
-  
+
       expect(result).toBe(true);
       expect(User.findById).toHaveBeenCalledWith(userId);
       expect(User.prototype.updateOne).toHaveBeenCalledWith(updateData);
     });
-  
+
     it("should throw an error if user is not found", async () => {
       const userId = "invalidUserId";
-  
+
       (User.findById as jest.Mock).mockResolvedValueOnce(null);
-  
+
       const updateData = {
         firstname: "John",
         lastname: "Doe",
       };
-  
+
       await expect(updateDetails(userId, updateData)).rejects.toThrow(
         "User details not found"
       );
       expect(User.findById).toHaveBeenCalledWith(userId);
     });
-  
+
     it("should update the password if oldPassword is valid", async () => {
       const userId = "validUserId";
       const mockUser: Partial<IUser> = {
         _id: userId,
         password: "hashedPassword",
       };
-  
+
       const updateData = {
         password: "newPassword",
         oldPassword: "oldPassword",
       };
-  
+
       (User.findById as jest.Mock).mockResolvedValueOnce(mockUser);
       (bcryptjs.compareSync as jest.Mock).mockReturnValueOnce(true);
       (User.prototype.updateOne as jest.Mock).mockResolvedValueOnce(true);
-  
+
       const result = await updateDetails(userId, updateData);
-  
+
       expect(result).toBe(true);
       expect(User.findById).toHaveBeenCalledWith(userId);
       expect(bcryptjs.compareSync).toHaveBeenCalledWith(
@@ -136,22 +140,23 @@ describe("User Service", () => {
         password: "newPassword",
       });
     });
-  
+
     it("should throw an error if oldPassword is incorrect", async () => {
       const userId = "validUserId";
       const mockUser: Partial<IUser> = {
         _id: userId,
         password: "hashedPassword",
+        updateOne: jest.fn().mockResolvedValue(true),
       };
-  
+
       const updateData = {
         password: "newPassword",
         oldPassword: "wrongOldPassword",
       };
-  
+
       (User.findById as jest.Mock).mockResolvedValueOnce(mockUser);
       (bcryptjs.compareSync as jest.Mock).mockReturnValueOnce(false);
-  
+
       await expect(updateDetails(userId, updateData)).rejects.toThrow(
         "Wrong credentials"
       );
@@ -161,17 +166,17 @@ describe("User Service", () => {
         "hashedPassword"
       );
     });
-  
+
     it("should throw an error if an unexpected error occurs", async () => {
       const userId = "validUserId";
       const updateData = {
         firstname: "John",
       };
-  
+
       (User.findById as jest.Mock).mockRejectedValueOnce(
         new Error("Database error")
       );
-  
+
       await expect(updateDetails(userId, updateData)).rejects.toThrow(
         "Database error"
       );

@@ -7,15 +7,22 @@ jest.mock("../../../../config/server.config", () => ({
   server: { app: { BASE_URL: "http://server-base.url" } },
 }));
 
+interface ExtendedRequest extends Request {
+  location: {
+    country: string;
+    city: string;
+  };
+}
+
 describe("redirectUrl Controller", () => {
-  let req: Partial<Request>;
+  let req: Partial<ExtendedRequest>;
   let res: Partial<Response>;
   let next: NextFunction;
 
   beforeEach(() => {
     req = {
       params: { code: "shortCode" },
-      // location: { country: "Country", city: "City" },
+      location: { country: "Country", city: "City" },
     };
     res = {
       redirect: jest.fn(),
