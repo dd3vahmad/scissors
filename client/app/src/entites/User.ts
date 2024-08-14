@@ -4,8 +4,8 @@ export default interface IUser {
   username: string;
   email: string;
   password: string;
-  apiKey: string;
-  profileImage: string;
+  apiKey?: string;
+  profileImage?: string;
   numberOfUrls?: number;
   totalClicks?: number;
 }
