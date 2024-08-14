@@ -5,7 +5,6 @@ import { error } from "../../../utils/error.util";
 import User from "../models/user.model";
 import { promisify } from "util";
 
-// Extend the Express Request interface to include the user property
 declare module "express-serve-static-core" {
   interface Request {
     user?: string | JwtPayload;

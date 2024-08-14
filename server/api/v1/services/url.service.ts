@@ -262,7 +262,7 @@ export const updateLink = async (id: string, data: UData) => {
     if (data.backHalf) updatedDatas.backHalf = data.backHalf;
 
     await Url.updateOne({ id }, updatedDatas);
-    throw new Error("");
+    return true;
   } catch (err: IError | any) {
     throw new Error(err.message);
   }
