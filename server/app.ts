@@ -36,6 +36,7 @@ const corsOptions: CorsOptions = {
 };
 
 // Middlewares
+app.set('trust proxy', '127.0.0.1');
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(userAgent.express());
