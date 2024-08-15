@@ -22,9 +22,7 @@ const redisMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const queryKey = `${(req as any).user._id}_${req.method}_${
-    req.originalUrl
-  }_${JSON.stringify(req.query)}`;
+  const queryKey = `${(req as any).user._id}_${req.method}_${req.originalUrl}`;
 
   try {
     const cachedData = await redisClient.get(queryKey);

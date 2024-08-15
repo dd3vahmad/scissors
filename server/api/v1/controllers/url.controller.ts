@@ -32,8 +32,10 @@ export const shortenUrl = async (
       userObj._id,
       backHalf
     );
-    const queryKey = JSON.stringify(req.query);
+    const queryKey = `${(req as any).user._id}_GET_/api/v1/url/history`;
+    const queryKey1 = `${(req as any).user._id}_GET_/api/v1/url/qrcode-history`;
     await redisClient.del(queryKey);
+    await redisClient.del(queryKey1);
     res.status(201).json(shortUrl);
   } catch (err) {
     next(err);
@@ -105,8 +107,20 @@ export const generateQrCode = async (
     if (!qrCodeGenerated) {
       return res.status(404).json({ message: "No URL found", failed: true });
     }
-    const queryKey = JSON.stringify(req.query);
+    const queryKey = `${
+      (req as any).user._id
+    }_GET_/api/v1/url/${id}/stats?by=day`;
+    const queryKey1 = `${
+      (req as any).user._id
+    }_GET_/api/v1/url/${id}/stats?by=location`;
+    const queryKey2 = `${(req as any).user._id}_GET_/api/v1/url/history`;
+    const queryKey3 = `${(req as any).user._id}_GET_/api/v1/url/qrcode-history`;
+    const queryKey4 = `${(req as any).user._id}_GET_/api/v1/url/{id}`;
     await redisClient.del(queryKey);
+    await redisClient.del(queryKey1);
+    await redisClient.del(queryKey2);
+    await redisClient.del(queryKey3);
+    await redisClient.del(queryKey4);
     res.status(200).json({
       failed: false,
       message: "QrCode generated successfully",
@@ -267,8 +281,14 @@ export const updateUrl = async (
         .status(400)
         .json({ failed: false, message: "Unable to delete url" });
     }
-    const queryKey = JSON.stringify(req.query);
+    const queryKey = `${
+      (req as any).user._id
+    }_GET_/api/v1/url/${id}/stats?by=day`;
+    const queryKey1 = `${
+      (req as any).user._id
+    }_GET_/api/v1/url/${id}/stats?by=location`;
     await redisClient.del(queryKey);
+    await redisClient.del(queryKey1);
     res
       .status(200)
       .json({ failed: false, message: "Url deleted successfully" });
@@ -290,8 +310,10 @@ export const deleteUrl = async (
         .status(400)
         .json({ failed: false, message: "Unable to delete url" });
     }
-    const queryKey = JSON.stringify(req.query);
+    const queryKey = `${(req as any).user._id}_GET_/api/v1/url/history`;
+    const queryKey1 = `${(req as any).user._id}_GET_/api/v1/url/qrcode-history`;
     await redisClient.del(queryKey);
+    await redisClient.del(queryKey1);
     res
       .status(200)
       .json({ failed: false, message: "Url deleted successfully" });

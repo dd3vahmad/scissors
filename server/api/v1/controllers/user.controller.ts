@@ -39,7 +39,7 @@ export const updateUserDetails = async (
         .json({ failed: false, message: "Unable to update details" });
     }
 
-    const queryKey = JSON.stringify(req.query);
+    const queryKey = `${(req as any).user._id}_GET_/api/v1/user/user-details`;
     await redisClient.del(queryKey);
     res
       .status(200)
