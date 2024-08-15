@@ -55,9 +55,9 @@ export const shortenNewUrl = async (
       qrCode,
       postedBy: userId,
     });
-    await url.save();
+    const savedUrl: any = await url.save();
 
-    return url;
+    return savedUrl;
   } catch (err: IError | any) {
     throw new Error(err.message);
   }
@@ -71,6 +71,9 @@ export const generateQrCodeForLink = async (
     let url;
     if (urlId) url = await Url.findById(urlId);
     if (backHalf) url = await Url.findOne({ backHalf });
+    if (!url) {
+      throw new Error("No QrCode for this link");
+    }
     if (url) {
       const qrCode: any = await generateNewQrCode(url.shortUrl);
       if (!qrCode) {
@@ -261,8 +264,13 @@ export const updateLink = async (id: string, data: UData) => {
     if (data.longUrl) updatedDatas.longUrl = data.longUrl;
     if (data.backHalf) updatedDatas.backHalf = data.backHalf;
 
-    await Url.updateOne({ id }, updatedDatas);
-    return true;
+    const urlUpdated = await Url.findByIdAndUpdate(id, updatedDatas, {
+      new: true,
+    });
+    if (!urlUpdated) {
+      throw new Error("Url not found for update");
+    }
+    return urlUpdated;
   } catch (err: IError | any) {
     throw new Error(err.message);
   }

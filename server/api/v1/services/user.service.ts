@@ -44,7 +44,10 @@ export const updateDetails = async (
       throw new Error("User details not found");
     }
 
-    if (validUser && password && oldPassword) {
+    if (password) {
+      if (!oldPassword) {
+        throw new Error("Old password required");
+      }
       const passwordValid =
         password && bcryptjs.compareSync(oldPassword, validUser?.password);
       if (!passwordValid) {
@@ -53,9 +56,8 @@ export const updateDetails = async (
       updatedDatas.password = password;
     }
 
-    await validUser.updateOne(updatedDatas);
-    return true;
+    return await validUser.updateOne(updatedDatas);
   } catch (err: IError | any) {
-    throw new Error(err.message);
+    throw new Error(err.message || "An unexpexted error occurred");
   }
 };

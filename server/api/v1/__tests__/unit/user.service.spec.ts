@@ -126,7 +126,7 @@ describe("User Service", () => {
 
       (User.findById as jest.Mock).mockResolvedValueOnce(mockUser);
       (bcryptjs.compareSync as jest.Mock).mockReturnValueOnce(true);
-      (User.prototype.updateOne as jest.Mock).mockResolvedValueOnce(true);
+      (mockUser.updateOne as jest.Mock).mockResolvedValueOnce(true);
 
       const result = await updateDetails(userId, updateData);
 
@@ -136,7 +136,7 @@ describe("User Service", () => {
         "oldPassword",
         "hashedPassword"
       );
-      expect(User.prototype.updateOne).toHaveBeenCalledWith({
+      expect(mockUser.updateOne).toHaveBeenCalledWith({
         password: "newPassword",
       });
     });

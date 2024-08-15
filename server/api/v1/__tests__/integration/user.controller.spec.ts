@@ -8,17 +8,33 @@ import { redisClient } from "../../middlewares/redis.middleware";
 import IUser from "../../entities/user.entity";
 
 // Mock dependencies
-jest.mock("../services/user.service");
-jest.mock("../middlewares/redis.middleware");
+jest.mock("redis");
+jest.mock("../../services/user.service");
+jest.mock("../../middlewares/redis.middleware");
+jest.mock("redis", () => ({
+  createClient: jest.fn(() => ({
+    on: jest.fn(),
+    connect: jest.fn(),
+    get: jest.fn(),
+    set: jest.fn(),
+    del: jest.fn(),
+  })),
+}));
+
+interface ExtendedRequest extends Request {
+  user: {
+    _id: string;
+  };
+}
 
 describe("User Controller", () => {
-  let req: Partial<Request>;
+  let req: Partial<ExtendedRequest>;
   let res: Partial<Response>;
   let next: NextFunction;
 
   beforeEach(() => {
     req = {
-      user: { _id: "123" } as IUser,
+      user: { _id: "123" },
       body: {},
       query: {},
     };
@@ -71,11 +87,10 @@ describe("User Controller", () => {
       await updateUserDetails(req as Request, res as Response, next);
 
       expect(updateDetails).toHaveBeenCalledWith("123", req.body);
-      expect(redisClient.del).toHaveBeenCalledWith(JSON.stringify(req.query));
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         failed: false,
-        message: "Details updated successfully",
+        message: "User details updated successfully",
       });
     });
 

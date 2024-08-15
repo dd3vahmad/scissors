@@ -4,12 +4,15 @@ import {
   generateQrCodeForLink,
   updateLink,
   deleteLink,
+  generateNewQrCode,
 } from "../../services/url.service";
 import Url from "../../models/url.model";
 import QRCode from "qrcode";
+import config from "../../../../config/server.config";
 
 jest.mock("../../models/url.model");
 jest.mock("qrcode");
+const server_base_url: string = config.server.app.BASE_URL || "";
 
 describe("URL Service Tests", () => {
   afterEach(() => {
@@ -22,20 +25,23 @@ describe("URL Service Tests", () => {
         _id: "url_id",
         title: "Test Title",
         longUrl: "https://example.com",
-        shortUrl: "http://short.url/abcd1234",
+        shortUrl: `${server_base_url}/abcd1234`,
         backHalf: "abcd1234",
+        qrCode: undefined,
         postedBy: "user_id",
-        save: jest.fn(),
+        save: jest.fn().mockResolvedValue(this),
       };
 
       (Url.findOne as jest.Mock).mockResolvedValue(null);
+
       (Url.prototype.save as jest.Mock).mockResolvedValue(mockUrl);
 
       const result = await shortenNewUrl(
         "Test Title",
         "https://example.com",
         false,
-        "user_id"
+        "user_id",
+        "abcd123"
       );
 
       expect(Url.findOne).toHaveBeenCalledWith({
@@ -50,7 +56,7 @@ describe("URL Service Tests", () => {
         _id: "url_id",
         title: "Test Title",
         longUrl: "https://example.com",
-        shortUrl: "http://short.url/abcd1234",
+        shortUrl: `${server_base_url}/abcd1234`,
         backHalf: "abcd1234",
         postedBy: "user_id",
       };
@@ -61,7 +67,8 @@ describe("URL Service Tests", () => {
         "Test Title",
         "https://example.com",
         false,
-        "user_id"
+        "user_id",
+        "abcd1234"
       );
 
       expect(Url.findOne).toHaveBeenCalledWith({
@@ -75,7 +82,7 @@ describe("URL Service Tests", () => {
         _id: "url_id",
         title: "Test Title",
         longUrl: "https://example.com",
-        shortUrl: "http://short.url/abcd1234",
+        shortUrl: `${server_base_url}/abcd1234`, // Update to match the expected value
         backHalf: "abcd1234",
         postedBy: "user_id",
         qrCode: "qr_code_data",
@@ -84,17 +91,18 @@ describe("URL Service Tests", () => {
 
       (Url.findOne as jest.Mock).mockResolvedValue(null);
       (Url.prototype.save as jest.Mock).mockResolvedValue(mockUrl);
-      (QRCode.toDataURL as jest.Mock).mockResolvedValue("qr_code_data");
+      (generateNewQrCode as jest.Mock).mockResolvedValue("qr_code_data");
 
       const result = await shortenNewUrl(
         "Test Title",
         "https://example.com",
         true,
-        "user_id"
+        "user_id",
+        "abcd1234"
       );
 
-      expect(QRCode.toDataURL).toHaveBeenCalledWith(
-        "http://short.url/abcd1234"
+      expect(generateNewQrCode).toHaveBeenCalledWith(
+        `${server_base_url}/abcd1234`
       );
       expect(result.qrCode).toEqual("qr_code_data");
     });
@@ -105,7 +113,7 @@ describe("URL Service Tests", () => {
       const mockUrl = {
         _id: "url_id",
         longUrl: "https://example.com",
-        shortUrl: "http://short.url/abcd1234",
+        shortUrl: `${server_base_url}/abcd1234`,
         clicks: 0,
         clicksData: [],
         save: jest.fn(),
@@ -116,7 +124,7 @@ describe("URL Service Tests", () => {
       const result = await getOriginalUrl("abcd1234", "New York");
 
       expect(Url.findOne).toHaveBeenCalledWith({
-        shortUrl: "http://short.url/abcd1234",
+        shortUrl: `${server_base_url}/abcd1234`,
       });
       expect(mockUrl.clicks).toBe(1);
       expect(mockUrl.clicksData).toHaveLength(1);

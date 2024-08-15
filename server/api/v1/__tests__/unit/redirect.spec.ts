@@ -5,6 +5,16 @@ import { Request, Response, NextFunction } from "express";
 jest.mock("../../services/url.service");
 jest.mock("../../../../config/server.config", () => ({
   server: { app: { BASE_URL: "http://server-base.url" } },
+  client: { app: { BASE_URL: "http://server-base.url" } },
+}));
+jest.mock("redis", () => ({
+  createClient: jest.fn(() => ({
+    on: jest.fn(),
+    connect: jest.fn(),
+    get: jest.fn(),
+    set: jest.fn(),
+    del: jest.fn(),
+  })),
 }));
 
 interface ExtendedRequest extends Request {

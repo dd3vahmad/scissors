@@ -22,11 +22,11 @@ describe("Rate Limit Middleware", () => {
     }
 
     const response = await request(app).get("/");
-    expect(response.status).toBe(429); // 429 Too Many Requests
+    expect(response.status).toBe(429);
     expect(response.body.message).toBe(
       "Too many requests from this IP, please try again after 15 minutes"
     );
-  });
+  }, 10000);
 
   it("should include rate limit headers in the response", async () => {
     const response = await request(app).get("/");

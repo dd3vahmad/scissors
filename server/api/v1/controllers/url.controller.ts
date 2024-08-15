@@ -311,7 +311,7 @@ export const deleteUrl = async (
     res
       .status(200)
       .json({ failed: false, message: "Url deleted successfully" });
-  } catch (err) {
+  } catch (err: any) {
     next(err);
   }
 };

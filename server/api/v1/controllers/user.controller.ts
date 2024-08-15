@@ -43,7 +43,7 @@ export const updateUserDetails = async (
     await redisClient.del(queryKey);
     res
       .status(200)
-      .json({ failed: false, message: "Details updated successfully" });
+      .json({ failed: false, message: "User details updated successfully" });
   } catch (err) {
     next(err);
   }

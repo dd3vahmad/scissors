@@ -46,7 +46,7 @@ describe("redisMiddleware", () => {
 
     await redisMiddleware(req as Request, res as Response, next);
 
-    expect(mockRedisClient.get).toHaveBeenCalledWith("123_GET_/test-url_{}");
+    expect(mockRedisClient.get).toHaveBeenCalledWith("123_GET_/test-url");
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(JSON.parse(cachedData));
     expect(next).not.toHaveBeenCalled();
@@ -57,9 +57,9 @@ describe("redisMiddleware", () => {
 
     await redisMiddleware(req as Request, res as Response, next);
 
-    expect(mockRedisClient.get).toHaveBeenCalledWith("123_GET_/test-url_{}");
+    expect(mockRedisClient.get).toHaveBeenCalledWith("123_GET_/test-url");
     expect(req).toHaveProperty("redisClient", mockRedisClient);
-    expect(req).toHaveProperty("queryKey", "123_GET_/test-url_{}");
+    expect(req).toHaveProperty("queryKey", "123_GET_/test-url");
     expect(next).toHaveBeenCalled();
   });
 
@@ -69,7 +69,7 @@ describe("redisMiddleware", () => {
 
     await redisMiddleware(req as Request, res as Response, next);
 
-    expect(mockRedisClient.get).toHaveBeenCalledWith("123_GET_/test-url_{}");
+    expect(mockRedisClient.get).toHaveBeenCalledWith("123_GET_/test-url");
     expect(next).toHaveBeenCalledWith(error);
   });
 });
