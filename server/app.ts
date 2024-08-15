@@ -35,8 +35,17 @@ const corsOptions: CorsOptions = {
   credentials: true,
 };
 
+// Middleware to ignore favicon.ico requests
+app.use((req: Request, res: Response, next: NextFunction) => {
+  if (req.originalUrl === "/favicon.ico") {
+    res.status(204).end(); // No Content
+  } else {
+    next();
+  }
+});
+
 // Middlewares
-app.set('trust proxy', '127.0.0.1');
+app.set("trust proxy", "127.0.0.1");
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(userAgent.express());

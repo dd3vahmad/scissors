@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "start": "npx tsx server.ts",
     "dev": "nodemon",
     "local:dev": "npx tsx server.ts"

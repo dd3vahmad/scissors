@@ -57,13 +57,7 @@ export const redirectUrl = async (
     if (!url) {
       return res.status(404).json({ message: "No URL found", failed: true });
     }
-    await (req as any).redisClient.set(
-      (req as any).queryKey,
-      JSON.stringify(url),
-      {
-        EX: 60 * 60 * 24,
-      }
-    );
+
     res.redirect(url || client_base_url);
   } catch (err) {
     next(err);
