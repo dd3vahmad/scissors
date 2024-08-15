@@ -32,7 +32,8 @@ export const shortenUrl = async (
       userObj._id,
       backHalf
     );
-
+    const queryKey = JSON.stringify(req.query);
+    await redisClient.del(queryKey);
     res.status(201).json(shortUrl);
   } catch (err) {
     next(err);

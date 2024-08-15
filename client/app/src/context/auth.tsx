@@ -70,6 +70,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     fetchUserData();
+    const loadingTimeOut = setTimeout(() => {
+      setLoading(false);
+      return clearTimeout(loadingTimeOut);
+    }, 3000);
   }, []);
 
   const loginUser = async (email: string, password: string): Promise<any> => {

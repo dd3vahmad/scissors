@@ -17,10 +17,10 @@
 ## Tech Stack
 
 - **Backend**: Node.js with Express
-- **Frontend**: React with TypeScript (if applicable)
-- **Database**: MongoDB (or your choice)
+- **Frontend**: React with TypeScript
+- **Database**: MongoDB
 - **Cache**: Redis
-- **Others**: TypeScript, Jest for testing, Chakra UI (for frontend, if applicable)
+- **Others**: TypeScript, Jest for testing, Chakra UI (for styling)
 
 ## Getting Started
 
@@ -30,7 +30,7 @@ Follow these steps to set up the Scissors URL shortener on your local machine.
 
 - **Node.js** (v14.x or higher)
 - **npm** (v6.x or higher) or **Yarn**
-- **MongoDB** (if using MongoDB as the database)
+- **MongoDB** (as database)
 - **Redis** (for caching)
 - **TypeScript**
 
