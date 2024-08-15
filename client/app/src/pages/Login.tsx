@@ -11,24 +11,30 @@ import {
   Text,
   Alert,
   AlertIcon,
+  Icon,
 } from "@chakra-ui/react";
-import { useAuth } from "../context/auth"; // Adjust the path accordingly
+import { useAuth } from "../context/auth";
 import { useNavigate } from "react-router-dom";
+import { FaSpinner } from "react-icons/fa6";
 
 const Login: React.FC = () => {
   const { loginUser, fetchUserData } = useAuth();
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await loginUser(email, password);
       await fetchUserData();
+      setLoading(false);
       navigate("/");
     } catch (error: any) {
+      setLoading(false);
       setError(error.message);
     }
   };
@@ -71,8 +77,14 @@ const Login: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </FormControl>
-            <Button colorScheme="blue" type="submit" width="full" mt={4}>
-              Log in
+            <Button
+              disabled={loading}
+              colorScheme="blue"
+              type="submit"
+              width="full"
+              mt={4}
+            >
+              {loading ? <Icon as={FaSpinner} /> : "Log in"}
             </Button>
           </Stack>
         </form>
