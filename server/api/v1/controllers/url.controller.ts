@@ -115,7 +115,7 @@ export const generateQrCode = async (
     }_GET_/api/v1/url/${id}/stats?by=location`;
     const queryKey2 = `${(req as any).user._id}_GET_/api/v1/url/history`;
     const queryKey3 = `${(req as any).user._id}_GET_/api/v1/url/qrcode-history`;
-    const queryKey4 = `${(req as any).user._id}_GET_/api/v1/url/{id}`;
+    const queryKey4 = `${(req as any).user._id}_GET_/api/v1/url/${id}`;
     await redisClient.del(queryKey);
     await redisClient.del(queryKey1);
     await redisClient.del(queryKey2);
