@@ -9,6 +9,7 @@ import {
 import IUser from "../entites/User";
 import { FaSpinner } from "react-icons/fa6";
 import { useCustomToast } from "../components/Toast";
+import { Box, Text } from "@chakra-ui/react";
 
 interface AuthContextType {
   currentUser: IUser | null;
@@ -70,10 +71,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     fetchUserData();
-    const loadingTimeOut = setTimeout(() => {
-      setLoading(false);
-      return clearTimeout(loadingTimeOut);
-    }, 3000);
   }, []);
 
   const loginUser = async (email: string, password: string): Promise<any> => {
@@ -136,10 +133,15 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
     <AuthContext.Provider value={AuthValue}>
       {loading ? (
-        <FaSpinner
-          size={30}
-          className="flex justify-center items-center min-h-96"
-        />
+        <Box>
+          <FaSpinner
+            size={30}
+            className="flex justify-center items-center min-h-96"
+          />
+          <Text color="red">
+            Pls note that this might take long as we are using a free hosting
+          </Text>
+        </Box>
       ) : (
         children
       )}
