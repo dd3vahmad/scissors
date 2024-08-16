@@ -138,3 +138,11 @@ Follow these steps to set up the Scissors URL shortener on your local machine.
 ## Contributing
 
 Contributions to the Scissors project are welcome! Please fork the repository and submit a pull request with your proposed changes. Ensure that your code adheres to the project's coding standards and includes appropriate tests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For any questions or issues, please contact [rabiu2993@gmail.com].
