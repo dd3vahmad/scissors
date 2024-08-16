@@ -1,15 +1,17 @@
 import { NextFunction, Request, Response } from "express";
-import jwt, { JwtPayload, VerifyErrors } from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../../../config/server.config";
-import { error } from "../../../utils/error.util";
 import User from "../models/user.model";
+import IUser from "../entities/user.entity";
 
+// Extend Request interface with user property
 declare module "express-serve-static-core" {
   interface Request {
-    user?: string | JwtPayload;
+    user?: string | JwtPayload | IUser;
   }
 }
 
+// Utility function to verify JWT tokens
 const verifyToken = (
   token: string,
   secret: string
@@ -25,6 +27,7 @@ const verifyToken = (
   });
 };
 
+// Middleware to authenticate using JWT or API key
 const authenticateToken = async (
   req: Request,
   res: Response,
@@ -34,11 +37,11 @@ const authenticateToken = async (
     const token = req.cookies.access_token;
     const authHeader = req.headers["authorization"];
 
+    // Log incoming request details
     console.log("Cookies:", req.cookies);
     console.log("Headers:", req.headers);
-    console.log("Token:", token);
-    console.log("Auth Header:", authHeader);
 
+    // Handle JWT authentication
     if (token) {
       try {
         const decoded = await verifyToken(
@@ -49,30 +52,30 @@ const authenticateToken = async (
         return next();
       } catch (err) {
         console.error("JWT Verification Error:", err);
-        return res.status(403).json({ message: "Not authenticated" });
+        return res
+          .status(403)
+          .json({ message: "Not authenticated: Invalid token" });
       }
     }
 
+    // Handle API key authentication
     if (authHeader && authHeader.startsWith("Bearer ")) {
       const apiKey = authHeader.split(" ")[1];
       const user = await User.findOne({ apiKey });
 
       if (!user) {
-        return res
-          .status(403)
-          .json({ status: 403, message: "Invalid API key" });
+        return res.status(403).json({ message: "Invalid API key" });
       }
 
       req.user = user;
       return next();
     }
 
-    return res
-      .status(403)
-      .json({ status: 403, message: "Token or API key required" });
+    // No token or API key provided
+    return res.status(403).json({ message: "Token or API key required" });
   } catch (error) {
     console.error("Middleware Error:", error);
-    next(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 

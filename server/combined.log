@@ -701,3 +701,9 @@
 2024-08-15T20:28:33.783Z [32minfo[39m: Server running on port 5700
 2024-08-15T20:28:33.800Z [32minfo[39m: Redis connection successful
 2024-08-15T20:28:35.649Z [32minfo[39m: Connected to database
+2024-08-16T09:43:57.789Z [31merror[39m: Email failed to send. Error: Token validation failed: userId: Path `userId` is required. Stack: ValidationError: Token validation failed: userId: Path `userId` is required.
+    at Document.invalidate (C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\mongoose\lib\document.js:3318:32)
+    at C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\mongoose\lib\document.js:3079:17
+    at C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\mongoose\lib\schemaType.js:1388:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+2024-08-16T09:48:32.939Z [32minfo[39m: Email sent successfully:

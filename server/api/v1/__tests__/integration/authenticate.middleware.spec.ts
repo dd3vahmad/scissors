@@ -24,6 +24,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(require("cookie-parser")());
 app.use(authenticateToken);
 
+// Dummy route to test middleware
+app.get("/", (req: Request, res: Response) => {
+  if (req.user) {
+    res.status(200).json({ message: "Authenticated", user: req.user });
+  } else {
+    res.status(403).json({ message: "Not authenticated" });
+  }
+});
+
 describe("AuthenticateToken Middleware", () => {
   const mockUser = { _id: "123", apiKey: "valid-api-key" };
 
@@ -79,12 +88,11 @@ describe("AuthenticateToken Middleware", () => {
     expect(response.body).toEqual({ message: "Not authenticated" });
   });
 
-  it("should return 401 if no token is provided", async () => {
+  it("should return 403 if no token is provided", async () => {
     const response = await request(app).get("/");
 
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      status: 403,
       message: "Token or API key required",
     });
   });
@@ -108,7 +116,7 @@ describe("AuthenticateToken Middleware", () => {
       .set("Authorization", "Bearer invalid-api-key");
 
     expect(response.status).toBe(403);
-    expect(response.body).toEqual({ status: 403, message: "Invalid API key" });
+    expect(response.body).toEqual({ message: "Invalid API key" });
   });
 
   it("should return 403 if neither token nor API key is provided", async () => {
@@ -116,7 +124,6 @@ describe("AuthenticateToken Middleware", () => {
 
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      status: 403,
       message: "Token or API key required",
     });
   });

@@ -473,3 +473,8 @@
 2024-08-15T18:47:19.930Z [31merror[39m: Redis error: Connection timeout
 2024-08-15T19:42:25.250Z [31merror[39m: Redis error: Connection timeout
 2024-08-15T19:48:38.193Z [31merror[39m: Redis error: Connection timeout
+2024-08-16T09:43:57.789Z [31merror[39m: Email failed to send. Error: Token validation failed: userId: Path `userId` is required. Stack: ValidationError: Token validation failed: userId: Path `userId` is required.
+    at Document.invalidate (C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\mongoose\lib\document.js:3318:32)
+    at C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\mongoose\lib\document.js:3079:17
+    at C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\mongoose\lib\schemaType.js:1388:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
