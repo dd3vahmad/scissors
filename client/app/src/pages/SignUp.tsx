@@ -11,9 +11,11 @@ import {
   Text,
   Alert,
   AlertIcon,
+  Icon,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth"; // Adjust the path accordingly
+import { FaSpinner } from "react-icons/fa6";
 
 const SignUp: React.FC = () => {
   const { signupUser } = useAuth(); // Add a signUp method in your AuthContext
@@ -24,10 +26,12 @@ const SignUp: React.FC = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -42,7 +46,8 @@ const SignUp: React.FC = () => {
       };
       await signupUser(formData);
       localStorage.setItem("new-user-email", email);
-      navigate("/verify-email"); // Redirect to email verification page
+      setLoading(false);
+      navigate("/verify-email");
     } catch (error: any) {
       setError(error.message);
     }
@@ -119,7 +124,7 @@ const SignUp: React.FC = () => {
               />
             </FormControl>
             <Button colorScheme="blue" type="submit" width="full" mt={4}>
-              Sign Up
+              {loading ? <Icon as={FaSpinner} /> : "Sign Up"}
             </Button>
           </Stack>
         </form>

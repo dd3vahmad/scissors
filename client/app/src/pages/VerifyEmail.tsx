@@ -34,7 +34,7 @@ const VerifyEmail: React.FC = () => {
       await verifyUserEmail(email || "", otp || 0);
       localStorage.removeItem("new-user-email");
       setLoading(false);
-      showToast("error", "Verification successful");
+      showToast("success", "Verification successful");
       navigate("/login");
     } catch (error: any) {
       setError(error.message);
