@@ -118,7 +118,7 @@ Follow these steps to set up the Scissors URL shortener on your local machine.
    `Server Tests:`
 
    ```bash
-   cd backend
+   cd server
    npm run test
    ```
 
