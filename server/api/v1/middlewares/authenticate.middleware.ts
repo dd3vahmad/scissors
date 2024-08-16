@@ -4,7 +4,6 @@ import config from "../../../config/server.config";
 import User from "../models/user.model";
 import IUser from "../entities/user.entity";
 
-// Extend Request interface with user property
 declare module "express-serve-static-core" {
   interface Request {
     user?: string | JwtPayload | IUser;
@@ -27,7 +26,6 @@ const verifyToken = (
   });
 };
 
-// Middleware to authenticate using JWT or API key
 const authenticateToken = async (
   req: Request,
   res: Response,
@@ -37,11 +35,6 @@ const authenticateToken = async (
     const token = req.cookies.access_token;
     const authHeader = req.headers["authorization"];
 
-    // Log incoming request details
-    console.log("Cookies:", req.cookies);
-    console.log("Headers:", req.headers);
-
-    // Handle JWT authentication
     if (token) {
       try {
         const decoded = await verifyToken(
@@ -51,7 +44,6 @@ const authenticateToken = async (
         req.user = decoded;
         return next();
       } catch (err) {
-        console.error("JWT Verification Error:", err);
         return res
           .status(403)
           .json({ message: "Not authenticated: Invalid token" });
@@ -71,10 +63,8 @@ const authenticateToken = async (
       return next();
     }
 
-    // No token or API key provided
     return res.status(403).json({ message: "Token or API key required" });
   } catch (error) {
-    console.error("Middleware Error:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };

@@ -478,3 +478,5 @@
     at C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\mongoose\lib\document.js:3079:17
     at C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\mongoose\lib\schemaType.js:1388:9
     at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+2024-08-16T10:10:24.774Z [31merror[39m: Redis error: Connection timeout
+2024-08-16T11:24:34.021Z [31merror[39m: Redis error: Connection timeout

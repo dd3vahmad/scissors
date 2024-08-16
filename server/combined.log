@@ -707,3 +707,17 @@
     at C:\Users\USER\Desktop\Logical's\_mine_\projects\Scissors\server\node_modules\mongoose\lib\schemaType.js:1388:9
     at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
 2024-08-16T09:48:32.939Z [32minfo[39m: Email sent successfully:
+2024-08-16T10:10:24.759Z [32minfo[39m: Server running on port 5700
+2024-08-16T10:10:24.774Z [31merror[39m: Redis error: Connection timeout
+2024-08-16T10:10:25.924Z [32minfo[39m: Redis connection successful
+2024-08-16T10:10:26.808Z [32minfo[39m: Connected to database
+2024-08-16T10:10:46.421Z [32minfo[39m: Server running on port 5700
+2024-08-16T10:10:46.439Z [32minfo[39m: Redis connection successful
+2024-08-16T10:10:48.215Z [32minfo[39m: Connected to database
+2024-08-16T11:24:34.007Z [32minfo[39m: Server running on port 5700
+2024-08-16T11:24:34.021Z [31merror[39m: Redis error: Connection timeout
+2024-08-16T11:24:35.048Z [32minfo[39m: Redis connection successful
+2024-08-16T11:24:35.806Z [32minfo[39m: Connected to database
+2024-08-16T11:25:14.614Z [32minfo[39m: Server running on port 5700
+2024-08-16T11:25:14.836Z [32minfo[39m: Redis connection successful
+2024-08-16T11:25:16.385Z [32minfo[39m: Connected to database

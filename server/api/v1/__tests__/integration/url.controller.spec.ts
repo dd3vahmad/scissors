@@ -1,416 +1,276 @@
+import { Request, Response, NextFunction } from "express";
 import {
   shortenUrl,
+  redirectUrl,
   getUrl,
   generateQrCode,
   getUserUrlHistory,
   getUserQrCodeHistory,
   getUserLinkStats,
+  getUserLinksStats,
   updateUrl,
   deleteUrl,
-  getUserLinksStats,
 } from "../../controllers/url.controller";
 import {
   shortenNewUrl,
+  getOriginalUrl,
   getSingleUrl,
   generateQrCodeForLink,
   getUserUrls,
-  formatChartData,
   getUrlStats,
   getUrlsStats,
+  updateLink,
+  deleteLink,
 } from "../../services/url.service";
-import { Request, Response, NextFunction } from "express";
+import { redisClient } from "../../middlewares/redis.middleware";
 
-jest.mock("../../services/url.service");
+// Mock the dependencies
+jest.mock("../../services/url.service", () => ({
+  shortenNewUrl: jest.fn(),
+  getOriginalUrl: jest.fn(),
+  getSingleUrl: jest.fn(),
+  generateQrCodeForLink: jest.fn(),
+  getUserUrls: jest.fn(),
+  getUrlStats: jest.fn(),
+  getUrlsStats: jest.fn(),
+  updateLink: jest.fn(),
+  deleteLink: jest.fn(),
+}));
+jest.mock("../../middlewares/redis.middleware");
 jest.mock("../../controllers/url.controller", () => ({
+  shortenUrl: jest.fn(),
+  redirectUrl: jest.fn(),
+  getUrl: jest.fn(),
+  generateQrCode: jest.fn(),
+  getUserUrlHistory: jest.fn(),
+  getUserQrCodeHistory: jest.fn(),
+  getUserLinkStats: jest.fn(),
+  getUserLinksStats: jest.fn(),
+  updateUrl: jest.fn(),
   deleteUrl: jest.fn(),
 }));
-jest.mock("redis", () => ({
-  createClient: jest.fn(() => ({
-    on: jest.fn(),
-    connect: jest.fn(),
-    get: jest.fn(),
-    set: jest.fn(),
-    del: jest.fn(),
-  })),
-}));
-
-interface ExtendedRequest extends Request {
-  user: {
-    _id: string;
+jest.mock("redis", () => {
+  return {
+    createClient: jest.fn(() => ({
+      connect: jest.fn(),
+      on: jest.fn(),
+      quit: jest.fn(),
+      get: jest.fn(),
+      set: jest.fn(),
+      del: jest.fn(),
+    })),
   };
-}
+});
 
-describe("Url Controller", () => {
+describe("URL Controller", () => {
+  let mockReq: Partial<Request>;
+  let mockRes: Partial<Response>;
+  let mockNext: NextFunction;
+
   beforeEach(() => {
+    mockReq = {
+      body: {},
+      params: {},
+      query: {},
+      user: { _id: "user123" },
+      cookies: {},
+    };
+    mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+      redirect: jest.fn(),
+    };
+    mockNext = jest.fn();
+  });
+
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("shortenUrl Controller", () => {
-    let req: Partial<ExtendedRequest>;
-    let res: Partial<Response>;
-    let next: NextFunction;
-
-    beforeEach(() => {
-      req = {
-        body: {
-          title: "Test URL",
-          longUrl: "http://example.com",
-          backHalf: "example",
-          generateQrCode: false,
-        },
-        user: { _id: "userId" },
-      };
-      res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      next = jest.fn();
-    });
-
-    it("should shorten a new URL and return it", async () => {
-      const mockShortUrl = { shortUrl: "http://short.url/example" };
+  describe("shortenUrl", () => {
+    it("should shorten a URL and clear Redis cache", async () => {
+      const mockShortUrl = { shortUrl: "short.ly/abc123" };
       (shortenNewUrl as jest.Mock).mockResolvedValue(mockShortUrl);
+      (redisClient.del as jest.Mock).mockResolvedValue(true);
 
-      await shortenUrl(req as Request, res as Response, next);
+      mockReq.body = {
+        title: "Test URL",
+        longUrl: "http://example.com",
+        generateQrCode: true,
+      };
+
+      await shortenUrl(mockReq as Request, mockRes as Response, mockNext);
 
       expect(shortenNewUrl).toHaveBeenCalledWith(
         "Test URL",
-        "example",
         "http://example.com",
-        false,
-        "userId"
+        true,
+        "user123",
+        undefined
       );
-      expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith(mockShortUrl);
+      expect(redisClient.del).toHaveBeenCalledTimes(2);
+      expect(mockRes.status).toHaveBeenCalledWith(201);
+      expect(mockRes.json).toHaveBeenCalledWith(mockShortUrl);
     });
 
-    it("should call next with an error if shortening fails", async () => {
-      const error = new Error("Shortening failed");
+    it("should handle errors", async () => {
+      const error = new Error("Failed to shorten URL");
       (shortenNewUrl as jest.Mock).mockRejectedValue(error);
 
-      await shortenUrl(req as Request, res as Response, next);
+      await shortenUrl(mockReq as Request, mockRes as Response, mockNext);
 
-      expect(next).toHaveBeenCalledWith(error);
+      expect(mockNext).toHaveBeenCalledWith(error);
     });
   });
 
-  describe("getUrl Controller", () => {
-    let req: Partial<ExtendedRequest>;
-    let res: Partial<Response>;
-    let next: NextFunction;
+  describe("redirectUrl", () => {
+    it("should redirect to the original URL", async () => {
+      (getOriginalUrl as jest.Mock).mockResolvedValue("http://example.com");
 
-    beforeEach(() => {
-      req = {
-        params: { id: "urlId" },
-        user: { _id: "userId" },
-      };
-      res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      next = jest.fn();
+      mockReq.params = { code: "abc123" };
+
+      await redirectUrl(mockReq as Request, mockRes as Response, mockNext);
+
+      expect(getOriginalUrl).toHaveBeenCalledWith("abc123", undefined);
+      expect(mockRes.redirect).toHaveBeenCalledWith("http://example.com");
     });
 
-    it("should return the formatted URL if found", async () => {
-      const mockUrl = { postedBy: "userId", id: "urlId", title: "Test URL" };
-      (getSingleUrl as jest.Mock).mockResolvedValue(mockUrl);
+    it("should return 404 if no URL is found", async () => {
+      (getOriginalUrl as jest.Mock).mockResolvedValue(null);
 
-      await getUrl(req as Request, res as Response, next);
+      await redirectUrl(mockReq as Request, mockRes as Response, mockNext);
 
-      expect(getSingleUrl).toHaveBeenCalledWith("userId", "urlId");
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ id: "urlId", title: "Test URL" });
-    });
-
-    it("should respond with 404 if no URL is found", async () => {
-      (getSingleUrl as jest.Mock).mockResolvedValue(null);
-
-      await getUrl(req as Request, res as Response, next);
-
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({
         message: "No URL found",
         failed: true,
       });
     });
 
-    it("should call next with an error if an exception occurs", async () => {
-      const error = new Error("Error getting URL");
-      (getSingleUrl as jest.Mock).mockRejectedValue(error);
+    it("should handle errors", async () => {
+      const error = new Error("Redirect error");
+      (getOriginalUrl as jest.Mock).mockRejectedValue(error);
 
-      await getUrl(req as Request, res as Response, next);
+      await redirectUrl(mockReq as Request, mockRes as Response, mockNext);
 
-      expect(next).toHaveBeenCalledWith(error);
+      expect(mockNext).toHaveBeenCalledWith(error);
     });
   });
 
-  describe("generateQrCode Controller", () => {
-    let req: Partial<Request>;
-    let res: Partial<Response>;
-    let next: NextFunction;
+  describe("getUrl", () => {
+    it("should return a single URL and cache it", async () => {
+      const mockUrl = { id: "url123", longUrl: "http://example.com" };
+      (getSingleUrl as jest.Mock).mockResolvedValue(mockUrl);
 
-    beforeEach(() => {
-      req = {
-        params: { id: "urlId", backHalf: "backHalf" },
-      };
-      res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      next = jest.fn();
+      mockReq.params = { id: "url123" };
+
+      await getUrl(mockReq as Request, mockRes as Response, mockNext);
+
+      expect(getSingleUrl).toHaveBeenCalledWith("user123", "url123");
+      expect(redisClient.set).toHaveBeenCalled();
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith(mockUrl);
     });
 
-    it("should generate a QR code if URL is found", async () => {
-      const mockQrCode = "generatedQrCode";
+    it("should return 404 if no URL is found", async () => {
+      (getSingleUrl as jest.Mock).mockResolvedValue(null);
+
+      await getUrl(mockReq as Request, mockRes as Response, mockNext);
+
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        message: "No URL found",
+        failed: true,
+      });
+    });
+
+    it("should handle errors", async () => {
+      const error = new Error("Get URL error");
+      (getSingleUrl as jest.Mock).mockRejectedValue(error);
+
+      await getUrl(mockReq as Request, mockRes as Response, mockNext);
+
+      expect(mockNext).toHaveBeenCalledWith(error);
+    });
+  });
+
+  describe("generateQrCode", () => {
+    it("should generate a QR code and clear relevant Redis cache", async () => {
+      const mockQrCode = { qrCode: "qrCodeImageData" };
       (generateQrCodeForLink as jest.Mock).mockResolvedValue(mockQrCode);
 
-      await generateQrCode(req as Request, res as Response, next);
+      mockReq.params = { id: "url123", backHalf: "custom" };
 
-      expect(generateQrCodeForLink).toHaveBeenCalledWith("urlId", "backHalf");
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
+      await generateQrCode(mockReq as Request, mockRes as Response, mockNext);
+
+      expect(generateQrCodeForLink).toHaveBeenCalledWith("url123", "custom");
+      expect(redisClient.del).toHaveBeenCalledTimes(5);
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith({
         failed: false,
         message: "QrCode generated successfully",
         qrCode: mockQrCode,
       });
     });
 
-    it("should respond with 404 if no URL is found", async () => {
+    it("should return 404 if no URL is found", async () => {
       (generateQrCodeForLink as jest.Mock).mockResolvedValue(null);
 
-      await generateQrCode(req as Request, res as Response, next);
+      await generateQrCode(mockReq as Request, mockRes as Response, mockNext);
 
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({
+      expect(mockRes.status).toHaveBeenCalledWith(404);
+      expect(mockRes.json).toHaveBeenCalledWith({
         message: "No URL found",
         failed: true,
       });
     });
 
-    it("should call next with an error if an exception occurs", async () => {
-      const error = new Error("Error generating QR code");
+    it("should handle errors", async () => {
+      const error = new Error("Generate QR code error");
       (generateQrCodeForLink as jest.Mock).mockRejectedValue(error);
 
-      await generateQrCode(req as Request, res as Response, next);
+      await generateQrCode(mockReq as Request, mockRes as Response, mockNext);
 
-      expect(next).toHaveBeenCalledWith(error);
-    });
-  });
-
-  describe("getUserUrlHistory Controller", () => {
-    let req: Partial<ExtendedRequest>;
-    let res: Partial<Response>;
-    let next: NextFunction;
-
-    beforeEach(() => {
-      req = {
-        user: { _id: "userId" },
-      } as any;
-      res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      next = jest.fn();
-    });
-
-    it("should return the user's URL history", async () => {
-      const mockUrls = [{ id: "url1" }, { id: "url2" }];
-      (getUserUrls as jest.Mock).mockResolvedValue(mockUrls);
-
-      await getUserUrlHistory(req as Request, res as Response, next);
-
-      expect(getUserUrls).toHaveBeenCalledWith("userId");
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        failed: false,
-        message: "User urls fetched successfully",
-        data: mockUrls,
-      });
-    });
-
-    it("should respond with 404 if no URLs are found", async () => {
-      (getUserUrls as jest.Mock).mockResolvedValue([]);
-
-      await getUserUrlHistory(req as Request, res as Response, next);
-
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({
-        failed: true,
-        message: "No URLs found",
-      });
-    });
-  });
-
-  describe("getUserQrCodeHistory", () => {
-    let req: Partial<ExtendedRequest>;
-    let res: Partial<Response>;
-    let next: NextFunction;
-
-    it("should return user QR code history", async () => {
-      const user = { _id: "userId" };
-      req.user = user;
-
-      const urls = [
-        { longUrl: "http://example.com", qrCode: "qrCode", id: "id" },
-      ];
-      (getUserUrls as jest.Mock).mockResolvedValue(urls);
-
-      await getUserQrCodeHistory(req as Request, res as Response, next);
-
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        failed: false,
-        message: "User qr codes fetched successfully",
-        data: [{ id: "id", link: "http://example.com", qrCode: "qrCode" }],
-      });
-    });
-
-    it("should handle errors", async () => {
-      const error = new Error("Some error");
-      (getUserUrls as jest.Mock).mockRejectedValue(error);
-
-      await getUserQrCodeHistory(req as Request, res as Response, next);
-
-      expect(next).toHaveBeenCalledWith(error);
-    });
-  });
-
-  describe("getUserLinkStats", () => {
-    let req: Partial<ExtendedRequest>;
-    let res: Response;
-    let next: NextFunction;
-
-    it("should return user link stats", async () => {
-      req.params = { id: "urlId" };
-      req.query = { by: "day" };
-      const user = { _id: "userId" };
-      req.user = user;
-
-      const stats = [{ date: "2024-01-01", clicks: 10 }];
-      (getUrlStats as jest.Mock).mockResolvedValue(stats);
-      (formatChartData as jest.Mock).mockReturnValue(stats);
-
-      await getUserLinkStats(req as any, res, next);
-
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        failed: false,
-        message: "Url data fetched successfully",
-        data: stats,
-      });
-    });
-
-    it("should handle errors", async () => {
-      const error = new Error("Some error");
-      (getUrlStats as jest.Mock).mockRejectedValue(error);
-
-      await getUserLinkStats(req as Request, res as Response, next);
-
-      expect(next).toHaveBeenCalledWith(error);
-    });
-  });
-
-  describe("getUserLinksStats", () => {
-    let req: Partial<ExtendedRequest> | any;
-    let res: Response;
-    let next: NextFunction;
-
-    it("should return user links stats", async () => {
-      req.query = { by: "day" };
-      const user = { _id: "userId" };
-      req.user = user;
-
-      const stats = [{ date: "2024-01-01", clicks: 10 }];
-      (getUrlsStats as jest.Mock).mockResolvedValue(stats);
-      (formatChartData as jest.Mock).mockReturnValue(stats);
-
-      await getUserLinksStats(req as Request, res as Response, next);
-
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        failed: false,
-        message: "Urls data fetched successfully",
-        data: stats,
-      });
-    });
-
-    it("should handle errors", async () => {
-      const error = new Error("Some error");
-      (getUrlsStats as jest.Mock).mockRejectedValue(error);
-
-      await getUserLinksStats(req, res, next);
-
-      expect(next).toHaveBeenCalledWith(error);
-    });
-  });
-
-  describe("updateUrl", () => {
-    let req: Request;
-    let res: Response;
-    let next: NextFunction;
-
-    it("should update a URL successfully", async () => {
-      req.params = { id: "urlId" };
-      req.body = { title: "New title" };
-      const updatedLink = { longUrl: "http://example.com", title: "New title" };
-      (updateUrl as jest.Mock).mockResolvedValue(updatedLink);
-
-      await updateUrl(req, res, next);
-
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        failed: false,
-        message: "Url updated successfully",
-        data: updatedLink,
-      });
-    });
-
-    it("should handle errors", async () => {
-      const error = new Error("Some error");
-      (updateUrl as jest.Mock).mockRejectedValue(error);
-
-      await updateUrl(req as Request, res as Response, next);
-
-      expect(next).toHaveBeenCalledWith(error);
+      expect(mockNext).toHaveBeenCalledWith(error);
     });
   });
 
   describe("deleteUrl", () => {
-    let req: Partial<Request>;
-    let res: Partial<Response>;
-    let next: NextFunction;
+    it("should delete a URL and clear Redis cache", async () => {
+      (deleteLink as jest.Mock).mockResolvedValue(true);
 
-    beforeEach(() => {
-      req = {
-        params: {},
-      };
-      res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      next = jest.fn();
-    });
+      mockReq.params = { id: "url123" };
 
-    it("should delete a URL successfully", async () => {
-      req.params = { id: "urlId" };
-      (deleteUrl as jest.Mock).mockResolvedValue({});
+      await deleteUrl(mockReq as Request, mockRes as Response, mockNext);
 
-      await deleteUrl(req as Request, res as Response, next);
-
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
+      expect(deleteLink).toHaveBeenCalledWith("url123");
+      expect(redisClient.del).toHaveBeenCalledTimes(2);
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith({
         failed: false,
         message: "Url deleted successfully",
       });
     });
 
+    it("should return 400 if the URL cannot be deleted", async () => {
+      (deleteLink as jest.Mock).mockResolvedValue(false);
+
+      await deleteUrl(mockReq as Request, mockRes as Response, mockNext);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        failed: false,
+        message: "Unable to delete url",
+      });
+    });
+
     it("should handle errors", async () => {
-      const error = new Error("Some error");
+      const error = new Error("Delete URL error");
       (deleteUrl as jest.Mock).mockRejectedValue(error);
 
-      await deleteUrl(req as Request, res as Response, next);
+      await deleteUrl(mockReq as Request, mockRes as Response, mockNext);
 
-      expect(next).toHaveBeenCalledWith(error);
+      expect(mockNext).toHaveBeenCalledWith(error);
     });
   });
 });

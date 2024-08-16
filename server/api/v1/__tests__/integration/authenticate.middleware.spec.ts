@@ -85,7 +85,9 @@ describe("AuthenticateToken Middleware", () => {
       .set("Cookie", ["access_token=invalid.token.here"]);
 
     expect(response.status).toBe(403);
-    expect(response.body).toEqual({ message: "Not authenticated" });
+    expect(response.body).toEqual({
+      message: "Not authenticated: Invalid token",
+    });
   });
 
   it("should return 403 if no token is provided", async () => {
