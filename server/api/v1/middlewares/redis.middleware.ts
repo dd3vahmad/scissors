@@ -3,10 +3,9 @@ import redis from "redis";
 import logger from "../../../utils/logger.util";
 import config from "../../../config/server.config";
 
-const redisClient = redis.createClient();
-// const redisClient = redis.createClient({
-//   url: config.server.REDIS_URL,
-// });
+const redisClient = redis.createClient({
+  url: config.server.REDIS_URL,
+});
 
 redisClient.on("error", (err: any) => {
   logger.error("Redis error:", err);
