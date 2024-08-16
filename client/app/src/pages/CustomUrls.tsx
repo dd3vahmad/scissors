@@ -25,7 +25,7 @@ const CustomUrls = () => {
       {links.length ? (
         <LinkList onDeleteLink={() => console.log("Goooooo")} links={links} />
       ) : (
-        <Flex direction={"column"}>
+        <Flex maxWidth={"500px"} margin={"0 auto"} direction={"column"}>
           <Text
             color={color}
             fontSize={"3xl"}

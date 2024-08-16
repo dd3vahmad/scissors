@@ -103,6 +103,8 @@ const Settings = () => {
       borderWidth="1px"
       borderRadius="lg"
       boxShadow="lg"
+      maxWidth={"500px"}
+      margin={"0 auto"}
     >
       <Flex direction={{ base: "column", md: "row" }} align="center">
         <Button
