@@ -48,12 +48,15 @@ export const updateDetails = async (
       if (!oldPassword) {
         throw new Error("Old password required");
       }
-      const passwordValid =
-        password && bcryptjs.compareSync(oldPassword, validUser?.password);
+      const passwordValid = bcryptjs.compareSync(
+        oldPassword,
+        validUser?.password
+      );
       if (!passwordValid) {
         throw new Error("Wrong credentials");
+      } else {
+        updatedDatas.password = password;
       }
-      updatedDatas.password = password;
     }
 
     return await validUser.updateOne(updatedDatas);

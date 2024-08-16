@@ -22,7 +22,6 @@ describe("User Service", () => {
         apiKey: "apikey123",
       };
 
-      // Mocking the User.findById method to return the mock user
       (User.findById as jest.Mock).mockResolvedValueOnce({
         toObject: () => ({
           _id: userId,
@@ -42,7 +41,6 @@ describe("User Service", () => {
     it("should return undefined if user is not found", async () => {
       const userId = "nonExistentUserId";
 
-      // Mocking the User.findById method to return null
       (User.findById as jest.Mock).mockResolvedValueOnce(null);
 
       const result = await getDetails(userId);
@@ -60,7 +58,6 @@ describe("User Service", () => {
     it("should throw an error if there is an issue retrieving user details", async () => {
       const userId = "validUserId";
 
-      // Mocking the User.findById method to throw an error
       (User.findById as jest.Mock).mockRejectedValueOnce(
         new Error("Database error")
       );
@@ -82,18 +79,16 @@ describe("User Service", () => {
         firstname: "John",
         lastname: "Doe",
         username: "johndoe",
-        email: "email123",
         apiKey: "newApiKey",
       };
 
       (User.findById as jest.Mock).mockResolvedValueOnce(mockUser);
-      (User.prototype.updateOne as jest.Mock).mockResolvedValueOnce(true);
 
       const result = await updateDetails(userId, updateData);
 
       expect(result).toBe(true);
       expect(User.findById).toHaveBeenCalledWith(userId);
-      expect(User.prototype.updateOne).toHaveBeenCalledWith(updateData);
+      expect(mockUser.updateOne).toHaveBeenCalledWith(updateData);
     });
 
     it("should throw an error if user is not found", async () => {
@@ -117,6 +112,7 @@ describe("User Service", () => {
       const mockUser: Partial<IUser> = {
         _id: userId,
         password: "hashedPassword",
+        updateOne: jest.fn().mockResolvedValue(true),
       };
 
       const updateData = {
@@ -126,7 +122,6 @@ describe("User Service", () => {
 
       (User.findById as jest.Mock).mockResolvedValueOnce(mockUser);
       (bcryptjs.compareSync as jest.Mock).mockReturnValueOnce(true);
-      (mockUser.updateOne as jest.Mock).mockResolvedValueOnce(true);
 
       const result = await updateDetails(userId, updateData);
 

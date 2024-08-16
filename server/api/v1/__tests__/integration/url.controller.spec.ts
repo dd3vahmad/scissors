@@ -40,7 +40,7 @@ interface ExtendedRequest extends Request {
   };
 }
 
-describe("Url Controller Service", () => {
+describe("Url Controller", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

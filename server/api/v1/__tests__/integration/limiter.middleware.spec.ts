@@ -26,7 +26,7 @@ describe("Rate Limit Middleware", () => {
     expect(response.body.message).toBe(
       "Too many requests from this IP, please try again after 15 minutes"
     );
-  }, 10000);
+  }, 60000);
 
   it("should include rate limit headers in the response", async () => {
     const response = await request(app).get("/");

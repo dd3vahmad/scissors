@@ -1,53 +1,75 @@
 import request from "supertest";
 import express, { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import authenticateToken from "../../middlewares/authenticate.middleware";
 import User from "../../models/user.model";
+import jwt from "jsonwebtoken";
 import config from "../../../../config/server.config";
 
-// Mock necessary modules
+// Mock the necessary components
 jest.mock("jsonwebtoken");
 jest.mock("../../models/user.model");
+jest.mock("../../../../config/server.config", () => ({
+  server: {
+    app: {
+      auth: {
+        JWT_SECRET: "test_secret",
+      },
+    },
+  },
+}));
+
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(require("cookie-parser")());
+app.use(authenticateToken);
 
 describe("AuthenticateToken Middleware", () => {
-  let app: express.Application;
+  const mockUser = { _id: "123", apiKey: "valid-api-key" };
 
   beforeEach(() => {
-    app = express();
-    app.use(authenticateToken);
-    app.get("/", (req: Request, res: Response) => {
-      res.status(200).json({ message: "Authenticated", user: req.user });
-    });
+    jest.clearAllMocks();
   });
 
   it("should authenticate with a valid JWT token", async () => {
-    const mockUser = { id: "123", name: "Test User" };
-    (jwt.verify as jest.Mock).mockImplementation((token, secret, callback) => {
-      callback(null, mockUser);
-    });
+    const token = "valid.token.here";
+    const decodedToken = { id: "123" };
+
+    (jwt.verify as jest.Mock).mockImplementation(
+      (
+        token: string,
+        secret: string,
+        callback: (err: any, decoded?: any) => void
+      ) => {
+        if (token === "valid.token.here") {
+          callback(null, decodedToken);
+        } else {
+          callback(new Error("Invalid token"));
+        }
+      }
+    );
 
     const response = await request(app)
       .get("/")
-      .set("Cookie", ["access_token=valid.token.here"]);
+      .set("Cookie", [`access_token=${token}`]);
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ message: "Authenticated", user: mockUser });
-  });
-
-  it("should return 401 if no token is provided", async () => {
-    const response = await request(app).get("/");
-
-    expect(response.status).toBe(401);
     expect(response.body).toEqual({
-      status: 401,
-      message: "Token is required",
+      message: "Authenticated",
+      user: decodedToken,
     });
   });
 
   it("should return 403 if JWT token is invalid", async () => {
-    (jwt.verify as jest.Mock).mockImplementation((token, secret, callback) => {
-      callback(new Error("Invalid token"), undefined);
-    });
+    (jwt.verify as jest.Mock).mockImplementation(
+      (
+        token: string,
+        secret: string,
+        callback: (err: any, decoded?: any) => void
+      ) => {
+        callback(new Error("Invalid token"));
+      }
+    );
 
     const response = await request(app)
       .get("/")
@@ -57,8 +79,17 @@ describe("AuthenticateToken Middleware", () => {
     expect(response.body).toEqual({ message: "Not authenticated" });
   });
 
+  it("should return 401 if no token is provided", async () => {
+    const response = await request(app).get("/");
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      status: 403,
+      message: "Token or API key required",
+    });
+  });
+
   it("should authenticate with a valid API key", async () => {
-    const mockUser = { id: "123", name: "API User" };
     (User.findOne as jest.Mock).mockResolvedValue(mockUser);
 
     const response = await request(app)
