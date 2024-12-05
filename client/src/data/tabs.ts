@@ -6,34 +6,34 @@ import ITab from "../entites/Tab";
 
 const tabs: ITab[] = [
   {
-    name: "Home",
+    name: "Dashboard",
     icon: BiHome,
-    path: "/",
+    path: "/app",
   },
   {
     name: "Links",
     icon: BiLink,
-    path: "/links",
+    path: "/app/links",
   },
   {
     name: "QR Codes",
     icon: ImQrcode,
-    path: "/qrcodes",
+    path: "/app/qrcodes",
   },
   {
     name: "Pages",
     icon: RiPagesLine,
-    path: "/pages",
+    path: "/app/pages",
   },
   {
     name: "Custom Urls",
     icon: BiLink,
-    path: "/custom-urls",
+    path: "/app/custom-urls",
   },
   {
     name: "Analytics",
     icon: IoAnalyticsOutline,
-    path: "/analytics",
+    path: "/app/analytics",
   },
 ];
 

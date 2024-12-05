@@ -20,6 +20,7 @@ import EVerificationRoute from "./rbac/EVerification";
 import config from "../config/app.config";
 import Settings from "./pages/Settings";
 import Home from "./pages/Home";
+// import ProtectedRoute from "./rbac/ProtectedRoute";
 
 function App() {
   axios.defaults.baseURL = config.server_base_url;
