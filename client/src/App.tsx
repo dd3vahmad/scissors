@@ -12,6 +12,7 @@ import CustomUrls from "./pages/CustomUrls";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
+import _404 from "./pages/404";
 import axios from "axios";
 import AuthProvider from "./context/auth";
 import VerifyEmail from "./pages/VerifyEmail";
@@ -51,6 +52,7 @@ function App() {
               <Route path="analytics" element={<Analytics />} />
               <Route path="account-settings" element={<Settings />} />
             </Route>
+            <Route path="*" element={<_404 />} />
           </Routes>
         </Router>
       </AuthProvider>
