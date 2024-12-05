@@ -13,7 +13,6 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
 import axios from "axios";
-import ProtectedRoute from "./rbac/ProtectedRoute";
 import AuthProvider from "./context/auth";
 import VerifyEmail from "./pages/VerifyEmail";
 import EVerificationRoute from "./rbac/EVerification";
@@ -29,6 +28,7 @@ function App() {
       <AuthProvider>
         <Router>
           <Routes>
+            <Route path="/" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/" element={<EVerificationRoute />}>
@@ -36,21 +36,19 @@ function App() {
             </Route>
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
-              path="/"
+              path="/app/"
               element={<AppLayout />}
               errorElement={<ErrorPage />}
             >
-              <Route path="/" element={<ProtectedRoute />}>
-                <Route index element={<Dashboard />} />
-                <Route path="links/:id" element={<Link />} />
-                <Route path="links" element={<Links />} />
-                <Route path="create-new/:qrcode?" element={<CreateNew />} />
-                <Route path="qrcodes" element={<QrCodes />} />
-                <Route path="pages" element={<Pages />} />
-                <Route path="custom-urls" element={<CustomUrls />} />
-                <Route path="analytics" element={<Analytics />} />
-                <Route path="account-settings" element={<Settings />} />
-              </Route>
+              <Route index element={<Dashboard />} />
+              <Route path="links/:id" element={<Link />} />
+              <Route path="links" element={<Links />} />
+              <Route path="create-new/:qrcode?" element={<CreateNew />} />
+              <Route path="qrcodes" element={<QrCodes />} />
+              <Route path="pages" element={<Pages />} />
+              <Route path="custom-urls" element={<CustomUrls />} />
+              <Route path="analytics" element={<Analytics />} />
+              <Route path="account-settings" element={<Settings />} />
             </Route>
           </Routes>
         </Router>
